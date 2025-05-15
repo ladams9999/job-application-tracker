@@ -71,9 +71,12 @@ const ApplicationForm = () => {
       const companyName = data.isAnonymous ? "Anonymous" : data.company;
       
       await addApplication({
-        ...data,
         company: companyName, // Ensure company is always provided
+        jobTitle: data.jobTitle, // Explicitly include jobTitle as it's required
+        jobDescription: data.jobDescription, // Explicitly include jobDescription as it's required
         dateApplied: data.dateApplied.toISOString(),
+        status: data.status, // Explicitly include status as it's required
+        notes: data.notes,
       });
       
       toast.success("Application successfully added!");

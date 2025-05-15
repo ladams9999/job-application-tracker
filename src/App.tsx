@@ -30,6 +30,11 @@ const App = () => (
               <ApplicationForm />
             </Layout>
           } />
+          <Route path="/edit/:id" element={
+            <Layout>
+              <ApplicationForm />
+            </Layout>
+          } />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

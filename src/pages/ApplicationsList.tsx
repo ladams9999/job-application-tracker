@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { JobApplication, ApplicationFilter, ApplicationStatus } from "@/types";
 import { getAllApplications, deleteApplication, filterApplications } from "@/services/applicationService";
-import { Plus, Search, ArrowUp, ArrowDown, Trash } from "lucide-react";
+import { Plus, Search, ArrowUp, ArrowDown, Trash, Edit } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -176,7 +176,11 @@ const ApplicationsList = () => {
             {filteredApplications.length > 0 ? (
               filteredApplications.map((app) => (
                 <TableRow key={app.id}>
-                  <TableCell className="font-medium">{app.company}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link to={`/edit/${app.id}`} className="text-primary hover:underline">
+                      {app.company}
+                    </Link>
+                  </TableCell>
                   <TableCell>{app.jobTitle}</TableCell>
                   <TableCell>{formatDate(app.dateApplied)}</TableCell>
                   <TableCell>
@@ -185,25 +189,32 @@ const ApplicationsList = () => {
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
+                    <div className="flex justify-end gap-2">
+                      <Link to={`/edit/${app.id}`}>
                         <Button variant="ghost" size="icon">
-                          <Trash className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Application</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this application for {app.jobTitle} at {app.company}? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDelete(app.id)}>Delete</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Application</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this application for {app.jobTitle} at {app.company}? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDelete(app.id)}>Delete</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

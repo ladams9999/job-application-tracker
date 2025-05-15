@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,12 +25,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { addApplication } from "@/services/applicationService";
+import { addApplication, updateApplication, getAllApplications } from "@/services/applicationService";
 import { format } from "date-fns";
 import { toast } from "@/components/ui/sonner";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ApplicationStatus } from "@/types";
+import { ApplicationStatus, JobApplication } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
@@ -49,7 +49,10 @@ type FormValues = z.infer<typeof formSchema>;
 
 const ApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -63,6 +66,34 @@ const ApplicationForm = () => {
     },
   });
 
+  // Load application data if in edit mode
+  useEffect(() => {
+    if (isEditMode) {
+      setIsLoading(true);
+      const applications = getAllApplications();
+      const application = applications.find(app => app.id === id);
+      
+      if (application) {
+        // Check if it's an anonymous application
+        const isAnonymous = application.company === "Anonymous";
+        
+        form.reset({
+          company: application.company,
+          jobTitle: application.jobTitle,
+          jobDescription: application.jobDescription,
+          dateApplied: new Date(application.dateApplied),
+          status: application.status,
+          notes: application.notes || "",
+          isAnonymous: isAnonymous,
+        });
+      } else {
+        toast.error("Application not found");
+        navigate("/applications");
+      }
+      setIsLoading(false);
+    }
+  }, [id, isEditMode, form, navigate]);
+
   const onSubmit = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
@@ -70,33 +101,62 @@ const ApplicationForm = () => {
       // If anonymous is selected, use "Anonymous" as the company name
       const companyName = data.isAnonymous ? "Anonymous" : data.company;
       
-      await addApplication({
-        company: companyName, // Ensure company is always provided
-        jobTitle: data.jobTitle, // Explicitly include jobTitle as it's required
-        jobDescription: data.jobDescription, // Explicitly include jobDescription as it's required
-        dateApplied: data.dateApplied.toISOString(),
-        status: data.status, // Explicitly include status as it's required
-        notes: data.notes,
-      });
+      if (isEditMode && id) {
+        await updateApplication({
+          id,
+          company: companyName,
+          jobTitle: data.jobTitle,
+          jobDescription: data.jobDescription,
+          dateApplied: data.dateApplied.toISOString(),
+          status: data.status,
+          notes: data.notes,
+          createdAt: "", // These will be preserved by updateApplication
+          updatedAt: "",
+        });
+        toast.success("Application successfully updated!");
+      } else {
+        await addApplication({
+          company: companyName,
+          jobTitle: data.jobTitle,
+          jobDescription: data.jobDescription,
+          dateApplied: data.dateApplied.toISOString(),
+          status: data.status,
+          notes: data.notes,
+        });
+        toast.success("Application successfully added!");
+      }
       
-      toast.success("Application successfully added!");
       navigate("/applications");
     } catch (error) {
-      console.error("Error adding application:", error);
-      toast.error("Failed to add application");
+      console.error("Error saving application:", error);
+      toast.error(isEditMode ? "Failed to update application" : "Failed to add application");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-lg text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight mb-6">Add New Application</h1>
+      <h1 className="text-3xl font-bold tracking-tight mb-6">
+        {isEditMode ? "Edit Application" : "Add New Application"}
+      </h1>
       
       <Card>
         <CardHeader>
           <CardTitle>Job Details</CardTitle>
-          <CardDescription>Enter the details of the job you applied for</CardDescription>
+          <CardDescription>
+            {isEditMode 
+              ? "Update the details of your job application" 
+              : "Enter the details of the job you applied for"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -276,7 +336,10 @@ const ApplicationForm = () => {
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Save Application"}
+                  {isSubmitting 
+                    ? (isEditMode ? "Updating..." : "Submitting...") 
+                    : (isEditMode ? "Update Application" : "Save Application")
+                  }
                 </Button>
               </div>
             </form>

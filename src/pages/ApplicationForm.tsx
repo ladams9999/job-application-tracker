@@ -31,6 +31,7 @@ import { toast } from "@/components/ui/sonner";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ApplicationStatus } from "@/types";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   company: z.string().min(1, { message: "Company name is required" }),
@@ -41,6 +42,7 @@ const formSchema = z.object({
   }),
   status: z.enum(["applied", "interview", "offer", "rejected", "withdrawn"] as const),
   notes: z.string().optional(),
+  isAnonymous: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,6 +59,7 @@ const ApplicationForm = () => {
       jobDescription: "",
       status: "applied" as ApplicationStatus,
       notes: "",
+      isAnonymous: false,
     },
   });
 
@@ -64,8 +67,12 @@ const ApplicationForm = () => {
     try {
       setIsSubmitting(true);
       
+      // If anonymous is selected, use "Anonymous" as the company name
+      const companyName = data.isAnonymous ? "Anonymous" : data.company;
+      
       await addApplication({
         ...data,
+        company: companyName, // Ensure company is always provided
         dateApplied: data.dateApplied.toISOString(),
       });
       
@@ -92,19 +99,54 @@ const ApplicationForm = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="company"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Company name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="company"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Company name" 
+                            {...field} 
+                            disabled={form.watch("isAnonymous")}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="isAnonymous"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              // If checked, set company to "Anonymous", otherwise clear it
+                              if (checked) {
+                                form.setValue("company", "Anonymous");
+                              } else {
+                                form.setValue("company", "");
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Anonymous Application</FormLabel>
+                          <p className="text-sm text-muted-foreground">
+                            Hide the company name in your records
+                          </p>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 
                 <FormField
                   control={form.control}

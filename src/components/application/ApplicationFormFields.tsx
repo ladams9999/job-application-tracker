@@ -23,6 +23,11 @@ interface ApplicationFormFieldsProps {
 }
 
 const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousEntries, showRecruiterFields }) => {
+  // Ensure previousEntries properties are always arrays even if undefined
+  const companies = previousEntries?.companies || [];
+  const jobTitles = previousEntries?.jobTitles || [];
+  const sources = previousEntries?.sources || ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -55,7 +60,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup>
-                          {previousEntries?.companies.map((company) => (
+                          {companies.map((company) => (
                             <CommandItem
                               key={company}
                               value={company}
@@ -112,7 +117,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
                       <CommandInput placeholder="Search job title..." />
                       <CommandEmpty>No job title found.</CommandEmpty>
                       <CommandGroup>
-                        {previousEntries?.jobTitles.map((title) => (
+                        {jobTitles.map((title) => (
                           <CommandItem
                             key={title}
                             value={title}
@@ -238,7 +243,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {previousEntries?.sources.map((source) => (
+                {sources.map((source) => (
                   <SelectItem key={source} value={source}>
                     {source}
                   </SelectItem>

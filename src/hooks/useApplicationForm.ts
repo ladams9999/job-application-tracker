@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -66,7 +65,7 @@ export const useApplicationForm = () => {
       notes: "",
       isAnonymous: false,
       dateApplied: new Date(), // Default to current date
-      source: "",
+      source: "LinkedIn", // Default source
       recruiter: "",
       recruitingFirm: "",
     },
@@ -78,18 +77,28 @@ export const useApplicationForm = () => {
   // Load unique previous entries
   useEffect(() => {
     const loadPreviousEntries = () => {
-      const applications = getAllApplications();
-      const companies = [...new Set(applications.map(app => app.company))];
-      const jobTitles = [...new Set(applications.map(app => app.jobTitle))];
-      const sources = [...new Set(applications.map(app => app.source || ""))]
-        .filter(Boolean)
-        .concat(["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]);
-      
-      setPreviousEntries({
-        companies,
-        jobTitles,
-        sources: [...new Set(sources)], // Remove duplicates
-      });
+      try {
+        const applications = getAllApplications();
+        if (!applications || applications.length === 0) {
+          // If no applications exist, keep the default values
+          return;
+        }
+
+        const companies = [...new Set(applications.map(app => app.company))];
+        const jobTitles = [...new Set(applications.map(app => app.jobTitle))];
+        const sourcesList = [...new Set(applications.map(app => app.source || ""))]
+          .filter(Boolean)
+          .concat(["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]);
+        
+        setPreviousEntries({
+          companies,
+          jobTitles,
+          sources: [...new Set(sourcesList)], // Remove duplicates
+        });
+      } catch (error) {
+        console.error('Error loading previous entries:', error);
+        // Keep the default values
+      }
     };
     
     loadPreviousEntries();
@@ -114,7 +123,7 @@ export const useApplicationForm = () => {
           status: application.status,
           notes: application.notes || "",
           isAnonymous: isAnonymous,
-          source: application.source || "",
+          source: application.source || "LinkedIn",
           recruiter: application.recruiter || "",
           recruitingFirm: application.recruitingFirm || "",
         });

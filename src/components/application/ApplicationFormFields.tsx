@@ -15,12 +15,16 @@ interface ApplicationFormFieldsProps {
   showRecruiterFields?: boolean;
 }
 
-const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousEntries, showRecruiterFields }) => {
+const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ 
+  form, 
+  previousEntries, 
+  showRecruiterFields = false 
+}) => {
   // Ensure previousEntries properties are always arrays even if undefined
-  const safeEntries = {
-    companies: previousEntries?.companies || [],
-    jobTitles: previousEntries?.jobTitles || [],
-    sources: previousEntries?.sources || ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]
+  const safeEntries: PreviousEntryData = {
+    companies: Array.isArray(previousEntries?.companies) ? previousEntries.companies : [],
+    jobTitles: Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [],
+    sources: Array.isArray(previousEntries?.sources) ? previousEntries.sources : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]
   };
 
   return (

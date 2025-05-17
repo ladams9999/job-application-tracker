@@ -10,7 +10,12 @@ interface SourceFieldProps {
   sources: string[];
 }
 
-const SourceField: FC<SourceFieldProps> = ({ form, sources }) => {
+const SourceField: FC<SourceFieldProps> = ({ form, sources = [] }) => {
+  // Ensure we always have default sources
+  const availableSources = sources.length > 0 
+    ? sources 
+    : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];
+  
   return (
     <FormField
       control={form.control}
@@ -18,14 +23,18 @@ const SourceField: FC<SourceFieldProps> = ({ form, sources }) => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Source</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value || "LinkedIn"}>
+          <Select 
+            onValueChange={field.onChange} 
+            value={field.value || "LinkedIn"} // Ensure we have a default value
+            defaultValue="LinkedIn"
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="How did you find this job?" />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {sources.map((source) => (
+              {availableSources.map((source) => (
                 <SelectItem key={source} value={source}>
                   {source}
                 </SelectItem>

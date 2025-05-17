@@ -11,4 +11,13 @@ export interface FormValues {
   status: ApplicationStatus;
   notes?: string;
   isAnonymous: boolean;
+  source: string;
+  recruiter?: string;
+  recruitingFirm?: string;
+}
+
+export interface PreviousEntryData {
+  companies: string[];
+  jobTitles: string[];
+  sources: string[];
 }

@@ -7,7 +7,15 @@ import FormActions from "@/components/application/FormActions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 
 const ApplicationForm = () => {
-  const { form, isSubmitting, isLoading, isEditMode, onSubmit } = useApplicationForm();
+  const { 
+    form, 
+    isSubmitting, 
+    isLoading, 
+    isEditMode, 
+    onSubmit,
+    previousEntries,
+    showRecruiterFields
+  } = useApplicationForm();
 
   if (isLoading) {
     return (
@@ -33,7 +41,11 @@ const ApplicationForm = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <ApplicationFormFields form={form} />
+              <ApplicationFormFields 
+                form={form} 
+                previousEntries={previousEntries}
+                showRecruiterFields={showRecruiterFields}
+              />
               <FormActions isSubmitting={isSubmitting} isEditMode={isEditMode} />
             </form>
           </Form>

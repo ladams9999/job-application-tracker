@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "@/components/ui/sonner";
-import { ApplicationStatus, FormValues } from "@/types/forms";
+import { ApplicationStatus, FormValues, PreviousEntryData } from "@/types/forms";
 import { addApplication, updateApplication, getAllApplications } from "@/services/applicationService";
 
 export const formSchema = z.object({
@@ -18,11 +18,40 @@ export const formSchema = z.object({
   status: z.enum(["applied", "interview", "offer", "rejected", "withdrawn"] as const),
   notes: z.string().optional(),
   isAnonymous: z.boolean().default(false),
+  source: z.string().min(1, { message: "Source is required" }),
+  recruiter: z.string().optional()
+    .refine(val => {
+      // When source is 'Recruiter', recruiter is required
+      return true;
+    }, { 
+      message: "Recruiter name is required when source is Recruiter", 
+    }),
+  recruitingFirm: z.string().optional()
+    .refine(val => {
+      // When source is 'Recruiter', recruiting firm is required
+      return true;
+    }, {
+      message: "Recruiting firm is required when source is Recruiter",
+    })
+}).refine((data) => {
+  // When source is 'Recruiter', both recruiter and recruitingFirm must be provided
+  if (data.source === "Recruiter") {
+    return !!data.recruiter && !!data.recruitingFirm;
+  }
+  return true;
+}, {
+  message: "Recruiter and recruiting firm are required when source is Recruiter",
+  path: ["recruiter"], // Show error on the recruiter field
 });
 
 export const useApplicationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [previousEntries, setPreviousEntries] = useState<PreviousEntryData>({
+    companies: [],
+    jobTitles: [],
+    sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
+  });
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
@@ -36,8 +65,35 @@ export const useApplicationForm = () => {
       status: "applied" as ApplicationStatus,
       notes: "",
       isAnonymous: false,
+      dateApplied: new Date(), // Default to current date
+      source: "",
+      recruiter: "",
+      recruitingFirm: "",
     },
   });
+
+  // Watch the source field to conditionally show recruiter fields
+  const source = form.watch("source");
+  
+  // Load unique previous entries
+  useEffect(() => {
+    const loadPreviousEntries = () => {
+      const applications = getAllApplications();
+      const companies = [...new Set(applications.map(app => app.company))];
+      const jobTitles = [...new Set(applications.map(app => app.jobTitle))];
+      const sources = [...new Set(applications.map(app => app.source || ""))]
+        .filter(Boolean)
+        .concat(["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]);
+      
+      setPreviousEntries({
+        companies,
+        jobTitles,
+        sources: [...new Set(sources)], // Remove duplicates
+      });
+    };
+    
+    loadPreviousEntries();
+  }, []);
 
   // Load application data if in edit mode
   useEffect(() => {
@@ -58,6 +114,9 @@ export const useApplicationForm = () => {
           status: application.status,
           notes: application.notes || "",
           isAnonymous: isAnonymous,
+          source: application.source || "",
+          recruiter: application.recruiter || "",
+          recruitingFirm: application.recruitingFirm || "",
         });
       } else {
         toast.error("Application not found");
@@ -83,6 +142,9 @@ export const useApplicationForm = () => {
           dateApplied: data.dateApplied.toISOString(),
           status: data.status,
           notes: data.notes,
+          source: data.source,
+          recruiter: data.source === "Recruiter" ? data.recruiter : undefined,
+          recruitingFirm: data.source === "Recruiter" ? data.recruitingFirm : undefined,
           createdAt: "", // These will be preserved by updateApplication
           updatedAt: "",
         });
@@ -95,6 +157,9 @@ export const useApplicationForm = () => {
           dateApplied: data.dateApplied.toISOString(),
           status: data.status,
           notes: data.notes,
+          source: data.source,
+          recruiter: data.source === "Recruiter" ? data.recruiter : undefined,
+          recruitingFirm: data.source === "Recruiter" ? data.recruitingFirm : undefined,
         });
         toast.success("Application successfully added!");
       }
@@ -113,6 +178,8 @@ export const useApplicationForm = () => {
     isSubmitting,
     isLoading,
     isEditMode,
-    onSubmit
+    onSubmit,
+    previousEntries,
+    showRecruiterFields: source === "Recruiter"
   };
 };

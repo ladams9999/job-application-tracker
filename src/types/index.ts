@@ -9,6 +9,9 @@ export interface JobApplication {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+  source?: string;
+  recruiter?: string;
+  recruitingFirm?: string;
 }
 
 export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected' | 'withdrawn';

@@ -11,14 +11,18 @@ import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { FormValues } from "@/types/forms";
+import { FormValues, PreviousEntryData } from "@/types/forms";
 import AnonymousToggle from "./AnonymousToggle";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface ApplicationFormFieldsProps {
   form: UseFormReturn<FormValues>;
+  previousEntries?: PreviousEntryData;
+  showRecruiterFields?: boolean;
 }
 
-const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form }) => {
+const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousEntries, showRecruiterFields }) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -30,11 +34,48 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form }) => {
               <FormItem>
                 <FormLabel>Company</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="Company name" 
-                    {...field} 
-                    disabled={form.watch("isAnonymous")}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                          disabled={form.watch("isAnonymous")}
+                        >
+                          {field.value || "Select company..."}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search company..." />
+                        <CommandEmpty>No company found.</CommandEmpty>
+                        <CommandGroup>
+                          {previousEntries?.companies.map((company) => (
+                            <CommandItem
+                              key={company}
+                              value={company}
+                              onSelect={() => {
+                                form.setValue("company", company);
+                              }}
+                            >
+                              {company}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                      <Input
+                        placeholder="Or enter a new company"
+                        value={field.value}
+                        onChange={field.onChange}
+                        className="border-t"
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -51,7 +92,47 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form }) => {
             <FormItem>
               <FormLabel>Job Title</FormLabel>
               <FormControl>
-                <Input placeholder="Job title" {...field} />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value || "Select job title..."}
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search job title..." />
+                      <CommandEmpty>No job title found.</CommandEmpty>
+                      <CommandGroup>
+                        {previousEntries?.jobTitles.map((title) => (
+                          <CommandItem
+                            key={title}
+                            value={title}
+                            onSelect={() => {
+                              form.setValue("jobTitle", title);
+                            }}
+                          >
+                            {title}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                    <Input
+                      placeholder="Or enter a new job title"
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="border-t"
+                    />
+                  </PopoverContent>
+                </Popover>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -109,6 +190,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form }) => {
                     selected={field.value}
                     onSelect={field.onChange}
                     initialFocus
+                    className="pointer-events-auto"
                   />
                 </PopoverContent>
               </Popover>
@@ -142,6 +224,63 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form }) => {
           )}
         />
       </div>
+      
+      <FormField
+        control={form.control}
+        name="source"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Source</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="How did you find this job?" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {previousEntries?.sources.map((source) => (
+                  <SelectItem key={source} value={source}>
+                    {source}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {showRecruiterFields && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="recruiter"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Recruiter Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Name of the recruiter" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="recruitingFirm"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Recruiting Firm</FormLabel>
+                <FormControl>
+                  <Input placeholder="Name of the recruiting firm" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      )}
       
       <FormField
         control={form.control}

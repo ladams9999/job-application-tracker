@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 import { FormValues, PreviousEntryData } from "@/types/forms";
 import AnonymousToggle from "./AnonymousToggle";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface ApplicationFormFieldsProps {
   form: UseFormReturn<FormValues>;
@@ -210,7 +209,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
@@ -236,7 +235,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
         render={({ field }) => (
           <FormItem>
             <FormLabel>Source</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value || "LinkedIn"}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="How did you find this job?" />

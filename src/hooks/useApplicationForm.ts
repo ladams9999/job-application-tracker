@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -72,7 +73,7 @@ export const useApplicationForm = () => {
   });
 
   // Watch the source field to conditionally show recruiter fields
-  const source = form.watch("source");
+  const source = form.watch("source") || "LinkedIn";
   
   // Load unique previous entries
   useEffect(() => {
@@ -84,10 +85,9 @@ export const useApplicationForm = () => {
           return;
         }
 
-        const companies = [...new Set(applications.map(app => app.company))];
-        const jobTitles = [...new Set(applications.map(app => app.jobTitle))];
-        const sourcesList = [...new Set(applications.map(app => app.source || ""))]
-          .filter(Boolean)
+        const companies = [...new Set(applications.map(app => app.company || "").filter(Boolean))];
+        const jobTitles = [...new Set(applications.map(app => app.jobTitle || "").filter(Boolean))];
+        const sourcesList = [...new Set(applications.map(app => app.source || "").filter(Boolean))]
           .concat(["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]);
         
         setPreviousEntries({
@@ -108,30 +108,37 @@ export const useApplicationForm = () => {
   useEffect(() => {
     if (isEditMode) {
       setIsLoading(true);
-      const applications = getAllApplications();
-      const application = applications.find(app => app.id === id);
-      
-      if (application) {
-        // Check if it's an anonymous application
-        const isAnonymous = application.company === "Anonymous";
+      try {
+        const applications = getAllApplications();
+        const application = applications.find(app => app.id === id);
         
-        form.reset({
-          company: application.company,
-          jobTitle: application.jobTitle,
-          jobDescription: application.jobDescription,
-          dateApplied: new Date(application.dateApplied),
-          status: application.status,
-          notes: application.notes || "",
-          isAnonymous: isAnonymous,
-          source: application.source || "LinkedIn",
-          recruiter: application.recruiter || "",
-          recruitingFirm: application.recruitingFirm || "",
-        });
-      } else {
-        toast.error("Application not found");
+        if (application) {
+          // Check if it's an anonymous application
+          const isAnonymous = application.company === "Anonymous";
+          
+          form.reset({
+            company: application.company || "",
+            jobTitle: application.jobTitle || "",
+            jobDescription: application.jobDescription || "",
+            dateApplied: new Date(application.dateApplied),
+            status: application.status,
+            notes: application.notes || "",
+            isAnonymous: isAnonymous,
+            source: application.source || "LinkedIn",
+            recruiter: application.recruiter || "",
+            recruitingFirm: application.recruitingFirm || "",
+          });
+        } else {
+          toast.error("Application not found");
+          navigate("/applications");
+        }
+      } catch (error) {
+        console.error("Error loading application:", error);
+        toast.error("Failed to load application");
         navigate("/applications");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   }, [id, isEditMode, form, navigate]);
 

@@ -58,19 +58,23 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
                       <Command>
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
-                        <CommandGroup>
-                          {companies.map((company) => (
-                            <CommandItem
-                              key={company}
-                              value={company}
-                              onSelect={() => {
-                                form.setValue("company", company);
-                              }}
-                            >
-                              {company}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
+                        {companies.length > 0 ? (
+                          <CommandGroup>
+                            {companies.map((company) => (
+                              <CommandItem
+                                key={company}
+                                value={company}
+                                onSelect={() => {
+                                  form.setValue("company", company);
+                                }}
+                              >
+                                {company}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        ) : (
+                          <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
+                        )}
                       </Command>
                       <Input
                         placeholder="Or enter a new company"
@@ -115,19 +119,23 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ form, previousE
                     <Command>
                       <CommandInput placeholder="Search job title..." />
                       <CommandEmpty>No job title found.</CommandEmpty>
-                      <CommandGroup>
-                        {jobTitles.map((title) => (
-                          <CommandItem
-                            key={title}
-                            value={title}
-                            onSelect={() => {
-                              form.setValue("jobTitle", title);
-                            }}
-                          >
-                            {title}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      {jobTitles.length > 0 ? (
+                        <CommandGroup>
+                          {jobTitles.map((title) => (
+                            <CommandItem
+                              key={title}
+                              value={title}
+                              onSelect={() => {
+                                form.setValue("jobTitle", title);
+                              }}
+                            >
+                              {title}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      ) : (
+                        <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
+                      )}
                     </Command>
                     <Input
                       placeholder="Or enter a new job title"

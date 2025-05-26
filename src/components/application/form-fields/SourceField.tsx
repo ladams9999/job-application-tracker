@@ -11,10 +11,12 @@ interface SourceFieldProps {
 }
 
 const SourceField: FC<SourceFieldProps> = ({ form, sources = [] }) => {
-  // Ensure we always have default sources
-  const availableSources = sources.length > 0 
-    ? sources 
+  // Ensure we always have default sources and they're valid strings
+  const availableSources = Array.isArray(sources) && sources.length > 0 
+    ? sources.filter(source => source && typeof source === 'string')
     : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];
+  
+  console.log("SourceField - availableSources:", availableSources);
   
   return (
     <FormField
@@ -25,7 +27,7 @@ const SourceField: FC<SourceFieldProps> = ({ form, sources = [] }) => {
           <FormLabel>Source</FormLabel>
           <Select 
             onValueChange={field.onChange} 
-            value={field.value || "LinkedIn"} // Ensure we have a default value
+            value={field.value || "LinkedIn"}
             defaultValue="LinkedIn"
           >
             <FormControl>

@@ -24,8 +24,12 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   const safeEntries: PreviousEntryData = {
     companies: Array.isArray(previousEntries?.companies) ? previousEntries.companies : [],
     jobTitles: Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [],
-    sources: Array.isArray(previousEntries?.sources) ? previousEntries.sources : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]
+    sources: Array.isArray(previousEntries?.sources) && previousEntries.sources.length > 0 
+      ? previousEntries.sources 
+      : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]
   };
+
+  console.log("ApplicationFormFields - safeEntries:", safeEntries);
 
   return (
     <>

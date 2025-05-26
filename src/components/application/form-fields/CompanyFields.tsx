@@ -16,7 +16,9 @@ interface CompanyFieldsProps {
 }
 
 const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
-  const companies = previousEntries?.companies || [];
+  // Ensure we always have valid arrays
+  const companies = Array.isArray(previousEntries?.companies) ? previousEntries.companies : [];
+  const jobTitles = Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [];
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,7 +50,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                     <Command>
                       <CommandInput placeholder="Search company..." />
                       <CommandEmpty>No company found.</CommandEmpty>
-                      {companies.length > 0 ? (
+                      {companies.length > 0 && (
                         <CommandGroup>
                           {companies.map((company) => (
                             <CommandItem
@@ -62,13 +64,14 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                             </CommandItem>
                           ))}
                         </CommandGroup>
-                      ) : (
+                      )}
+                      {companies.length === 0 && (
                         <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
                       )}
                     </Command>
                     <Input
                       placeholder="Or enter a new company"
-                      value={field.value}
+                      value={field.value || ""}
                       onChange={field.onChange}
                       className="border-t"
                     />
@@ -109,9 +112,9 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                   <Command>
                     <CommandInput placeholder="Search job title..." />
                     <CommandEmpty>No job title found.</CommandEmpty>
-                    {previousEntries.jobTitles.length > 0 ? (
+                    {jobTitles.length > 0 && (
                       <CommandGroup>
-                        {previousEntries.jobTitles.map((title) => (
+                        {jobTitles.map((title) => (
                           <CommandItem
                             key={title}
                             value={title}
@@ -123,13 +126,14 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                           </CommandItem>
                         ))}
                       </CommandGroup>
-                    ) : (
+                    )}
+                    {jobTitles.length === 0 && (
                       <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
                     )}
                   </Command>
                   <Input
                     placeholder="Or enter a new job title"
-                    value={field.value}
+                    value={field.value || ""}
                     onChange={field.onChange}
                     className="border-t"
                   />

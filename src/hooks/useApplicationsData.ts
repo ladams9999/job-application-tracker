@@ -1,30 +1,37 @@
 
 import { useState, useEffect } from "react";
 import { JobApplication, ApplicationFilter } from "@/types";
-import { getAllApplications, deleteApplication, filterApplications } from "@/services/applicationService";
+import { applicationsApi } from "@/services/applicationsApi";
+import { deleteApplication } from "@/services/applicationService";
 
 export const useApplicationsData = (filter: ApplicationFilter) => {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<JobApplication[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadApplications();
-  }, []);
+  }, [filter]);
 
-  useEffect(() => {
-    const filtered = filterApplications(applications, filter);
-    setFilteredApplications(filtered);
-  }, [applications, filter]);
-
-  const loadApplications = () => {
-    const data = getAllApplications();
-    setApplications(data);
+  const loadApplications = async () => {
+    try {
+      setIsLoading(true);
+      const response = await applicationsApi.getApplications(filter);
+      setApplications(response.applications);
+      setFilteredApplications(response.applications);
+    } catch (error) {
+      console.error("Error loading applications:", error);
+      setApplications([]);
+      setFilteredApplications([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteApplication(id);
-      loadApplications();
+      await loadApplications(); // Reload data after deletion
     } catch (error) {
       console.error("Error deleting application:", error);
     }
@@ -32,6 +39,7 @@ export const useApplicationsData = (filter: ApplicationFilter) => {
 
   return {
     filteredApplications,
+    isLoading,
     handleDelete,
   };
 };

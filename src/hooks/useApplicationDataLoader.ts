@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
 import { FormValues } from "@/types/forms";
-import { getAllApplications } from "@/services/applicationService";
+import { applicationsApi } from "@/services/applicationsApi";
 
 export const useApplicationDataLoader = (
   id: string | undefined, 
@@ -15,41 +15,41 @@ export const useApplicationDataLoader = (
   const isEditMode = !!id;
 
   useEffect(() => {
-    if (isEditMode) {
-      setIsLoading(true);
-      try {
-        const applications = getAllApplications();
-        const application = applications.find(app => app.id === id);
-        
-        if (application) {
-          // Check if it's an anonymous application
-          const isAnonymous = application.company === "Anonymous";
-          
-          form.reset({
-            company: application.company || "",
-            jobTitle: application.jobTitle || "",
-            jobDescription: application.jobDescription || "",
-            dateApplied: new Date(application.dateApplied),
-            status: application.status,
-            notes: application.notes || "",
-            isAnonymous: isAnonymous,
-            source: application.source || "LinkedIn",
-            recruiter: application.recruiter || "",
-            recruitingFirm: application.recruitingFirm || "",
-          });
-        } else {
-          toast.error("Application not found");
-          navigate("/applications");
-        }
-      } catch (error) {
-        console.error("Error loading application:", error);
-        toast.error("Failed to load application");
-        navigate("/applications");
-      } finally {
-        setIsLoading(false);
-      }
+    if (isEditMode && id) {
+      loadApplication();
     }
-  }, [id, isEditMode, form, navigate]);
+  }, [id, isEditMode]);
+
+  const loadApplication = async () => {
+    if (!id) return;
+    
+    setIsLoading(true);
+    try {
+      const application = await applicationsApi.getApplication(id);
+      
+      // Check if it's an anonymous application
+      const isAnonymous = application.company === "Anonymous";
+      
+      form.reset({
+        company: application.company || "",
+        jobTitle: application.jobTitle || "",
+        jobDescription: application.jobDescription || "",
+        dateApplied: new Date(application.dateApplied),
+        status: application.status,
+        notes: application.notes || "",
+        isAnonymous: isAnonymous,
+        source: application.source || "LinkedIn",
+        recruiter: application.recruiter || "",
+        recruitingFirm: application.recruitingFirm || "",
+      });
+    } catch (error) {
+      console.error("Error loading application:", error);
+      toast.error("Failed to load application");
+      navigate("/applications");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return { isLoading, isEditMode };
 };

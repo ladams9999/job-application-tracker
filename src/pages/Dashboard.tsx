@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { JobApplication, ApplicationStatus } from "@/types";
@@ -9,6 +8,7 @@ import { Plus } from "lucide-react";
 
 const Dashboard = () => {
   const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
@@ -19,21 +19,28 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    const loadApplications = () => {
-      const data = getAllApplications();
-      setApplications(data);
-      
-      // Calculate stats
-      const stats = {
-        total: data.length,
-        applied: data.filter(app => app.status === 'applied').length,
-        interview: data.filter(app => app.status === 'interview').length,
-        offer: data.filter(app => app.status === 'offer').length,
-        rejected: data.filter(app => app.status === 'rejected').length,
-        withdrawn: data.filter(app => app.status === 'withdrawn').length,
-      };
-      
-      setStats(stats);
+    const loadApplications = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getAllApplications();
+        setApplications(data);
+        
+        // Calculate stats
+        const stats = {
+          total: data.length,
+          applied: data.filter(app => app.status === 'applied').length,
+          interview: data.filter(app => app.status === 'interview').length,
+          offer: data.filter(app => app.status === 'offer').length,
+          rejected: data.filter(app => app.status === 'rejected').length,
+          withdrawn: data.filter(app => app.status === 'withdrawn').length,
+        };
+        
+        setStats(stats);
+      } catch (error) {
+        console.error("Error loading applications:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     
     loadApplications();
@@ -58,6 +65,14 @@ const Dashboard = () => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-lg text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

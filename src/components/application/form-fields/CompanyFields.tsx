@@ -16,9 +16,12 @@ interface CompanyFieldsProps {
 }
 
 const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
-  // Ensure we always have valid arrays
+  // Ensure we always have valid arrays and that previousEntries is defined
   const companies = Array.isArray(previousEntries?.companies) ? previousEntries.companies : [];
   const jobTitles = Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [];
+  
+  // Don't render the Command components if we don't have a proper data structure
+  const isDataReady = previousEntries && typeof previousEntries === 'object';
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -47,33 +50,37 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
-                    <Command>
-                      <CommandInput placeholder="Search company..." />
-                      <CommandEmpty>No company found.</CommandEmpty>
-                      {companies.length > 0 ? (
-                        <CommandGroup>
-                          {companies.map((company) => (
-                            <CommandItem
-                              key={company}
-                              value={company}
-                              onSelect={() => {
-                                form.setValue("company", company);
-                              }}
-                            >
-                              {company}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      ) : (
-                        <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
-                      )}
-                    </Command>
-                    <Input
-                      placeholder="Or enter a new company"
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      className="border-t"
-                    />
+                    {isDataReady ? (
+                      <Command>
+                        <CommandInput placeholder="Search company..." />
+                        <CommandEmpty>No company found.</CommandEmpty>
+                        {companies.length > 0 ? (
+                          <CommandGroup>
+                            {companies.map((company) => (
+                              <CommandItem
+                                key={company}
+                                value={company}
+                                onSelect={() => {
+                                  form.setValue("company", company);
+                                }}
+                              >
+                                {company}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        ) : (
+                          <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
+                        )}
+                        <Input
+                          placeholder="Or enter a new company"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          className="border-t"
+                        />
+                      </Command>
+                    ) : (
+                      <div className="py-4 px-2 text-sm text-muted-foreground">Loading...</div>
+                    )}
                   </PopoverContent>
                 </Popover>
               </FormControl>
@@ -108,33 +115,37 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search job title..." />
-                    <CommandEmpty>No job title found.</CommandEmpty>
-                    {jobTitles.length > 0 ? (
-                      <CommandGroup>
-                        {jobTitles.map((title) => (
-                          <CommandItem
-                            key={title}
-                            value={title}
-                            onSelect={() => {
-                              form.setValue("jobTitle", title);
-                            }}
-                          >
-                            {title}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    ) : (
-                      <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
-                    )}
-                  </Command>
-                  <Input
-                    placeholder="Or enter a new job title"
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    className="border-t"
-                  />
+                  {isDataReady ? (
+                    <Command>
+                      <CommandInput placeholder="Search job title..." />
+                      <CommandEmpty>No job title found.</CommandEmpty>
+                      {jobTitles.length > 0 ? (
+                        <CommandGroup>
+                          {jobTitles.map((title) => (
+                            <CommandItem
+                              key={title}
+                              value={title}
+                              onSelect={() => {
+                                form.setValue("jobTitle", title);
+                              }}
+                            >
+                              {title}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      ) : (
+                        <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
+                      )}
+                      <Input
+                        placeholder="Or enter a new job title"
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        className="border-t"
+                      />
+                    </Command>
+                  ) : (
+                    <div className="py-4 px-2 text-sm text-muted-foreground">Loading...</div>
+                  )}
                 </PopoverContent>
               </Popover>
             </FormControl>

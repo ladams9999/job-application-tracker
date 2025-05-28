@@ -10,11 +10,13 @@ interface SourceFieldProps {
   sources: string[];
 }
 
+const DEFAULT_SOURCES = ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];
+
 const SourceField: FC<SourceFieldProps> = ({ form, sources = [] }) => {
-  // Ensure we always have default sources and they're valid strings
+  // Ensure we always have valid sources and they're valid strings
   const availableSources = Array.isArray(sources) && sources.length > 0 
     ? sources.filter(source => source && typeof source === 'string')
-    : ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];
+    : DEFAULT_SOURCES;
   
   console.log("SourceField - availableSources:", availableSources);
   

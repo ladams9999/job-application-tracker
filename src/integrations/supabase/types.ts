@@ -9,7 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      job_applications: {
+        Row: {
+          company: string
+          created_at: string
+          date_applied: string
+          id: string
+          job_description: string
+          job_title: string
+          notes: string | null
+          recruiter: string | null
+          recruiting_firm: string | null
+          source: string | null
+          status: Database["public"]["Enums"]["application_status"]
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          date_applied: string
+          id?: string
+          job_description: string
+          job_title: string
+          notes?: string | null
+          recruiter?: string | null
+          recruiting_firm?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          date_applied?: string
+          id?: string
+          job_description?: string
+          job_title?: string
+          notes?: string | null
+          recruiter?: string | null
+          recruiting_firm?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["application_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +62,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      application_status:
+        | "applied"
+        | "interview"
+        | "offer"
+        | "rejected"
+        | "withdrawn"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +182,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      application_status: [
+        "applied",
+        "interview",
+        "offer",
+        "rejected",
+        "withdrawn",
+      ],
+    },
   },
 } as const

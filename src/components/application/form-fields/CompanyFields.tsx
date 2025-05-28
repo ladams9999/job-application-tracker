@@ -50,7 +50,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                     <Command>
                       <CommandInput placeholder="Search company..." />
                       <CommandEmpty>No company found.</CommandEmpty>
-                      {companies.length > 0 && (
+                      {companies.length > 0 ? (
                         <CommandGroup>
                           {companies.map((company) => (
                             <CommandItem
@@ -64,8 +64,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                             </CommandItem>
                           ))}
                         </CommandGroup>
-                      )}
-                      {companies.length === 0 && (
+                      ) : (
                         <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
                       )}
                     </Command>
@@ -112,7 +111,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                   <Command>
                     <CommandInput placeholder="Search job title..." />
                     <CommandEmpty>No job title found.</CommandEmpty>
-                    {jobTitles.length > 0 && (
+                    {jobTitles.length > 0 ? (
                       <CommandGroup>
                         {jobTitles.map((title) => (
                           <CommandItem
@@ -126,8 +125,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                           </CommandItem>
                         ))}
                       </CommandGroup>
-                    )}
-                    {jobTitles.length === 0 && (
+                    ) : (
                       <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
                     )}
                   </Command>

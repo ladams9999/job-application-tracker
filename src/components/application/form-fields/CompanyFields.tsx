@@ -16,16 +16,20 @@ interface CompanyFieldsProps {
 }
 
 const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
-  // Ensure we always have valid arrays with additional safety checks
+  // Filter out any undefined, null, or empty values and ensure we have valid strings
   const companies = Array.isArray(previousEntries?.companies) 
-    ? previousEntries.companies.filter(company => company && typeof company === 'string')
+    ? previousEntries.companies
+        .filter(company => company && typeof company === 'string' && company.trim().length > 0)
+        .filter(Boolean) // Additional filter to remove any falsy values
     : [];
     
   const jobTitles = Array.isArray(previousEntries?.jobTitles) 
-    ? previousEntries.jobTitles.filter(title => title && typeof title === 'string')
+    ? previousEntries.jobTitles
+        .filter(title => title && typeof title === 'string' && title.trim().length > 0)
+        .filter(Boolean) // Additional filter to remove any falsy values
     : [];
   
-  // Only render Command components when we have a valid data structure
+  // Only render Command components when we have valid data structure and data is ready
   const isDataReady = previousEntries && 
     typeof previousEntries === 'object' && 
     Array.isArray(previousEntries.companies) && 
@@ -62,19 +66,25 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                       <Command>
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
-                        {companies.length > 0 && (
+                        {companies && companies.length > 0 && (
                           <CommandGroup>
-                            {companies.map((company) => (
-                              <CommandItem
-                                key={company}
-                                value={company}
-                                onSelect={() => {
-                                  form.setValue("company", company);
-                                }}
-                              >
-                                {company}
-                              </CommandItem>
-                            ))}
+                            {companies.map((company, index) => {
+                              // Extra safety check for each company item
+                              if (!company || typeof company !== 'string') {
+                                return null;
+                              }
+                              return (
+                                <CommandItem
+                                  key={`company-${index}-${company}`}
+                                  value={company}
+                                  onSelect={() => {
+                                    form.setValue("company", company);
+                                  }}
+                                >
+                                  {company}
+                                </CommandItem>
+                              );
+                            })}
                           </CommandGroup>
                         )}
                         <Input
@@ -125,19 +135,25 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                     <Command>
                       <CommandInput placeholder="Search job title..." />
                       <CommandEmpty>No job title found.</CommandEmpty>
-                      {jobTitles.length > 0 && (
+                      {jobTitles && jobTitles.length > 0 && (
                         <CommandGroup>
-                          {jobTitles.map((title) => (
-                            <CommandItem
-                              key={title}
-                              value={title}
-                              onSelect={() => {
-                                form.setValue("jobTitle", title);
-                              }}
-                            >
-                              {title}
-                            </CommandItem>
-                          ))}
+                          {jobTitles.map((title, index) => {
+                            // Extra safety check for each job title item
+                            if (!title || typeof title !== 'string') {
+                              return null;
+                            }
+                            return (
+                              <CommandItem
+                                key={`title-${index}-${title}`}
+                                value={title}
+                                onSelect={() => {
+                                  form.setValue("jobTitle", title);
+                                }}
+                              >
+                                {title}
+                              </CommandItem>
+                            );
+                          })}
                         </CommandGroup>
                       )}
                       <Input

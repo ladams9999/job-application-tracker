@@ -38,6 +38,13 @@ export const useApplicationForm = () => {
 
   const isLoading = isDataLoading || isFormLoading;
 
+  console.log("useApplicationForm state:", { 
+    isDataLoading, 
+    isFormLoading, 
+    isLoading, 
+    previousEntries: previousEntries ? Object.keys(previousEntries) : 'undefined'
+  });
+
   return {
     form,
     isSubmitting,

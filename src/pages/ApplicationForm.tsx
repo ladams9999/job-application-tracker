@@ -19,6 +19,9 @@ const ApplicationForm = () => {
     showRecruiterFields
   } = useApplicationForm();
 
+  // For Phase 3 testing - can be enabled to test autocomplete
+  const enableAutocomplete = false; // Set to true to test autocomplete functionality
+
   // Create a unique key based on route to force remounting when switching between add/edit
   const componentKey = id ? `edit-${id}` : 'add-new';
 
@@ -50,6 +53,8 @@ const ApplicationForm = () => {
                 form={form} 
                 previousEntries={previousEntries}
                 showRecruiterFields={showRecruiterFields}
+                isDataLoading={isLoading}
+                enableAutocomplete={enableAutocomplete}
               />
               <FormActions isSubmitting={isSubmitting} isEditMode={isEditMode} />
             </form>

@@ -1,4 +1,5 @@
 
+import { useParams } from "react-router-dom";
 import { Form } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ApplicationFormHeader from "@/components/application/ApplicationFormHeader";
@@ -7,6 +8,7 @@ import FormActions from "@/components/application/FormActions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 
 const ApplicationForm = () => {
+  const { id } = useParams<{ id: string }>();
   const { 
     form, 
     isSubmitting, 
@@ -17,6 +19,9 @@ const ApplicationForm = () => {
     showRecruiterFields
   } = useApplicationForm();
 
+  // Create a unique key based on route to force remounting when switching between add/edit
+  const componentKey = id ? `edit-${id}` : 'add-new';
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -26,7 +31,7 @@ const ApplicationForm = () => {
   }
 
   return (
-    <div>
+    <div key={componentKey}>
       <ApplicationFormHeader isEditMode={isEditMode} />
       
       <Card>

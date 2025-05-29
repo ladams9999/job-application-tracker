@@ -22,8 +22,8 @@ export const useApplicationForm = () => {
       status: "applied",
       notes: "",
       isAnonymous: false,
-      dateApplied: new Date(), // Default to current date
-      source: "LinkedIn", // Default source
+      dateApplied: new Date(),
+      source: "LinkedIn",
       recruiter: "",
       recruitingFirm: "",
     },
@@ -32,9 +32,11 @@ export const useApplicationForm = () => {
   // Watch the source field to conditionally show recruiter fields
   const source = form.watch("source") || "LinkedIn";
   
-  const previousEntries = usePreviousEntriesLoader();
-  const { isLoading, isEditMode } = useApplicationDataLoader(id, form);
+  const { previousEntries, isLoading: isDataLoading } = usePreviousEntriesLoader();
+  const { isLoading: isFormLoading, isEditMode } = useApplicationDataLoader(id, form);
   const { isSubmitting, onSubmit } = useApplicationSubmit(id);
+
+  const isLoading = isDataLoading || isFormLoading;
 
   return {
     form,

@@ -16,12 +16,20 @@ interface CompanyFieldsProps {
 }
 
 const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
-  // Ensure we always have valid arrays and that previousEntries is defined
-  const companies = Array.isArray(previousEntries?.companies) ? previousEntries.companies : [];
-  const jobTitles = Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [];
+  // Ensure we always have valid arrays with additional safety checks
+  const companies = Array.isArray(previousEntries?.companies) 
+    ? previousEntries.companies.filter(company => company && typeof company === 'string')
+    : [];
+    
+  const jobTitles = Array.isArray(previousEntries?.jobTitles) 
+    ? previousEntries.jobTitles.filter(title => title && typeof title === 'string')
+    : [];
   
-  // Don't render the Command components if we don't have a proper data structure
-  const isDataReady = previousEntries && typeof previousEntries === 'object';
+  // Only render Command components when we have a valid data structure
+  const isDataReady = previousEntries && 
+    typeof previousEntries === 'object' && 
+    Array.isArray(previousEntries.companies) && 
+    Array.isArray(previousEntries.jobTitles);
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -54,7 +62,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                       <Command>
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
-                        {companies.length > 0 ? (
+                        {companies.length > 0 && (
                           <CommandGroup>
                             {companies.map((company) => (
                               <CommandItem
@@ -68,8 +76,6 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                               </CommandItem>
                             ))}
                           </CommandGroup>
-                        ) : (
-                          <div className="py-2 px-2 text-sm text-muted-foreground">No previous companies</div>
                         )}
                         <Input
                           placeholder="Or enter a new company"
@@ -79,7 +85,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                         />
                       </Command>
                     ) : (
-                      <div className="py-4 px-2 text-sm text-muted-foreground">Loading...</div>
+                      <div className="py-4 px-2 text-sm text-muted-foreground">Loading suggestions...</div>
                     )}
                   </PopoverContent>
                 </Popover>
@@ -119,7 +125,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                     <Command>
                       <CommandInput placeholder="Search job title..." />
                       <CommandEmpty>No job title found.</CommandEmpty>
-                      {jobTitles.length > 0 ? (
+                      {jobTitles.length > 0 && (
                         <CommandGroup>
                           {jobTitles.map((title) => (
                             <CommandItem
@@ -133,8 +139,6 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                             </CommandItem>
                           ))}
                         </CommandGroup>
-                      ) : (
-                        <div className="py-2 px-2 text-sm text-muted-foreground">No previous job titles</div>
                       )}
                       <Input
                         placeholder="Or enter a new job title"
@@ -144,7 +148,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
                       />
                     </Command>
                   ) : (
-                    <div className="py-4 px-2 text-sm text-muted-foreground">Loading...</div>
+                    <div className="py-4 px-2 text-sm text-muted-foreground">Loading suggestions...</div>
                   )}
                 </PopoverContent>
               </Popover>

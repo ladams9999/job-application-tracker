@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UseFormReturn } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
 import { FormValues } from "@/types/forms";
@@ -12,7 +12,26 @@ export const useApplicationDataLoader = (
 ) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const isEditMode = !!id;
+
+  // Reset form to defaults when switching to add mode or when route changes
+  useEffect(() => {
+    if (!isEditMode && location.pathname === '/add') {
+      form.reset({
+        company: "",
+        jobTitle: "",
+        jobDescription: "",
+        status: "applied",
+        notes: "",
+        isAnonymous: false,
+        dateApplied: new Date(),
+        source: "LinkedIn",
+        recruiter: "",
+        recruitingFirm: "",
+      });
+    }
+  }, [isEditMode, location.pathname, form]);
 
   useEffect(() => {
     if (isEditMode && id) {

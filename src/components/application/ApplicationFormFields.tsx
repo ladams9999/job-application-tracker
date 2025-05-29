@@ -26,7 +26,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   previousEntries, 
   showRecruiterFields = false 
 }) => {
-  // Ensure previousEntries properties are always arrays even if undefined
+  // Ensure previousEntries properties are always valid objects with arrays
   const safeEntries: PreviousEntryData = {
     companies: Array.isArray(previousEntries?.companies) ? previousEntries.companies : DEFAULT_ENTRIES.companies,
     jobTitles: Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : DEFAULT_ENTRIES.jobTitles,
@@ -34,8 +34,6 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
       ? previousEntries.sources 
       : DEFAULT_ENTRIES.sources
   };
-
-  console.log("ApplicationFormFields - safeEntries:", safeEntries);
 
   return (
     <>

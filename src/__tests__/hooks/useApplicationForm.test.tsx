@@ -1,9 +1,18 @@
 
 import { renderHook } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { useApplicationForm } from '@/hooks/useApplicationForm';
 import * as usePreviousEntriesLoaderModule from '@/hooks/usePreviousEntriesLoader';
 import * as useApplicationDataLoaderModule from '@/hooks/useApplicationDataLoader';
 import * as useApplicationSubmitModule from '@/hooks/useApplicationSubmit';
+
+// Ensure Jest globals are available
+declare global {
+  const describe: jest.Describe;
+  const it: jest.It;
+  const expect: jest.Expect;
+  const beforeEach: jest.Lifecycle;
+}
 
 // Mock the hooks
 jest.mock('@/hooks/usePreviousEntriesLoader');

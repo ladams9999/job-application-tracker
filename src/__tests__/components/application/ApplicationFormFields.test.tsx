@@ -1,12 +1,20 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ApplicationFormFields from '@/components/application/ApplicationFormFields';
 import { FormValues, PreviousEntryData } from '@/types/forms';
 import { formSchema } from '@/schemas/applicationFormSchema';
 import { Form } from '@/components/ui/form';
+
+// Ensure Jest globals are available
+declare global {
+  const describe: jest.Describe;
+  const it: jest.It;
+  const expect: jest.Expect;
+}
 
 // Test wrapper component
 const TestWrapper = ({ 

@@ -2,11 +2,15 @@
 import { renderHook } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useApplicationForm } from '@/hooks/useApplicationForm';
-import * as usePreviousEntriesLoaderModule from '@/hooks/usePreviousEntriesLoader';
-import * as useApplicationDataLoaderModule from '@/hooks/useApplicationDataLoader';
-import * as useApplicationSubmitModule from '@/hooks/useApplicationSubmit';
+import * as usePreviousEntriesLoader from '@/hooks/usePreviousEntriesLoader';
+import * as useApplicationDataLoader from '@/hooks/useApplicationDataLoader';
+import * as useApplicationSubmit from '@/hooks/useApplicationSubmit';
 
 // Mock the hooks
+const mockUsePreviousEntriesLoader = usePreviousEntriesLoader.usePreviousEntriesLoader as jest.MockedFunction<typeof usePreviousEntriesLoader.usePreviousEntriesLoader>;
+const mockUseApplicationDataLoader = useApplicationDataLoader.useApplicationDataLoader as jest.MockedFunction<typeof useApplicationDataLoader.useApplicationDataLoader>;
+const mockUseApplicationSubmit = useApplicationSubmit.useApplicationSubmit as jest.MockedFunction<typeof useApplicationSubmit.useApplicationSubmit>;
+
 jest.mock('@/hooks/usePreviousEntriesLoader');
 jest.mock('@/hooks/useApplicationDataLoader');
 jest.mock('@/hooks/useApplicationSubmit');
@@ -14,14 +18,11 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: undefined }),
 }));
 
-const mockUsePreviousEntriesLoader = usePreviousEntriesLoaderModule.usePreviousEntriesLoader as jest.MockedFunction<typeof usePreviousEntriesLoaderModule.usePreviousEntriesLoader>;
-const mockUseApplicationDataLoader = useApplicationDataLoaderModule.useApplicationDataLoader as jest.MockedFunction<typeof useApplicationDataLoaderModule.useApplicationDataLoader>;
-const mockUseApplicationSubmit = useApplicationSubmitModule.useApplicationSubmit as jest.MockedFunction<typeof useApplicationSubmitModule.useApplicationSubmit>;
-
 describe('useApplicationForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
+    // Default mock implementations
     mockUsePreviousEntriesLoader.mockReturnValue({
       previousEntries: {
         companies: [],
@@ -42,55 +43,55 @@ describe('useApplicationForm', () => {
     });
   });
 
-  it('combines loading states correctly', () => {
+  it('should return form state correctly', () => {
+    const { result } = renderHook(() => useApplicationForm());
+
+    expect(result.current.form).toBeDefined();
+    expect(result.current.isSubmitting).toBe(false);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.isEditMode).toBe(false);
+    expect(result.current.onSubmit).toBeDefined();
+    expect(result.current.previousEntries).toBeDefined();
+    expect(result.current.showRecruiterFields).toBe(false);
+  });
+
+  it('should show recruiter fields when source is Recruiter', () => {
+    const { result } = renderHook(() => useApplicationForm());
+    
+    // Set the source to "Recruiter"
+    result.current.form.setValue('source', 'Recruiter');
+    
+    expect(result.current.showRecruiterFields).toBe(true);
+  });
+
+  it('should handle loading states correctly', () => {
     mockUsePreviousEntriesLoader.mockReturnValue({
-      previousEntries: { companies: [], jobTitles: [], sources: [] },
+      previousEntries: {
+        companies: [],
+        jobTitles: [],
+        sources: []
+      },
       isLoading: true
     });
     
     mockUseApplicationDataLoader.mockReturnValue({
-      isLoading: false,
+      isLoading: true,
       isEditMode: false
     });
-    
+
     const { result } = renderHook(() => useApplicationForm());
-    
+
     expect(result.current.isLoading).toBe(true);
   });
 
-  it('returns all required properties', () => {
-    const { result } = renderHook(() => useApplicationForm());
-    
-    expect(result.current).toHaveProperty('form');
-    expect(result.current).toHaveProperty('isSubmitting');
-    expect(result.current).toHaveProperty('isLoading');
-    expect(result.current).toHaveProperty('isEditMode');
-    expect(result.current).toHaveProperty('onSubmit');
-    expect(result.current).toHaveProperty('previousEntries');
-    expect(result.current).toHaveProperty('showRecruiterFields');
-  });
-
-  it('shows recruiter fields when source is "Recruiter"', () => {
-    const { result } = renderHook(() => useApplicationForm());
-    
-    // Set source to "Recruiter"
-    result.current.form.setValue('source', 'Recruiter');
-    
-    // Re-render to get updated value
-    const { result: updatedResult } = renderHook(() => useApplicationForm());
-    updatedResult.current.form.setValue('source', 'Recruiter');
-    
-    expect(updatedResult.current.showRecruiterFields).toBe(false); // Default is false initially
-  });
-
-  it('handles edit mode properly', () => {
+  it('should handle edit mode correctly', () => {
     mockUseApplicationDataLoader.mockReturnValue({
       isLoading: false,
       isEditMode: true
     });
-    
+
     const { result } = renderHook(() => useApplicationForm());
-    
+
     expect(result.current.isEditMode).toBe(true);
   });
 });

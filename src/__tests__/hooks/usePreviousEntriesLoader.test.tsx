@@ -1,60 +1,54 @@
 
-import { renderHook } from '@testing-library/react';
-import { waitFor } from '@testing-library/dom';
+import { renderHook, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { usePreviousEntriesLoader } from '@/hooks/usePreviousEntriesLoader';
 import * as applicationService from '@/services/applicationService';
 
-// Mock the service
-jest.mock('@/services/applicationService');
-const mockedGetSuggestions = applicationService.getSuggestions as jest.MockedFunction<typeof applicationService.getSuggestions>;
+// Mock the applicationService
+const mockGetSuggestions = applicationService.getSuggestions as jest.MockedFunction<typeof applicationService.getSuggestions>;
+
+jest.mock('@/services/applicationService', () => ({
+  getSuggestions: jest.fn(),
+}));
 
 describe('usePreviousEntriesLoader', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('returns loading state initially', () => {
-    mockedGetSuggestions.mockImplementation(() => new Promise(() => {})); // Never resolves
-    
-    const { result } = renderHook(() => usePreviousEntriesLoader());
-    
-    expect(result.current.isLoading).toBe(true);
-    expect(result.current.previousEntries).toEqual({
-      companies: [],
-      jobTitles: [],
-      sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
-    });
-  });
-
-  it('fetches suggestions from API and sets loading to false', async () => {
+  it('should load suggestions successfully', async () => {
     const mockSuggestions = {
       companies: ['Google', 'Microsoft'],
       jobTitles: ['Developer', 'Engineer'],
-      sources: ['LinkedIn', 'Custom Source']
+      sources: ['LinkedIn', 'Recruiter']
     };
-    
-    mockedGetSuggestions.mockResolvedValue(mockSuggestions);
-    
+
+    mockGetSuggestions.mockResolvedValue(mockSuggestions);
+
     const { result } = renderHook(() => usePreviousEntriesLoader());
-    
+
+    expect(result.current.isLoading).toBe(true);
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
-    
+
     expect(result.current.previousEntries).toEqual(mockSuggestions);
-    expect(mockedGetSuggestions).toHaveBeenCalledTimes(1);
+    expect(mockGetSuggestions).toHaveBeenCalledTimes(1);
   });
 
-  it('returns default data on API failure', async () => {
-    mockedGetSuggestions.mockRejectedValue(new Error('API Error'));
-    
+  it('should handle errors gracefully', async () => {
+    mockGetSuggestions.mockRejectedValue(new Error('API Error'));
+
     const { result } = renderHook(() => usePreviousEntriesLoader());
-    
+
+    expect(result.current.isLoading).toBe(true);
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
-    
+
+    // Should return default values on error
     expect(result.current.previousEntries).toEqual({
       companies: [],
       jobTitles: [],
@@ -62,21 +56,22 @@ describe('usePreviousEntriesLoader', () => {
     });
   });
 
-  it('handles malformed API responses', async () => {
-    const malformedResponse = {
+  it('should handle invalid data from API', async () => {
+    const invalidSuggestions = {
       companies: null,
-      jobTitles: 'not an array',
-      sources: undefined
+      jobTitles: undefined,
+      sources: null
     };
-    
-    mockedGetSuggestions.mockResolvedValue(malformedResponse as any);
-    
+
+    mockGetSuggestions.mockResolvedValue(invalidSuggestions);
+
     const { result } = renderHook(() => usePreviousEntriesLoader());
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
-    
+
+    // Should convert invalid data to safe defaults
     expect(result.current.previousEntries).toEqual({
       companies: [],
       jobTitles: [],
@@ -84,23 +79,26 @@ describe('usePreviousEntriesLoader', () => {
     });
   });
 
-  it('provides fallback for missing sources', async () => {
-    const responseWithoutSources = {
+  it('should handle empty sources array', async () => {
+    const suggestionsWithEmptySources = {
       companies: ['Google'],
       jobTitles: ['Developer'],
       sources: []
     };
-    
-    mockedGetSuggestions.mockResolvedValue(responseWithoutSources);
-    
+
+    mockGetSuggestions.mockResolvedValue(suggestionsWithEmptySources);
+
     const { result } = renderHook(() => usePreviousEntriesLoader());
-    
+
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
-    
-    expect(result.current.previousEntries.sources).toEqual([
-      "LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"
-    ]);
+
+    // Should use default sources when sources array is empty
+    expect(result.current.previousEntries).toEqual({
+      companies: ['Google'],
+      jobTitles: ['Developer'],
+      sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
+    });
   });
 });

@@ -1,6 +1,5 @@
 
-import { renderHook } from '@testing-library/react';
-import { waitFor } from '@testing-library/dom';
+import { renderHook, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { usePreviousEntriesLoader } from '@/hooks/usePreviousEntriesLoader';
 import * as applicationService from '@/services/applicationService';

@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { render } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
-import { fireEvent, waitFor } from '@testing-library/dom';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { useForm } from 'react-hook-form';

@@ -1,14 +1,26 @@
 
 import '@testing-library/jest-dom';
 
+// Declare Jest globals for TypeScript
+declare global {
+  var describe: jest.Describe;
+  var it: jest.It;
+  var expect: jest.Expect;
+  var beforeEach: jest.Lifecycle;
+  var afterEach: jest.Lifecycle;
+  var beforeAll: jest.Lifecycle;
+  var afterAll: jest.Lifecycle;
+  var jest: typeof import('jest');
+}
+
 // Mock Supabase client
 jest.mock('@/integrations/supabase/client', () => ({
   supabase: {
     from: jest.fn(() => ({
-      select: jest.fn(() => Promise.resolve({ data: [], error: null })),
-      insert: jest.fn(() => Promise.resolve({ data: [], error: null })),
-      update: jest.fn(() => Promise.resolve({ data: [], error: null })),
-      delete: jest.fn(() => Promise.resolve({ data: [], error: null })),
+      select: jest.fn(),
+      insert: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
     })),
   },
 }));
@@ -20,25 +32,10 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ pathname: '/' }),
 }));
 
-// Mock sonner toast
+// Mock UI components that might cause issues
 jest.mock('@/components/ui/sonner', () => ({
   toast: {
-    error: jest.fn(),
     success: jest.fn(),
+    error: jest.fn(),
   },
 }));
-
-// Mock window.matchMedia for responsive hooks
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // Deprecated
-    removeListener: jest.fn(), // Deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});

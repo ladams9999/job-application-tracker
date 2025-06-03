@@ -9,13 +9,6 @@ import { FormValues, PreviousEntryData } from '@/types/forms';
 import { formSchema } from '@/schemas/applicationFormSchema';
 import { Form } from '@/components/ui/form';
 
-// Ensure Jest globals are available
-declare global {
-  const describe: jest.Describe;
-  const it: jest.It;
-  const expect: jest.Expect;
-}
-
 // Test wrapper component
 const TestWrapper = ({ 
   previousEntries, 

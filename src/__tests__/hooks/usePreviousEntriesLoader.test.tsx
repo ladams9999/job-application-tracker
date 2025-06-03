@@ -4,14 +4,6 @@ import '@testing-library/jest-dom';
 import { usePreviousEntriesLoader } from '@/hooks/usePreviousEntriesLoader';
 import * as applicationService from '@/services/applicationService';
 
-// Ensure Jest globals are available
-declare global {
-  const describe: jest.Describe;
-  const it: jest.It;
-  const expect: jest.Expect;
-  const beforeEach: jest.Lifecycle;
-}
-
 // Mock the service
 jest.mock('@/services/applicationService');
 const mockedGetSuggestions = applicationService.getSuggestions as jest.MockedFunction<typeof applicationService.getSuggestions>;

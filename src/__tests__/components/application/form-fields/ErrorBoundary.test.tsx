@@ -4,15 +4,6 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ErrorBoundary from '@/components/application/form-fields/ErrorBoundary';
 
-// Ensure Jest globals are available
-declare global {
-  const describe: jest.Describe;
-  const it: jest.It;
-  const expect: jest.Expect;
-  const beforeAll: jest.Lifecycle;
-  const afterAll: jest.Lifecycle;
-}
-
 // Component that throws an error
 const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {

@@ -6,14 +6,6 @@ import * as usePreviousEntriesLoaderModule from '@/hooks/usePreviousEntriesLoade
 import * as useApplicationDataLoaderModule from '@/hooks/useApplicationDataLoader';
 import * as useApplicationSubmitModule from '@/hooks/useApplicationSubmit';
 
-// Ensure Jest globals are available
-declare global {
-  const describe: jest.Describe;
-  const it: jest.It;
-  const expect: jest.Expect;
-  const beforeEach: jest.Lifecycle;
-}
-
 // Mock the hooks
 jest.mock('@/hooks/usePreviousEntriesLoader');
 jest.mock('@/hooks/useApplicationDataLoader');

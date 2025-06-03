@@ -1,18 +1,6 @@
 
 import '@testing-library/jest-dom';
 
-// Declare Jest globals for TypeScript
-declare global {
-  var describe: jest.Describe;
-  var it: jest.It;
-  var expect: jest.Expect;
-  var beforeEach: jest.Lifecycle;
-  var afterEach: jest.Lifecycle;
-  var beforeAll: jest.Lifecycle;
-  var afterAll: jest.Lifecycle;
-  var jest: typeof import('jest');
-}
-
 // Mock Supabase client
 jest.mock('@/integrations/supabase/client', () => ({
   supabase: {

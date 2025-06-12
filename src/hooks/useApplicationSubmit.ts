@@ -32,7 +32,6 @@ export const useApplicationSubmit = (id: string | undefined) => {
           createdAt: "", // These will be preserved by updateApplication
           updatedAt: "",
         });
-        toast.success("Application successfully updated!");
       } else {
         await addApplication({
           company: companyName,
@@ -45,7 +44,6 @@ export const useApplicationSubmit = (id: string | undefined) => {
           recruiter: data.source === "Recruiter" ? data.recruiter : undefined,
           recruitingFirm: data.source === "Recruiter" ? data.recruitingFirm : undefined,
         });
-        toast.success("Application successfully added!");
       }
       
       navigate("/applications");

@@ -22,7 +22,7 @@ interface ApplicationFormFieldsProps {
 const DEFAULT_ENTRIES: PreviousEntryData = {
   companies: [],
   jobTitles: [],
-  sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"]
+  sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
 };
 
 const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({ 
@@ -32,31 +32,41 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   isDataLoading = false,
   enableAutocomplete = false
 }) => {
-  // Ensure previousEntries properties are always valid objects with arrays
-  const safeEntries: PreviousEntryData = {
-    companies: Array.isArray(previousEntries?.companies) ? previousEntries.companies : DEFAULT_ENTRIES.companies,
-    jobTitles: Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : DEFAULT_ENTRIES.jobTitles,
-    sources: Array.isArray(previousEntries?.sources) && previousEntries.sources.length > 0 
-      ? previousEntries.sources 
-      : DEFAULT_ENTRIES.sources
-  };
+  // Only sanitize the sources array so CompanyFieldsWithAutocomplete can
+  // determine if it should fall back to simple inputs when the companies or
+  // jobTitles arrays are invalid. This preserves `null`/`undefined` values for
+  // those fields passed in from the loader.
+  const safeSources = Array.isArray(previousEntries?.sources) && previousEntries.sources.length > 0
+    ? previousEntries.sources
+    : DEFAULT_ENTRIES.sources;
 
-  console.log("ApplicationFormFields render:", { enableAutocomplete, isDataLoading, safeEntries });
+  const fallbackEntries = DEFAULT_ENTRIES;
+
+  // Use the original previousEntries for the autocomplete component.  It may be
+  // undefined or contain invalid data which allows the component to gracefully
+  // render simple inputs instead of autocomplete fields when appropriate.
+  const autocompleteEntries = previousEntries as any;
+
+  console.log("ApplicationFormFields render:", {
+    enableAutocomplete,
+    isDataLoading,
+    previousEntries,
+  });
 
   return (
     <>
       <ErrorBoundary
-        fallback={<CompanyFields form={form} previousEntries={safeEntries} />}
+        fallback={<CompanyFields form={form} previousEntries={fallbackEntries} />}
         onError={(error) => console.error("CompanyFields error:", error)}
       >
         {enableAutocomplete ? (
-          <CompanyFieldsWithAutocomplete 
-            form={form} 
-            previousEntries={safeEntries}
+          <CompanyFieldsWithAutocomplete
+            form={form}
+            previousEntries={autocompleteEntries}
             isDataLoading={isDataLoading}
           />
         ) : (
-          <CompanyFields form={form} previousEntries={safeEntries} />
+          <CompanyFields form={form} previousEntries={fallbackEntries} />
         )}
       </ErrorBoundary>
       
@@ -64,7 +74,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
       
       <ApplicationDateAndStatusFields form={form} />
       
-      <SourceField form={form} sources={safeEntries.sources} />
+      <SourceField form={form} sources={safeSources} />
 
       {showRecruiterFields && <RecruiterFields form={form} />}
       

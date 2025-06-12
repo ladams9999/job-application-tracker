@@ -1,5 +1,5 @@
 
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useApplicationForm } from '@/hooks/useApplicationForm';
 import * as usePreviousEntriesLoader from '@/hooks/usePreviousEntriesLoader';
@@ -57,10 +57,12 @@ describe('useApplicationForm', () => {
 
   it('should show recruiter fields when source is Recruiter', () => {
     const { result } = renderHook(() => useApplicationForm());
-    
-    // Set the source to "Recruiter"
-    result.current.form.setValue('source', 'Recruiter');
-    
+
+    // Set the source to "Recruiter" and trigger a re-render
+    act(() => {
+      result.current.form.setValue('source', 'Recruiter');
+    });
+
     expect(result.current.showRecruiterFields).toBe(true);
   });
 

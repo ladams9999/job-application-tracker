@@ -45,6 +45,16 @@ const mockPreviousEntries: PreviousEntryData = {
 };
 
 describe('CompanyFieldsWithAutocomplete', () => {
+  beforeAll(() => {
+    // Polyfill ResizeObserver for the jsdom test environment
+    global.ResizeObserver = global.ResizeObserver || class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+    // jsdom doesn't implement scrollIntoView which cmdk relies on
+    Element.prototype.scrollIntoView = Element.prototype.scrollIntoView || (() => {});
+  });
   it('renders skeleton loaders when isDataLoading=true', () => {
     render(
       <TestWrapper 
@@ -138,8 +148,8 @@ describe('CompanyFieldsWithAutocomplete', () => {
     
     const anonymousCheckbox = screen.getByRole('checkbox');
     fireEvent.click(anonymousCheckbox);
-    
-    const companyButton = screen.getByText('Select or enter company...');
+
+    const companyButton = screen.getByRole('combobox', { name: 'Company' });
     expect(companyButton).toBeDisabled();
   });
 });

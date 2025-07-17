@@ -23,7 +23,16 @@ const TestWrapper = ({
     defaultValues: {
       company: "",
       jobTitle: "",
-      isAnonymous: false,
+      jobDescription: "",
+      status: "applied",
+      notes: "",
+      dateApplied: new Date(),
+      source: "LinkedIn",
+      recruiter: "",
+      recruitingFirm: "",
+      contactEmail: "",
+      contactPhone: "",
+      applicationUrl: "",
     },
   });
 
@@ -136,20 +145,5 @@ describe('CompanyFieldsWithAutocomplete', () => {
       expect(screen.getByText('Microsoft')).toBeInTheDocument();
       expect(screen.getByText('Apple')).toBeInTheDocument();
     });
-  });
-
-  it('disables company field when anonymous toggle is enabled', () => {
-    render(
-      <TestWrapper 
-        previousEntries={mockPreviousEntries} 
-        isDataLoading={false} 
-      />
-    );
-    
-    const anonymousCheckbox = screen.getByRole('checkbox');
-    fireEvent.click(anonymousCheckbox);
-
-    const companyButton = screen.getByRole('combobox', { name: 'Company' });
-    expect(companyButton).toBeDisabled();
   });
 });

@@ -24,11 +24,13 @@ export const useApplicationDataLoader = (
         jobDescription: "",
         status: "applied",
         notes: "",
-        isAnonymous: false,
         dateApplied: new Date(),
         source: "LinkedIn",
         recruiter: "",
         recruitingFirm: "",
+        contactEmail: "",
+        contactPhone: "",
+        applicationUrl: "",
       });
     }
   }, [isEditMode, location.pathname, form]);
@@ -46,9 +48,6 @@ export const useApplicationDataLoader = (
     try {
       const application = await applicationsApi.getApplication(id);
       
-      // Check if it's an anonymous application
-      const isAnonymous = application.company === "Anonymous";
-      
       form.reset({
         company: application.company || "",
         jobTitle: application.jobTitle || "",
@@ -56,10 +55,12 @@ export const useApplicationDataLoader = (
         dateApplied: new Date(application.dateApplied),
         status: application.status,
         notes: application.notes || "",
-        isAnonymous: isAnonymous,
         source: application.source || "LinkedIn",
         recruiter: application.recruiter || "",
         recruitingFirm: application.recruitingFirm || "",
+        contactEmail: application.contactEmail || "",
+        contactPhone: application.contactPhone || "",
+        applicationUrl: application.applicationUrl || "",
       });
     } catch (error) {
       console.error("Error loading application:", error);

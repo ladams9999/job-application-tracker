@@ -29,7 +29,6 @@ const TestWrapper = ({
       jobDescription: "",
       status: "applied",
       notes: "",
-      isAnonymous: false,
       dateApplied: new Date(),
       source: "LinkedIn",
       recruiter: "",

@@ -21,7 +21,6 @@ export const formSchema = z.object({
     "withdrawn",
   ] as const),
   notes: z.string().optional(),
-  isAnonymous: z.boolean().default(false),
   source: z.string().min(1, { message: "Source is required" }),
   recruiter: z.string().optional()
     .refine(val => {

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FormValues, PreviousEntryData } from "@/types/forms";
-import AnonymousToggle from "../AnonymousToggle";
 
 interface CompanyFieldsWithAutocompleteProps {
   form: UseFormReturn<FormValues>;
@@ -43,12 +42,9 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
   if (isDataLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">Company</label>
-            <div className="h-10 bg-gray-100 animate-pulse rounded-md" />
-          </div>
-          {!isEditMode && <AnonymousToggle form={form} />}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Company</label>
+          <div className="h-10 bg-gray-100 animate-pulse rounded-md" />
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium">Job Title</label>
@@ -62,27 +58,23 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
     console.warn("CompanyFieldsWithAutocomplete: Data not ready, falling back to simple inputs");
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="company"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Company</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter company name..."
-                    {...field}
-                    disabled={form.watch("isAnonymous")}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {!isEditMode && <AnonymousToggle form={form} />}
-        </div>
+        <FormField
+          control={form.control}
+          name="company"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter company name..."
+                  {...field}
+                  value={field.value || ""}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         
         <FormField
           control={form.control}
@@ -107,81 +99,76 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="space-y-4">
-        <FormField
-          control={form.control}
-          name="company"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Company</FormLabel>
-              <Popover open={companyOpen} onOpenChange={setCompanyOpen}>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={companyOpen}
-                      className="w-full justify-between"
-                      disabled={form.watch("isAnonymous")}
-                    >
-                      {field.value || "Select or enter company..."}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput 
-                      placeholder="Search companies..." 
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                      }}
-                    />
-                    <CommandEmpty>
-                      <div className="p-2">
-                        <Button
-                          variant="ghost"
-                          className="w-full"
-                          onClick={() => {
+      <FormField
+        control={form.control}
+        name="company"
+        render={({ field }) => (
+          <FormItem className="flex flex-col">
+            <FormLabel>Company</FormLabel>
+            <Popover open={companyOpen} onOpenChange={setCompanyOpen}>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={companyOpen}
+                    className="w-full justify-between"
+                  >
+                    {field.value || "Select or enter company..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput 
+                    placeholder="Search companies..." 
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                    }}
+                  />
+                  <CommandEmpty>
+                    <div className="p-2">
+                      <Button
+                        variant="ghost"
+                        className="w-full"
+                        onClick={() => {
+                          setCompanyOpen(false);
+                        }}
+                      >
+                        Use current input
+                      </Button>
+                    </div>
+                  </CommandEmpty>
+                  <CommandList>
+                    <CommandGroup>
+                      {previousEntries.companies.map((company) => (
+                        <CommandItem
+                          key={company}
+                          value={company}
+                          onSelect={(currentValue) => {
+                            field.onChange(currentValue);
                             setCompanyOpen(false);
                           }}
                         >
-                          Use current input
-                        </Button>
-                      </div>
-                    </CommandEmpty>
-                    <CommandList>
-                      <CommandGroup>
-                        {previousEntries.companies.map((company) => (
-                          <CommandItem
-                            key={company}
-                            value={company}
-                            onSelect={(currentValue) => {
-                              field.onChange(currentValue);
-                              setCompanyOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                field.value === company ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            {company}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        {!isEditMode && <AnonymousToggle form={form} />}
-      </div>
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              field.value === company ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {company}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       
       <FormField
         control={form.control}

@@ -14,13 +14,10 @@ export const useApplicationSubmit = (id: string | undefined) => {
     try {
       setIsSubmitting(true);
       
-      // If anonymous is selected, use "Anonymous" as the company name
-      const companyName = data.isAnonymous ? "Anonymous" : data.company;
-      
       if (isEditMode && id) {
         await updateApplication({
           id,
-          company: companyName,
+          company: data.company,
           jobTitle: data.jobTitle,
           jobDescription: data.jobDescription,
           dateApplied: data.dateApplied.toISOString(),
@@ -34,7 +31,7 @@ export const useApplicationSubmit = (id: string | undefined) => {
         });
       } else {
         await addApplication({
-          company: companyName,
+          company: data.company,
           jobTitle: data.jobTitle,
           jobDescription: data.jobDescription,
           dateApplied: data.dateApplied.toISOString(),

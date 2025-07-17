@@ -21,7 +21,6 @@ export const useApplicationForm = () => {
       jobDescription: "",
       status: "applied",
       notes: "",
-      isAnonymous: false,
       dateApplied: new Date(),
       source: "LinkedIn",
       recruiter: "",

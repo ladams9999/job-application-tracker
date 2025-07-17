@@ -10,7 +10,6 @@ export interface FormValues {
   dateApplied: Date;
   status: ApplicationStatus;
   notes?: string;
-  isAnonymous: boolean;
   source: string;
   recruiter?: string;
   recruitingFirm?: string;

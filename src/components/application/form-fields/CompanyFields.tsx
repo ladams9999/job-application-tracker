@@ -9,9 +9,10 @@ import AnonymousToggle from "../AnonymousToggle";
 interface CompanyFieldsProps {
   form: UseFormReturn<FormValues>;
   previousEntries: PreviousEntryData;
+  isEditMode?: boolean;
 }
 
-const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
+const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries, isEditMode = false }) => {
   console.log("CompanyFields rendered with previousEntries:", previousEntries);
   
   return (
@@ -36,7 +37,7 @@ const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries }) => {
           )}
         />
         
-        <AnonymousToggle form={form} />
+        {!isEditMode && <AnonymousToggle form={form} />}
       </div>
       
       <FormField

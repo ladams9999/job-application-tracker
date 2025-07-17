@@ -18,6 +18,7 @@ interface ApplicationFormFieldsProps {
   showRecruiterFields?: boolean;
   isDataLoading?: boolean;
   enableAutocomplete?: boolean;
+  isEditMode?: boolean;
 }
 
 const DEFAULT_ENTRIES: PreviousEntryData = {
@@ -31,7 +32,8 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   previousEntries, 
   showRecruiterFields = false,
   isDataLoading = false,
-  enableAutocomplete = false
+  enableAutocomplete = false,
+  isEditMode = false
 }) => {
   // Only sanitize the sources array so CompanyFieldsWithAutocomplete can
   // determine if it should fall back to simple inputs when the companies or
@@ -52,12 +54,13 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
     enableAutocomplete,
     isDataLoading,
     previousEntries,
+    isEditMode,
   });
 
   return (
     <>
       <ErrorBoundary
-        fallback={<CompanyFields form={form} previousEntries={fallbackEntries} />}
+        fallback={<CompanyFields form={form} previousEntries={fallbackEntries} isEditMode={isEditMode} />}
         onError={(error) => console.error("CompanyFields error:", error)}
       >
         {enableAutocomplete ? (
@@ -65,9 +68,10 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
             form={form}
             previousEntries={autocompleteEntries}
             isDataLoading={isDataLoading}
+            isEditMode={isEditMode}
           />
         ) : (
-          <CompanyFields form={form} previousEntries={fallbackEntries} />
+          <CompanyFields form={form} previousEntries={fallbackEntries} isEditMode={isEditMode} />
         )}
       </ErrorBoundary>
       

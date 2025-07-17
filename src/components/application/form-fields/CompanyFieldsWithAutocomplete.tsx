@@ -15,12 +15,14 @@ interface CompanyFieldsWithAutocompleteProps {
   form: UseFormReturn<FormValues>;
   previousEntries: PreviousEntryData;
   isDataLoading?: boolean;
+  isEditMode?: boolean;
 }
 
 const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({ 
   form, 
   previousEntries, 
-  isDataLoading = false 
+  isDataLoading = false,
+  isEditMode = false
 }) => {
   const [companyOpen, setCompanyOpen] = useState(false);
   const [jobTitleOpen, setJobTitleOpen] = useState(false);
@@ -46,7 +48,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
             <label className="block text-sm font-medium">Company</label>
             <div className="h-10 bg-gray-100 animate-pulse rounded-md" />
           </div>
-          <AnonymousToggle form={form} />
+          {!isEditMode && <AnonymousToggle form={form} />}
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium">Job Title</label>
@@ -79,7 +81,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
               </FormItem>
             )}
           />
-          <AnonymousToggle form={form} />
+          {!isEditMode && <AnonymousToggle form={form} />}
         </div>
         
         <FormField
@@ -178,7 +180,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
           )}
         />
         
-        <AnonymousToggle form={form} />
+        {!isEditMode && <AnonymousToggle form={form} />}
       </div>
       
       <FormField

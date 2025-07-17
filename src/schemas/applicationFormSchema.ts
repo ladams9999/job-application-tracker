@@ -13,9 +13,7 @@ export const formSchema = z.object({
   }),
   status: z.enum([
     "applied",
-    "underReview",
-    "interviewScheduled",
-    "interviewed",
+    "interview",
     "offer",
     "rejected",
     "withdrawn",

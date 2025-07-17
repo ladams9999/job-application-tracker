@@ -1,4 +1,3 @@
-
 import { JobApplication, ApplicationFilter } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -8,14 +7,7 @@ export interface CreateApplicationRequest {
   jobTitle: string;
   jobDescription: string;
   dateApplied: string;
-  status:
-    | 'applied'
-    | 'underReview'
-    | 'interviewScheduled'
-    | 'interviewed'
-    | 'offer'
-    | 'rejected'
-    | 'withdrawn';
+  status: 'applied' | 'interview' | 'offer' | 'rejected' | 'withdrawn';
   notes?: string;
   source: string;
   recruiter?: string;

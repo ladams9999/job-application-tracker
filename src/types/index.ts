@@ -19,9 +19,7 @@ export interface JobApplication {
 
 export type ApplicationStatus =
   | 'applied'
-  | 'underReview'
-  | 'interviewScheduled'
-  | 'interviewed'
+  | 'interview'
   | 'offer'
   | 'rejected'
   | 'withdrawn';

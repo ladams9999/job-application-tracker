@@ -54,14 +54,23 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
   const getStatusColor = (status: ApplicationStatus) => {
     const colors = {
       applied: "bg-blue-100 text-blue-800",
-      underReview: "bg-purple-100 text-purple-800",
-      interviewScheduled: "bg-yellow-100 text-yellow-800",
-      interviewed: "bg-orange-100 text-orange-800",
+      interview: "bg-yellow-100 text-yellow-800",
       offer: "bg-green-100 text-green-800",
       rejected: "bg-red-100 text-red-800",
       withdrawn: "bg-gray-100 text-gray-800",
     } as Record<ApplicationStatus, string>;
     return colors[status];
+  };
+
+  const getStatusLabel = (status: ApplicationStatus) => {
+    const labels = {
+      applied: "Applied",
+      interview: "Interview",
+      offer: "Offer",
+      rejected: "Rejected",
+      withdrawn: "Withdrawn",
+    } as Record<ApplicationStatus, string>;
+    return labels[status];
   };
 
   return (
@@ -97,7 +106,7 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                 <TableCell>{formatDate(app.dateApplied)}</TableCell>
                 <TableCell>
                   <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(app.status)}`}>
-                    {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                    {getStatusLabel(app.status)}
                   </span>
                 </TableCell>
                 <TableCell className="text-right">

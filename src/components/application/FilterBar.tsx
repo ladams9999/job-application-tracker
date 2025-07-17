@@ -41,9 +41,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="applied">Applied</SelectItem>
-            <SelectItem value="underReview">Under Review</SelectItem>
-            <SelectItem value="interviewScheduled">Interview Scheduled</SelectItem>
-            <SelectItem value="interviewed">Interviewed</SelectItem>
+            <SelectItem value="interview">Interview</SelectItem>
             <SelectItem value="offer">Offer</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
             <SelectItem value="withdrawn">Withdrawn</SelectItem>

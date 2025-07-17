@@ -2,7 +2,7 @@
 
 This repository uses Jest for testing. Run `npx jest` from the repository root to execute the test suite.
 
-Refer to the Product Requirements Document in `job_application_tracker_prd.md` for a detailed description of the intended application features.
+Refer to the Product Requirements Document in `PRD.md` for a detailed description of the intended application features.
 
 **Existing Features**
 - React frontend using React Hook Form and Tailwind CSS

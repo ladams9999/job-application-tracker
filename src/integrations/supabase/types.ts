@@ -64,7 +64,9 @@ export type Database = {
     Enums: {
       application_status:
         | "applied"
-        | "interview"
+        | "underReview"
+        | "interviewScheduled"
+        | "interviewed"
         | "offer"
         | "rejected"
         | "withdrawn"
@@ -185,7 +187,9 @@ export const Constants = {
     Enums: {
       application_status: [
         "applied",
-        "interview",
+        "underReview",
+        "interviewScheduled",
+        "interviewed",
         "offer",
         "rejected",
         "withdrawn",

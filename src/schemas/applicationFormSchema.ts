@@ -5,11 +5,21 @@ import { ApplicationStatus } from "@/types/forms";
 export const formSchema = z.object({
   company: z.string().min(1, { message: "Company name is required" }),
   jobTitle: z.string().min(1, { message: "Job title is required" }),
-  jobDescription: z.string(),
+  jobDescription: z.string().min(1, { message: "Job description is required" }),
   dateApplied: z.date({
     required_error: "Date applied is required",
+  }).refine(date => date <= new Date(), {
+    message: "Date cannot be in the future",
   }),
-  status: z.enum(["applied", "interview", "offer", "rejected", "withdrawn"] as const),
+  status: z.enum([
+    "applied",
+    "underReview",
+    "interviewScheduled",
+    "interviewed",
+    "offer",
+    "rejected",
+    "withdrawn",
+  ] as const),
   notes: z.string().optional(),
   isAnonymous: z.boolean().default(false),
   source: z.string().min(1, { message: "Source is required" }),
@@ -26,7 +36,10 @@ export const formSchema = z.object({
       return true;
     }, {
       message: "Recruiting firm is required when source is Recruiter",
-    })
+    }),
+  contactEmail: z.string().email({ message: "Invalid email" }).optional(),
+  contactPhone: z.string().optional(),
+  applicationUrl: z.string().url({ message: "Invalid URL" }).optional()
 }).refine((data) => {
   // When source is 'Recruiter', both recruiter and recruitingFirm must be provided
   if (data.source === "Recruiter") {

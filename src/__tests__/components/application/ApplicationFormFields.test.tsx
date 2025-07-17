@@ -34,6 +34,9 @@ const TestWrapper = ({
       source: "LinkedIn",
       recruiter: "",
       recruitingFirm: "",
+      contactEmail: "",
+      contactPhone: "",
+      applicationUrl: "",
     },
   });
 
@@ -143,6 +146,9 @@ describe('ApplicationFormFields', () => {
     expect(screen.getByLabelText('Status')).toBeInTheDocument();
     expect(screen.getByLabelText('Source')).toBeInTheDocument();
     expect(screen.getByLabelText('Notes')).toBeInTheDocument();
+    expect(screen.getByLabelText('Contact Email')).toBeInTheDocument();
+    expect(screen.getByLabelText('Contact Phone')).toBeInTheDocument();
+    expect(screen.getByLabelText('Application URL')).toBeInTheDocument();
   });
 
   it('conditionally shows recruiter fields', () => {

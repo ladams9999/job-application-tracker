@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
-    interview: 0,
+    interviews: 0,
     offer: 0,
     rejected: 0,
     withdrawn: 0,
@@ -29,7 +29,7 @@ const Dashboard = () => {
         const stats = {
           total: data.length,
           applied: data.filter(app => app.status === 'applied').length,
-          interview: data.filter(app => app.status === 'interview').length,
+          interviews: data.filter(app => app.status === 'interviewScheduled' || app.status === 'interviewed').length,
           offer: data.filter(app => app.status === 'offer').length,
           rejected: data.filter(app => app.status === 'rejected').length,
           withdrawn: data.filter(app => app.status === 'withdrawn').length,
@@ -54,11 +54,13 @@ const Dashboard = () => {
   const getStatusColor = (status: ApplicationStatus) => {
     const colors = {
       applied: "bg-blue-100 text-blue-800",
-      interview: "bg-yellow-100 text-yellow-800",
+      underReview: "bg-purple-100 text-purple-800",
+      interviewScheduled: "bg-yellow-100 text-yellow-800",
+      interviewed: "bg-orange-100 text-orange-800",
       offer: "bg-green-100 text-green-800",
       rejected: "bg-red-100 text-red-800",
       withdrawn: "bg-gray-100 text-gray-800",
-    };
+    } as Record<ApplicationStatus, string>;
     return colors[status];
   };
 
@@ -100,7 +102,7 @@ const Dashboard = () => {
             <CardTitle className="text-sm font-medium text-muted-foreground">Interviews</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats.interview}</div>
+            <div className="text-3xl font-bold">{stats.interviews}</div>
           </CardContent>
         </Card>
         <Card>

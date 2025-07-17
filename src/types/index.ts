@@ -12,9 +12,19 @@ export interface JobApplication {
   source?: string;
   recruiter?: string;
   recruitingFirm?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  applicationUrl?: string;
 }
 
-export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected' | 'withdrawn';
+export type ApplicationStatus =
+  | 'applied'
+  | 'underReview'
+  | 'interviewScheduled'
+  | 'interviewed'
+  | 'offer'
+  | 'rejected'
+  | 'withdrawn';
 
 export interface ApplicationFilter {
   search: string;

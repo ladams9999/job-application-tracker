@@ -10,6 +10,7 @@ import ApplicationDateAndStatusFields from "./form-fields/ApplicationDateAndStat
 import SourceField from "./form-fields/SourceField";
 import RecruiterFields from "./form-fields/RecruiterFields";
 import NotesField from "./form-fields/NotesField";
+import ContactFields from "./form-fields/ContactFields";
 
 interface ApplicationFormFieldsProps {
   form: UseFormReturn<FormValues>;
@@ -77,7 +78,9 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
       <SourceField form={form} sources={safeSources} />
 
       {showRecruiterFields && <RecruiterFields form={form} />}
-      
+
+      <ContactFields form={form} />
+
       <NotesField form={form} />
     </>
   );

@@ -8,11 +8,21 @@ export interface CreateApplicationRequest {
   jobTitle: string;
   jobDescription: string;
   dateApplied: string;
-  status: 'applied' | 'interview' | 'offer' | 'rejected' | 'withdrawn';
+  status:
+    | 'applied'
+    | 'underReview'
+    | 'interviewScheduled'
+    | 'interviewed'
+    | 'offer'
+    | 'rejected'
+    | 'withdrawn';
   notes?: string;
   source: string;
   recruiter?: string;
   recruitingFirm?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  applicationUrl?: string;
 }
 
 export interface UpdateApplicationRequest extends CreateApplicationRequest {}
@@ -85,6 +95,9 @@ export const applicationsApi = {
         source: app.source || '',
         recruiter: app.recruiter || '',
         recruitingFirm: app.recruiting_firm || '',
+        contactEmail: app.contact_email || '',
+        contactPhone: app.contact_phone || '',
+        applicationUrl: app.application_url || '',
       }));
 
       return {
@@ -130,6 +143,9 @@ export const applicationsApi = {
         source: data.source || '',
         recruiter: data.recruiter || '',
         recruitingFirm: data.recruiting_firm || '',
+        contactEmail: data.contact_email || '',
+        contactPhone: data.contact_phone || '',
+        applicationUrl: data.application_url || '',
       };
     } catch (error) {
       console.error('Error in getApplication:', error);
@@ -152,6 +168,9 @@ export const applicationsApi = {
           source: data.source,
           recruiter: data.recruiter || null,
           recruiting_firm: data.recruitingFirm || null,
+          contact_email: data.contactEmail || null,
+          contact_phone: data.contactPhone || null,
+          application_url: data.applicationUrl || null,
         })
         .select()
         .single();
@@ -179,6 +198,9 @@ export const applicationsApi = {
         source: result.source || '',
         recruiter: result.recruiter || '',
         recruitingFirm: result.recruiting_firm || '',
+        contactEmail: result.contact_email || '',
+        contactPhone: result.contact_phone || '',
+        applicationUrl: result.application_url || '',
       };
     } catch (error) {
       console.error('Error in createApplication:', error);
@@ -201,6 +223,9 @@ export const applicationsApi = {
           source: data.source,
           recruiter: data.recruiter || null,
           recruiting_firm: data.recruitingFirm || null,
+          contact_email: data.contactEmail || null,
+          contact_phone: data.contactPhone || null,
+          application_url: data.applicationUrl || null,
         })
         .eq('id', id)
         .select()
@@ -229,6 +254,9 @@ export const applicationsApi = {
         source: result.source || '',
         recruiter: result.recruiter || '',
         recruitingFirm: result.recruiting_firm || '',
+        contactEmail: result.contact_email || '',
+        contactPhone: result.contact_phone || '',
+        applicationUrl: result.application_url || '',
       };
     } catch (error) {
       console.error('Error in updateApplication:', error);

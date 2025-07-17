@@ -14,6 +14,9 @@ export interface FormValues {
   source: string;
   recruiter?: string;
   recruitingFirm?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  applicationUrl?: string;
 }
 
 export interface PreviousEntryData {

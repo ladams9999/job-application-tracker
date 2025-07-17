@@ -26,6 +26,9 @@ export const useApplicationForm = () => {
       source: "LinkedIn",
       recruiter: "",
       recruitingFirm: "",
+      contactEmail: "",
+      contactPhone: "",
+      applicationUrl: "",
     },
   });
 

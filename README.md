@@ -1,26 +1,20 @@
-# Welcome to your Lovable project
+# Welcome to Job Application Tracker
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/a2fa30c1-a260-4487-8461-20fdc6063394
+This project originally started as an attempt to vibe code using Lovable.  Lovable came up with a halfway decent prototype UI, but couldn't get anything else right, so I've stopped using it.  Instead, I've been throwing coding tools at the mess in an attempt to fix it, and to give me a feel for their unique strengths and weaknesses.  Each fork has their own branch here in this repo.  Somewhere along the line I may split into separate repos, but not today:
 
-## How can I edit this code?
+`using-codex`: ChatGPT Codex - using GPT-4o(?)
 
-There are several ways of editing your application.
+`using-copilot`: Github Copilot - primarily on o4-mini, but some other llms as well
 
-**Use Lovable**
+`using-warp`: Warp - using Claude 4 Sonnet
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a2fa30c1-a260-4487-8461-20fdc6063394) and start prompting.
+## How can I run this code?
 
-Changes made via Lovable will be committed automatically to this repo.
+I can't guarantee `main` or any of the above branches will be in a working state.  In the future I may try to guarantee `main` works, but again, not today. 
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Nominally, follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
@@ -32,42 +26,56 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Set up environment variables (see Environment Configuration below).
+cp .env.example .env
+# Edit .env with your actual configuration values
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Environment Configuration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This project uses environment variables for configuration. A `.env.example` file is provided as a template.
 
-**Use GitHub Codespaces**
+### Setup
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Copy the example file:
+   ```sh
+   cp .env.example .env
+   ```
 
-## What technologies are used for this project?
+2. Edit `.env` with your actual values:
+   ```sh
+   # Supabase Configuration
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   
+   # Development Server Configuration
+   SERVER_PORT=8080
+   ```
 
-This project is built with:
+### Available Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **`VITE_SUPABASE_URL`**: Your Supabase project URL
+- **`VITE_SUPABASE_ANON_KEY`**: Your Supabase anonymous key
+- **`SERVER_PORT`**: Port for the development server (default: 8080)
 
-## How can I deploy this project?
+### Usage Examples
 
-Simply open [Lovable](https://lovable.dev/projects/a2fa30c1-a260-4487-8461-20fdc6063394) and click on Share -> Publish.
+```sh
+# Default port (8080)
+npm run dev
 
-## Can I connect a custom domain to my Lovable project?
+# Custom port via environment variable
+SERVER_PORT=3000 npm run dev
 
-Yes, you can!
+# Or set in .env file
+echo "SERVER_PORT=3000" >> .env
+npm run dev
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Security Note
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The `.env` file is excluded from git to protect sensitive information. Never commit actual credentials to the repository.
+

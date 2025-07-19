@@ -12,8 +12,16 @@ This repository uses Jest for testing. Run `npx jest` from the repository root t
 ## Build System
 - **Vite**: v7.0.5 (upgraded from v5.4.19 to fix security vulnerabilities)
 - **Build command**: `npm run build`
-- **Dev server**: `npm run dev` (runs on port 8080)
+- **Dev server**: `npm run dev` (port configurable via SERVER_PORT env var, default 8080)
 - **Security status**: All npm audit vulnerabilities resolved (0 vulnerabilities as of last check)
+
+## Environment Configuration
+- **Environment file**: `.env` (excluded from git, use `.env.example` as template)
+- **Required variables**:
+  - `VITE_SUPABASE_URL`: Supabase project URL
+  - `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
+  - `SERVER_PORT`: Development server port (default: 8080)
+- **Setup**: `cp .env.example .env` and edit with actual values
 
 ## Recent Changes
 - Removed `lovable-tagger` dependency (was only used for Lovable platform development tagging)
@@ -33,6 +41,34 @@ Refer to the Product Requirements Document in `job_application_tracker_prd.md` f
 - Node.js/Express backend and REST endpoints
 - SQLite persistence or local database setup
 - Soft delete/archive functionality
-- Dockerfile, `.env` configuration and full integration test suite
+- Dockerfile and full integration test suite
+
+## Technology Stack
+- **Vite** v7.0.5 - Fast build tool and dev server
+- **React** 18 - UI framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Re-usable UI components
+- **Supabase** - Backend as a service
+- **React Hook Form** - Form handling
+- **Jest** - Testing framework
+- **React Testing Library** - Component testing utilities
+
+## Available Scripts
+```sh
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run preview    # Preview production build
+npm run lint       # Run ESLint
+npx jest           # Run tests
+```
+
+## Project Structure
+- `src/` - Source code
+- `src/components/` - React components
+- `src/integrations/supabase/` - Supabase configuration
+- `dist/` - Production build output
+- `.env` - Environment variables (not tracked)
+- `.env.example` - Environment variables template
 
 Follow a TDD workflow: write failing tests first, then implement code until they pass.

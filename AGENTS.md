@@ -17,3 +17,8 @@ Refer to the Product Requirements Document in `job_application_tracker_prd.md` f
 - Dockerfile, `.env` configuration and full integration test suite
 
 Follow a TDD workflow: write failing tests first, then implement code until they pass.
+
+## Agent Memory
+
+- The default Git remote for pushes is named `github`, not `origin`.
+- User OS: Linux; default shell: bash.

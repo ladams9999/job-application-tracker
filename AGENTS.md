@@ -22,3 +22,12 @@ Follow a TDD workflow: write failing tests first, then implement code until they
 
 - The default Git remote for pushes is named `github`, not `origin`.
 - User OS: Linux; default shell: bash.
+- No Tailwind stylelint plugin installed; CSS is linted post-build.
+- Custom CSS utilities implemented directly in `src/index.css` rather than using `@apply` globally.
+
+-## Recent Build & CSS Configuration
+
+- PostCSS is configured with the `@tailwindcss/postcss` plugin.
+- `tailwind.config.ts` includes a `safelist` for custom utilities `border-border`, `bg-background`, `text-foreground`.
+- `src/index.css` defines explicit `.border-border`, `.bg-background`, and `.text-foreground` utility classes in the `utilities` layer.
+- Stylelint configuration for Tailwind was removed; linting occurs on processed CSS after PostCSS.

@@ -1,3 +1,4 @@
+/* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,13 +16,14 @@
 
 /* Custom utilities that use CSS variables */
 @layer utilities {
-  * {
-    /* Apply border color directly using CSS variable */
+  /* Explicit custom utility classes */
+  .border-border {
     border-color: hsl(var(--border));
   }
-
-  body {
+  .bg-background {
     background-color: hsl(var(--background));
+  }
+  .text-foreground {
     color: hsl(var(--foreground));
   }
 }

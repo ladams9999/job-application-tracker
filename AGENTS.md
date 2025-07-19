@@ -24,9 +24,11 @@ This repository uses Jest for testing. Run `npx jest` from the repository root t
 - **Setup**: `cp .env.example .env` and edit with actual values
 
 ## Recent Changes
-- Removed `lovable-tagger` dependency (was only used for Lovable platform development tagging)
-- Upgraded vite to latest stable version (7.0.5) which resolved esbuild security vulnerabilities
-- Node.js updated from v18.19.0 to v20.19.4 to meet React Router v7.7.0 requirements
+- **Environment Configuration**: Added .env support with Supabase and server port configuration
+- **Security Fixes**: Removed `lovable-tagger` dependency and upgraded vite to v7.0.5 (resolved all npm audit vulnerabilities)
+- **Node.js Upgrade**: Updated from v18.19.0 to v20.19.4 via nvm to meet React Router v7.7.0 requirements
+- **Documentation**: Updated README.md and AGENTS.md with comprehensive setup instructions
+- **Git Configuration**: Remote is named `github` (not `origin`), working on `using-warp` branch
 
 ## Project Documentation
 Refer to the Product Requirements Document in `job_application_tracker_prd.md` for a detailed description of the intended application features.
@@ -71,4 +73,43 @@ npx jest           # Run tests
 - `.env` - Environment variables (not tracked)
 - `.env.example` - Environment variables template
 
-Follow a TDD workflow: write failing tests first, then implement code until they pass.
+## Session Continuity Notes
+
+### Current Project State
+- **Working Directory**: `/home/lloyd/projects/jat-with-warp`
+- **Project Status**: Fully functional with clean build, no vulnerabilities
+- **Last Session Actions**: Environment configuration, security fixes, documentation updates
+- **Git Status**: All changes committed to `using-warp` branch
+
+### Important Commands for New Sessions
+```sh
+# Load Node.js environment (required for all npm commands)
+export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Verify environment
+node --version  # Should show v20.19.4
+npm --version   # Should show v10.8.2
+
+# Check git configuration
+git remote -v   # Remote is 'github', NOT 'origin'
+git branch      # Currently on 'using-warp'
+
+# Verify project health
+npm run build   # Should build successfully
+npm audit       # Should show 0 vulnerabilities
+```
+
+### Development Workflow
+1. Always load nvm environment first
+2. Use `git remote` name `github` for push/pull operations
+3. Environment variables are in `.env` (use `.env.example` as template)
+4. Test changes with `npm run build` before committing
+5. Follow TDD: write failing tests first, then implement code until they pass
+
+### Key Files Modified This Session
+- `vite.config.ts` - Updated to use environment variables
+- `src/integrations/supabase/client.ts` - Now uses env vars with validation
+- `.env` and `.env.example` - Environment configuration
+- `.gitignore` - Added environment file exclusions
+- `README.md` and `AGENTS.md` - Documentation updates
+- `package.json` and `package-lock.json` - Dependency updates (vite, removed lovable-tagger)

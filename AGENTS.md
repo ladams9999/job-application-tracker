@@ -24,6 +24,8 @@ This repository uses Jest for testing. Run `npx jest` from the repository root t
 - **Setup**: `cp .env.example .env` and edit with actual values
 
 ## Recent Changes
+- **Form Validation**: Made Contact Email field truly optional - accepts empty strings, valid emails, or any text (e.g., "Ask HR")
+- **Port Configuration**: Fixed Vite dev server to properly read SERVER_PORT from .env file using loadEnv()
 - **Environment Configuration**: Added .env support with Supabase and server port configuration
 - **Security Fixes**: Removed `lovable-tagger` dependency and upgraded vite to v7.0.5 (resolved all npm audit vulnerabilities)
 - **Node.js Upgrade**: Updated from v18.19.0 to v20.19.4 via nvm to meet React Router v7.7.0 requirements

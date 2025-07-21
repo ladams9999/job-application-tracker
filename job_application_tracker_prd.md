@@ -52,7 +52,7 @@ A comprehensive, user-friendly application that helps job seekers organize, trac
 - Application Status (required; predefined options: "Applied", "Under Review", "Interview Scheduled", "Interviewed", "Offer", "Rejected", "Withdrawn" + custom entry)
 - Notes (optional, free text)
 - Agency / Recruiter (optional)
-- Contact Email (optional, valid email format)
+- Contact Email (optional, accepts any text including emails or contact notes)
 - Contact Phone (optional)
 - Application URL (optional, valid URL)
 

@@ -4,9 +4,9 @@
 
 This project originally started as an attempt to vibe code using Lovable.  Lovable came up with a halfway decent prototype UI, but couldn't get anything else right, so I've stopped using it.  Instead, I've been throwing coding tools at the mess in an attempt to fix it, and to give me a feel for their unique strengths and weaknesses.  Each fork has their own branch here in this repo.  Somewhere along the line I may split into separate repos, but not today:
 
-`using-codex`: ChatGPT Codex - using GPT-4o(?)
+`using-codex`: ChatGPT Codex - using codex-1 (o3)
 
-`using-copilot`: Github Copilot - primarily on o4-mini, but some other llms as well
+`using-copilot`: Github Copilot - primarily using o4-mini
 
 `using-warp`: Warp - using Claude 4 Sonnet
 

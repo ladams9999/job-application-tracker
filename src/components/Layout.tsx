@@ -37,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar for desktop */}
       <div className="hidden md:flex flex-col w-64 p-4 border-r">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">JobTrackr</h1>
+          <h1 className="text-2xl font-bold">Application Tracker</h1>
           <p className="text-sm text-muted-foreground">Track your job hunt</p>
         </div>
         <nav className="space-y-1">
@@ -64,7 +64,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Mobile navigation */}
       <div className="md:hidden border-b p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">JobTrackr</h1>
+        <h1 className="text-xl font-bold">Application Tracker</h1>
         <div className="flex gap-4">
           <Link
             to="/"

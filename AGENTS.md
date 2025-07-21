@@ -24,6 +24,7 @@ This repository uses Jest for testing. Run `npx jest` from the repository root t
 - **Setup**: `cp .env.example .env` and edit with actual values
 
 ## Recent Changes
+- **Source Field Enhancement**: Added custom source entry capability with combobox UI - users can select existing sources or type new custom sources
 - **Form Validation**: Made Contact Email field truly optional - accepts empty strings, valid emails, or any text (e.g., "Ask HR")
 - **Port Configuration**: Fixed Vite dev server to properly read SERVER_PORT from .env file using loadEnv()
 - **Environment Configuration**: Added .env support with Supabase and server port configuration

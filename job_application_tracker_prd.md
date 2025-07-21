@@ -47,7 +47,7 @@ A comprehensive, user-friendly application that helps job seekers organize, trac
 - Company Name (required, allow "Unknown")
 - Job Title (required)
 - Job Description (required)
-- Source / Where Found
+- Source / Where Found (required; supports predefined options and custom entry)
 - Date Applied (required, cannot be in future)
 - Application Status (required; predefined options: "Applied", "Under Review", "Interview Scheduled", "Interviewed", "Offer", "Rejected", "Withdrawn" + custom entry)
 - Notes (optional, free text)

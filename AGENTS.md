@@ -27,7 +27,8 @@ Follow a TDD workflow: write failing tests first, then implement code until they
 
 -## Recent Build & CSS Configuration
 
-- PostCSS is configured with the `@tailwindcss/postcss` plugin.
+- PostCSS is configured with the `@tailwindcss/postcss` plugin.  
+- NOTE: Removing or replacing this plugin with `tailwindcss` directly will break CSS processing.
 - `tailwind.config.ts` includes a `safelist` for custom utilities `border-border`, `bg-background`, `text-foreground`.
 - `src/index.css` defines explicit `.border-border`, `.bg-background`, and `.text-foreground` utility classes in the `utilities` layer.
 - Stylelint configuration for Tailwind was removed; linting occurs on processed CSS after PostCSS.

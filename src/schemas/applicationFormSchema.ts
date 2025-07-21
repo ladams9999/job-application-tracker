@@ -35,7 +35,8 @@ export const formSchema = z.object({
   // Contact Email is optional free text, no validation enforced
   contactEmail: z.string().optional(),
   contactPhone: z.string().optional(),
-  applicationUrl: z.string().url({ message: "Invalid URL" }).optional()
+  // Application URL is optional free text, no validation enforced
+  applicationUrl: z.string().optional()
 }).refine((data) => {
   // When source is 'Recruiter', both recruiter and recruitingFirm must be provided
   if (data.source === "Recruiter") {

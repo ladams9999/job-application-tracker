@@ -1,4 +1,11 @@
-# AGENT INSTRUCTIONS
+# AGENT INSTRUCTIONS 
+## Session Notes (2025-07-21)
+
+- Supabase project URL and public API key have been moved from `src/integrations/supabase/client.ts` to `.env` as `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- `.env` is now included in `.gitignore` to prevent accidental commits of sensitive data.
+- `.env.example` has been created with comments and placeholder values for all required environment variables.
+- The Vite dev server port is now configurable via `SERVER_PORT` in `.env` and `.env.example`. `vite.config.ts` reads this value using `process.env.SERVER_PORT`.
+- All changes have been committed, with `.env` remaining untracked.
 
 This repository uses Jest for testing. Run `npx jest` from the repository root to execute the test suite.
 

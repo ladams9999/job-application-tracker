@@ -29,7 +29,56 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Set up environment variables (see Environment Configuration below).
+cp .env.example .env
+# Edit .env with your actual configuration values
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
+
+## Environment Configuration
+
+This project uses environment variables for configuration. A `.env.example` file is provided as a template.
+
+### Setup
+
+1. Copy the example file:
+   ```sh
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your actual values:
+   ```sh
+   # Supabase Configuration
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   
+   # Development Server Configuration
+   SERVER_PORT=8080
+   ```
+
+### Available Environment Variables
+
+- **`VITE_SUPABASE_URL`**: Your Supabase project URL
+- **`VITE_SUPABASE_ANON_KEY`**: Your Supabase anonymous key
+- **`SERVER_PORT`**: Port for the development server (default: 8080)
+
+### Usage Examples
+
+```sh
+# Default port (8080)
+npm run dev
+
+# Custom port via environment variable
+SERVER_PORT=3000 npm run dev
+
+# Or set in .env file
+echo "SERVER_PORT=3000" >> .env
+npm run dev
+```
+
+### Security Note
+
+The `.env` file is excluded from git to protect sensitive information. Never commit actual credentials to the repository.
 

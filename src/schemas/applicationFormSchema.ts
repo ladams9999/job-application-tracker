@@ -1,6 +1,5 @@
 
 import { z } from "zod";
-import { ApplicationStatus } from "@/types/forms";
 
 export const formSchema = z.object({
   company: z.string().min(1, { message: "Company name is required" }),
@@ -8,12 +7,13 @@ export const formSchema = z.object({
   jobDescription: z.string().min(1, { message: "Job description is required" }),
   dateApplied: z.date({
     required_error: "Date applied is required",
+    invalid_type_error: "Please select a valid date",
   }).refine(date => date <= new Date(), {
     message: "Date cannot be in the future",
   }),
   status: z.enum([
     "applied",
-    "interview",
+    "interview", 
     "offer",
     "rejected",
     "withdrawn",

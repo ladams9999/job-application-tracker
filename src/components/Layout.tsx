@@ -42,12 +42,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
         <nav className="space-y-1">
           <NavItem
-            to="/"
-            icon={<LayoutDashboard size={20} />}
-            label="Dashboard"
-            isActive={pathname === "/"}
-          />
-          <NavItem
             to="/applications"
             icon={<ListFilter size={20} />}
             label="Applications"
@@ -66,15 +60,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="md:hidden border-b p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Application Tracker</h1>
         <div className="flex gap-4">
-          <Link
-            to="/"
-            className={cn(
-              "p-2 rounded-md",
-              pathname === "/" ? "bg-primary text-primary-foreground" : ""
-            )}
-          >
             <LayoutDashboard size={20} />
-          </Link>
           <Link
             to="/applications"
             className={cn(

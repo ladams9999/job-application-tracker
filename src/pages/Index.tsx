@@ -1,13 +1,15 @@
 
-import Layout from "@/components/Layout";
-import Dashboard from "@/pages/Dashboard";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  return (
-    <Layout>
-      <Dashboard />
-    </Layout>
-  );
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    navigate("/applications", { replace: true });
+  }, [navigate]);
+
+  return null;
 };
 
 export default Index;

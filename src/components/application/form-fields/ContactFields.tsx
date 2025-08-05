@@ -18,7 +18,7 @@ const ContactFields: FC<ContactFieldsProps> = ({ form }) => {
           <FormItem>
             <FormLabel>Contact Email</FormLabel>
             <FormControl>
-              <Input placeholder="example@company.com" {...field} />
+              <Input placeholder="example@company.com or contact info" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

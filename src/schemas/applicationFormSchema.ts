@@ -32,11 +32,20 @@ export const formSchema = z.object({
     }, {
       message: "Recruiting firm is required when source is Recruiter",
     }),
-  // Contact Email is optional free text, no validation enforced
   contactEmail: z.string().optional(),
   contactPhone: z.string().optional(),
-  // Application URL is optional free text, no validation enforced
-  applicationUrl: z.string().optional()
+  applicationUrl: z.string().optional().refine((val) => {
+    // Allow empty strings, undefined, or valid URLs only
+    if (!val || val.trim() === '') return true;
+    try {
+      new URL(val);
+      return true;
+    } catch {
+      return false;
+    }
+  }, {
+    message: "Please enter a valid URL or leave empty"
+  })
 }).refine((data) => {
   // When source is 'Recruiter', both recruiter and recruitingFirm must be provided
   if (data.source === "Recruiter") {

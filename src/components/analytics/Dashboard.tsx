@@ -78,54 +78,59 @@ const Dashboard = () => {
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
         <p className="text-muted-foreground">
-          Track your job application progress
+          Your job application progress
         </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="flex flex-wrap gap-4">
-        <Card className="border border-gray-200 rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Applications This Week</CardTitle>
+      <div className="flex flex-wrap gap-6">
+        <Card className="rounded-xl border-none shadow-md w-60 flex flex-col items-center justify-center">
+          <CardHeader className="w-full flex flex-col items-center justify-center space-y-0 pb-2">
+            <CardTitle className="text-sm font-bold text-center font-sans">This Week</CardTitle>
+            <p className="text-muted-foreground text-xs text-center">Since Sunday</p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{weeklyApplications}</div>
+          <CardContent className="w-full flex flex-col items-center justify-center">
+            <div className="text-2xl font-bold text-center font-sans">{weeklyApplications}</div>
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
+        <Card className="rounded-xl border-none shadow-md w-60 flex flex-col items-center justify-center">
+          <CardHeader className="w-full flex flex-col items-center justify-center space-y-0 pb-2">
+            <CardTitle className="text-sm font-bold text-center font-sans">Active</CardTitle>
+            <p className="text-muted-foreground text-xs text-center">In last two weeks</p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeApplications}</div>
+          <CardContent className="w-full flex flex-col items-center justify-center">
+            <div className="text-2xl font-bold text-center font-sans">{activeApplications}</div>
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Dormant</CardTitle>
+        <Card className="rounded-xl border-none shadow-md w-60 flex flex-col items-center justify-center">
+          <CardHeader className="w-full flex flex-col items-center justify-center space-y-0 pb-2">
+            <CardTitle className="text-sm font-bold text-center font-sans">Dormant</CardTitle>
+            <p className="text-muted-foreground text-xs text-center">No activity for 30 days</p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dormantApplications}</div>
+          <CardContent className="w-full flex flex-col items-center justify-center">
+            <div className="text-2xl font-bold text-center font-sans">{dormantApplications}</div>
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Silent</CardTitle>
+        <Card className="rounded-xl border-none shadow-md w-60 flex flex-col items-center justify-center">
+          <CardHeader className="w-full flex flex-col items-center justify-center space-y-0 pb-2">
+            <CardTitle className="text-sm font-bold text-center font-sans">Silent</CardTitle>
+            <p className="text-muted-foreground text-xs text-center">No activity</p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{silentApplications}</div>
+          <CardContent className="w-full flex flex-col items-center justify-center">
+            <div className="text-2xl font-bold text-center font-sans">{silentApplications}</div>
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total</CardTitle>
+        <Card className="rounded-xl border-none shadow-md w-60 flex flex-col items-center justify-center">
+          <CardHeader className="w-full flex flex-col items-center justify-center space-y-0 pb-2">
+            <CardTitle className="text-sm font-bold text-center font-sans">Total</CardTitle>
+            <p className="text-muted-foreground text-xs text-center">All applications</p>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalApplications}</div>
+          <CardContent className="w-full flex flex-col items-center justify-center">
+            <div className="text-2xl font-bold text-center font-sans">{totalApplications}</div>
           </CardContent>
         </Card>
       </div>

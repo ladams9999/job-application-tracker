@@ -30,3 +30,6 @@ bun.lockb
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env

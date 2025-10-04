@@ -5,10 +5,8 @@ export const formSchema = z.object({
   company: z.string().min(1, { message: "Company name is required" }),
   jobTitle: z.string().min(1, { message: "Job title is required" }),
   jobDescription: z.string().min(1, { message: "Job description is required" }),
-  dateApplied: z.date({
-    required_error: "Date applied is required",
-    invalid_type_error: "Please select a valid date",
-  }).refine(date => date <= new Date(), {
+  // Date applied: required and cannot be in the future
+  dateApplied: z.date().refine(date => date <= new Date(), {
     message: "Date cannot be in the future",
   }),
   status: z.enum([

@@ -18,7 +18,7 @@ This repository uses Jest for testing. Run `npx jest` from the repository root t
 - **Environment file**: `.env` (excluded from git, use `.env.example` as template)
 - **Required variables**:
   - `VITE_SUPABASE_URL`: Supabase project URL
-  - `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
+  - `VITE_SUPABASE_PUBLISHABLE_KEY`: Supabase publishable key
   - `SERVER_PORT`: Development server port (default: 8080)
 - **Setup**: `cp .env.example .env` and edit with actual values
 

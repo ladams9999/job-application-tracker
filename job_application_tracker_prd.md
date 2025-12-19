@@ -54,7 +54,7 @@ A comprehensive, user-friendly application that helps job seekers organize, trac
 - Agency / Recruiter (optional)
 - Contact Email (optional, accepts any text including emails or contact notes)
 - Contact Phone (optional)
-- Application URL (optional, valid URL)
+- Application URL (optional, free text)
 
 **Field Behavior:**
 - Autocomplete support for: Company Name, Job Title, Source, Agency/Recruiter

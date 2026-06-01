@@ -172,3 +172,11 @@
 - Normalized boundary failures through the shared app-error contract so fatal crashes still expose a summary, technical message, and operation context
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/error/AppErrorBoundary.test.tsx --runInBand` passes, and the boundary test proves a thrown child renders the fallback instead of a blank screen
+
+### Task 4: Preserve structured context when Supabase data is read and transformed
+
+- Updated `src/services/applicationAdapters.ts` so malformed `date_applied` values now throw `InvalidRecordDataError` with record id, field name, and raw value instead of an unstructured exception
+- Updated `src/services/applicationsApi.ts` to normalize read and transform failures with operation context for load, create, update, delete, and stats flows
+- Added regression coverage proving malformed row data is surfaced as a structured invalid-record-data error with the correct operation and record details
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/services/applicationAdapters.test.ts src/__tests__/services/applicationsApi.test.ts --runInBand` passes, and the tests prove malformed row data becomes a structured error with the expected record and field context

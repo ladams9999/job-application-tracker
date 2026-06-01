@@ -4,6 +4,7 @@ import {
   buildUpdateApplicationPayload,
   mapApplicationRow,
 } from '@/services/applicationAdapters';
+import { InvalidRecordDataError } from '@/lib/appError';
 import type { Tables } from '@/integrations/supabase/types';
 
 describe('applicationAdapters', () => {
@@ -65,6 +66,39 @@ describe('applicationAdapters', () => {
     };
 
     expect(mapApplicationRow(row).dateApplied).toBe('2026-06-01');
+  });
+
+  it('throws a structured invalid-record-data error for malformed dates', () => {
+    const row: Tables<'job_applications'> = {
+      id: 'app-bad',
+      company: 'Acme',
+      job_title: 'Frontend Engineer',
+      job_description: 'Build UI features',
+      date_applied: 'not-a-date',
+      status: 'applied',
+      notes: null,
+      created_at: '2026-06-01T12:00:00.000Z',
+      updated_at: '2026-06-02T12:00:00.000Z',
+      source: null,
+      recruiter: null,
+      recruiting_firm: null,
+      contact_email: null,
+      contact_phone: null,
+      application_url: null,
+    };
+
+    expect(() => mapApplicationRow(row)).toThrow(InvalidRecordDataError);
+
+    try {
+      mapApplicationRow(row);
+    } catch (error) {
+      expect(error).toMatchObject({
+        message: 'Invalid date-only value: not-a-date',
+        recordId: 'app-bad',
+        fieldName: 'date_applied',
+        rawValue: 'not-a-date',
+      });
+    }
   });
 
   it('builds the shared application request shape with defaults', () => {

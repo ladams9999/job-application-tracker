@@ -1,4 +1,5 @@
 import { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
+import { getTechnicalErrorMessage, InvalidRecordDataError } from "@/lib/appError";
 import { JobApplication } from "@/types";
 import { normalizeStoredDateValue } from "@/lib/date";
 
@@ -42,23 +43,37 @@ type ApplicationRequestSource = Pick<
 
 const toNullableString = (value?: string) => value || null;
 
-export const mapApplicationRow = (row: JobApplicationRow): JobApplication => ({
-  id: row.id,
-  company: row.company,
-  jobTitle: row.job_title,
-  jobDescription: row.job_description,
-  dateApplied: normalizeStoredDateValue(row.date_applied),
-  status: row.status,
-  notes: row.notes || "",
-  createdAt: row.created_at,
-  updatedAt: row.updated_at,
-  source: row.source || "",
-  recruiter: row.recruiter || "",
-  recruitingFirm: row.recruiting_firm || "",
-  contactEmail: row.contact_email || "",
-  contactPhone: row.contact_phone || "",
-  applicationUrl: row.application_url || "",
-});
+export const mapApplicationRow = (row: JobApplicationRow): JobApplication => {
+  let dateApplied: string;
+
+  try {
+    dateApplied = normalizeStoredDateValue(row.date_applied);
+  } catch (error) {
+    throw new InvalidRecordDataError(getTechnicalErrorMessage(error), {
+      recordId: row.id,
+      fieldName: "date_applied",
+      rawValue: row.date_applied,
+    });
+  }
+
+  return {
+    id: row.id,
+    company: row.company,
+    jobTitle: row.job_title,
+    jobDescription: row.job_description,
+    dateApplied,
+    status: row.status,
+    notes: row.notes || "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    source: row.source || "",
+    recruiter: row.recruiter || "",
+    recruitingFirm: row.recruiting_firm || "",
+    contactEmail: row.contact_email || "",
+    contactPhone: row.contact_phone || "",
+    applicationUrl: row.application_url || "",
+  };
+};
 
 export const buildApplicationRequest = (
   application: ApplicationRequestSource,

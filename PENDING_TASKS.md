@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 4: Preserve structured context when Supabase data is read and transformed
-
-- Update the API/service/adapter path to attach operation details and record context before errors reach the UI
-- Ensure record-data failures identify which record and field failed, plus the raw value when available
-
-**Verification:** Tests show malformed row data becomes a structured invalid-record-data error with the correct record and field context
-
 ### Task 5: Replace generic page-level error states with structured error rendering
 
 - Update list/dashboard loading failures and the edit-form record-load path to use the shared error component instead of generic text or redirects

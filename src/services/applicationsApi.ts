@@ -1,5 +1,6 @@
 import { JobApplication, ApplicationFilter } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
+import { normalizeAppError, type AppErrorContext } from "@/lib/appError";
 import {
   CreateApplicationRequest,
   UpdateApplicationRequest,
@@ -12,6 +13,8 @@ import {
   extractUniqueValues,
   filterApplicationsBySearch,
 } from "./applicationQueryUtils";
+
+type JobApplicationRow = Parameters<typeof mapApplicationRow>[0];
 
 export interface ApplicationsResponse {
   applications: JobApplication[];
@@ -29,6 +32,17 @@ export interface StatsResponse {
   totalApplications: number;
   statusCounts: Record<string, number>;
 }
+
+const mapApplicationRowWithContext = (
+  row: JobApplicationRow,
+  context: AppErrorContext,
+): JobApplication => {
+  try {
+    return mapApplicationRow(row);
+  } catch (error) {
+    throw normalizeAppError(error, context);
+  }
+};
 
 // Applications API functions using Supabase
 export const applicationsApi = {
@@ -64,7 +78,12 @@ export const applicationsApi = {
 
       // Transform data to match JobApplication interface
       const applications = filterApplicationsBySearch(
-        (data || []).map(mapApplicationRow),
+        (data || []).map((row) =>
+          mapApplicationRowWithContext(row, {
+            operation: "load applications",
+            recordId: row.id,
+          }),
+        ),
         filter?.search ?? "",
       );
 
@@ -75,7 +94,7 @@ export const applicationsApi = {
       };
     } catch (error) {
       console.error('Error in getApplications:', error);
-      throw error;
+      throw normalizeAppError(error, { operation: "load applications" });
     }
   },
 
@@ -94,14 +113,23 @@ export const applicationsApi = {
       }
 
       if (!data) {
-        throw new Error('Application not found');
+        throw normalizeAppError(new Error('Application not found'), {
+          operation: "load application",
+          recordId: id,
+        });
       }
 
       // Transform data to match JobApplication interface
-      return mapApplicationRow(data);
+      return mapApplicationRowWithContext(data, {
+        operation: "load application",
+        recordId: id,
+      });
     } catch (error) {
       console.error('Error in getApplication:', error);
-      throw error;
+      throw normalizeAppError(error, {
+        operation: "load application",
+        recordId: id,
+      });
     }
   },
 
@@ -124,10 +152,13 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      return mapApplicationRow(result);
+      return mapApplicationRowWithContext(result, {
+        operation: "create application",
+        recordId: result.id,
+      });
     } catch (error) {
       console.error('Error in createApplication:', error);
-      throw error;
+      throw normalizeAppError(error, { operation: "create application" });
     }
   },
 
@@ -151,10 +182,16 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      return mapApplicationRow(result);
+      return mapApplicationRowWithContext(result, {
+        operation: "update application",
+        recordId: id,
+      });
     } catch (error) {
       console.error('Error in updateApplication:', error);
-      throw error;
+      throw normalizeAppError(error, {
+        operation: "update application",
+        recordId: id,
+      });
     }
   },
 
@@ -174,7 +211,10 @@ export const applicationsApi = {
       return { success: true };
     } catch (error) {
       console.error('Error in deleteApplication:', error);
-      throw error;
+      throw normalizeAppError(error, {
+        operation: "delete application",
+        recordId: id,
+      });
     }
   },
 
@@ -277,7 +317,7 @@ export const applicationsApi = {
       };
     } catch (error) {
       console.error('Error in getStats:', error);
-      throw error;
+      throw normalizeAppError(error, { operation: "load application stats" });
     }
   },
 };

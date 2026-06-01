@@ -1,23 +1,12 @@
 import { JobApplication, ApplicationFilter } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
-
-// Request/Response Types
-export interface CreateApplicationRequest {
-  company: string;
-  jobTitle: string;
-  jobDescription: string;
-  dateApplied: string;
-  status: 'applied' | 'interview' | 'offer' | 'rejected' | 'withdrawn';
-  notes?: string;
-  source: string;
-  recruiter?: string;
-  recruitingFirm?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  applicationUrl?: string;
-}
-
-export type UpdateApplicationRequest = CreateApplicationRequest;
+import {
+  CreateApplicationRequest,
+  UpdateApplicationRequest,
+  buildCreateApplicationPayload,
+  buildUpdateApplicationPayload,
+  mapApplicationRow,
+} from "./applicationAdapters";
 
 export interface ApplicationsResponse {
   applications: JobApplication[];
@@ -74,23 +63,7 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      const applications: JobApplication[] = (data || []).map(app => ({
-        id: app.id,
-        company: app.company,
-        jobTitle: app.job_title,
-        jobDescription: app.job_description,
-        dateApplied: app.date_applied,
-        status: app.status,
-        notes: app.notes || '',
-        createdAt: app.created_at,
-        updatedAt: app.updated_at,
-        source: app.source || '',
-        recruiter: app.recruiter || '',
-        recruitingFirm: app.recruiting_firm || '',
-        contactEmail: app.contact_email || '',
-        contactPhone: app.contact_phone || '',
-        applicationUrl: app.application_url || '',
-      }));
+      const applications: JobApplication[] = (data || []).map(mapApplicationRow);
 
       return {
         applications,
@@ -122,23 +95,7 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      return {
-        id: data.id,
-        company: data.company,
-        jobTitle: data.job_title,
-        jobDescription: data.job_description,
-        dateApplied: data.date_applied,
-        status: data.status,
-        notes: data.notes || '',
-        createdAt: data.created_at,
-        updatedAt: data.updated_at,
-        source: data.source || '',
-        recruiter: data.recruiter || '',
-        recruitingFirm: data.recruiting_firm || '',
-        contactEmail: data.contact_email || '',
-        contactPhone: data.contact_phone || '',
-        applicationUrl: data.application_url || '',
-      };
+      return mapApplicationRow(data);
     } catch (error) {
       console.error('Error in getApplication:', error);
       throw error;
@@ -150,22 +107,9 @@ export const applicationsApi = {
     try {
       const { data: result, error } = await supabase
         .from('job_applications')
-        .insert({
-          company: data.company,
-          job_title: data.jobTitle,
-          job_description: data.jobDescription,
-          date_applied: data.dateApplied,
-          status: data.status,
-          notes: data.notes || null,
-          source: data.source,
-          recruiter: data.recruiter || null,
-          recruiting_firm: data.recruitingFirm || null,
-          contact_email: data.contactEmail || null,
-          contact_phone: data.contactPhone || null,
-          application_url: data.applicationUrl || null,
-        })
-        .select()
-        .single();
+        .insert(buildCreateApplicationPayload(data))
+      .select()
+      .single();
 
       if (error) {
         console.error('Error creating application:', error);
@@ -177,23 +121,7 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      return {
-        id: result.id,
-        company: result.company,
-        jobTitle: result.job_title,
-        jobDescription: result.job_description,
-        dateApplied: result.date_applied,
-        status: result.status,
-        notes: result.notes || '',
-        createdAt: result.created_at,
-        updatedAt: result.updated_at,
-        source: result.source || '',
-        recruiter: result.recruiter || '',
-        recruitingFirm: result.recruiting_firm || '',
-        contactEmail: result.contact_email || '',
-        contactPhone: result.contact_phone || '',
-        applicationUrl: result.application_url || '',
-      };
+      return mapApplicationRow(result);
     } catch (error) {
       console.error('Error in createApplication:', error);
       throw error;
@@ -205,23 +133,10 @@ export const applicationsApi = {
     try {
       const { data: result, error } = await supabase
         .from('job_applications')
-        .update({
-          company: data.company,
-          job_title: data.jobTitle,
-          job_description: data.jobDescription,
-          date_applied: data.dateApplied,
-          status: data.status,
-          notes: data.notes || null,
-          source: data.source,
-          recruiter: data.recruiter || null,
-          recruiting_firm: data.recruitingFirm || null,
-          contact_email: data.contactEmail || null,
-          contact_phone: data.contactPhone || null,
-          application_url: data.applicationUrl || null,
-        })
-        .eq('id', id)
-        .select()
-        .single();
+        .update(buildUpdateApplicationPayload(data))
+      .eq('id', id)
+      .select()
+      .single();
 
       if (error) {
         console.error('Error updating application:', error);
@@ -233,23 +148,7 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      return {
-        id: result.id,
-        company: result.company,
-        jobTitle: result.job_title,
-        jobDescription: result.job_description,
-        dateApplied: result.date_applied,
-        status: result.status,
-        notes: result.notes || '',
-        createdAt: result.created_at,
-        updatedAt: result.updated_at,
-        source: result.source || '',
-        recruiter: result.recruiter || '',
-        recruitingFirm: result.recruiting_firm || '',
-        contactEmail: result.contact_email || '',
-        contactPhone: result.contact_phone || '',
-        applicationUrl: result.application_url || '',
-      };
+      return mapApplicationRow(result);
     } catch (error) {
       console.error('Error in updateApplication:', error);
       throw error;

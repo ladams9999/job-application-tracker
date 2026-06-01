@@ -72,6 +72,14 @@
 
 **Verified:** `npx jest --runInBand && npm run build` completes successfully with the migrated query-based data flows
 
+### Task 8: Centralize Supabase row mapping and payload shaping
+
+- Extracted shared typed adapters for Supabase row-to-model mapping and request-to-payload conversion
+- Reused the same application request builder from the service layer for both create and update flows
+- Removed repeated snake_case/camelCase transformation blocks from the CRUD paths
+
+**Verified:** `npx jest --runTestsByPath src/__tests__/services/applicationAdapters.test.ts src/__tests__/hooks/useApplicationSubmit.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/lib/date.test.ts --runInBand && npm run build` passes with the adapter-based service/API flow
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

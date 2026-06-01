@@ -1,7 +1,12 @@
 
 import { JobApplication, ApplicationFilter } from "@/types";
 import { toast } from "@/components/ui/sonner";
-import { applicationsApi, CreateApplicationRequest, UpdateApplicationRequest } from "./applicationsApi";
+import { applicationsApi } from "./applicationsApi";
+import {
+  CreateApplicationRequest,
+  UpdateApplicationRequest,
+  buildApplicationRequest,
+} from "./applicationAdapters";
 
 // Get all job applications from API
 export const getAllApplications = async (): Promise<JobApplication[]> => {
@@ -18,20 +23,7 @@ export const getAllApplications = async (): Promise<JobApplication[]> => {
 // Add a new job application
 export const addApplication = async (application: Omit<JobApplication, 'id' | 'createdAt' | 'updatedAt'>): Promise<JobApplication> => {
   try {
-    const createRequest: CreateApplicationRequest = {
-      company: application.company,
-      jobTitle: application.jobTitle,
-      jobDescription: application.jobDescription,
-      dateApplied: application.dateApplied,
-      status: application.status,
-      notes: application.notes,
-      source: application.source || "LinkedIn",
-      recruiter: application.recruiter,
-      recruitingFirm: application.recruitingFirm,
-      contactEmail: application.contactEmail,
-      contactPhone: application.contactPhone,
-      applicationUrl: application.applicationUrl,
-    };
+    const createRequest: CreateApplicationRequest = buildApplicationRequest(application);
     
     const newApplication = await applicationsApi.createApplication(createRequest);
     toast.success("Application successfully added");
@@ -46,20 +38,7 @@ export const addApplication = async (application: Omit<JobApplication, 'id' | 'c
 // Update an existing job application
 export const updateApplication = async (application: JobApplication): Promise<JobApplication> => {
   try {
-    const updateRequest: UpdateApplicationRequest = {
-      company: application.company,
-      jobTitle: application.jobTitle,
-      jobDescription: application.jobDescription,
-      dateApplied: application.dateApplied,
-      status: application.status,
-      notes: application.notes,
-      source: application.source || "LinkedIn",
-      recruiter: application.recruiter,
-      recruitingFirm: application.recruitingFirm,
-      contactEmail: application.contactEmail,
-      contactPhone: application.contactPhone,
-      applicationUrl: application.applicationUrl,
-    };
+    const updateRequest: UpdateApplicationRequest = buildApplicationRequest(application);
     
     const updatedApplication = await applicationsApi.updateApplication(application.id, updateRequest);
     toast.success("Application successfully updated");

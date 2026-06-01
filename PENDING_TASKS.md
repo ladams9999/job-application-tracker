@@ -4,14 +4,6 @@
 
 This is the next feature to implement. The goal is a **portable script or tool** that can be invoked by an automated scheduler on this machine or on a different machine.
 
-### Task 4: Document setup and usage
-
-- Document how to configure and run the script manually
-- Document what a scheduler needs to invoke it
-- Keep scheduler guidance generic so it works across different machines
-
-**Verifiable outcome:** repository documentation explains installation, configuration, manual execution, and scheduler expectations
-
 ### Task 5: Validate against the target Supabase project
 
 - Run the script against the intended Supabase project

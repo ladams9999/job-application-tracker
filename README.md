@@ -130,10 +130,52 @@ npm run dev
 
 Then open the local URL shown by Vite.
 
+## Optional: Supabase keep-alive script
+
+If you want to keep a free-tier Supabase project from going inactive, this repo includes a portable keep-alive script.
+
+### Configuration
+
+The script uses either:
+
+- `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, or
+- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+If both are present, it prefers the dedicated `SUPABASE_*` variables.
+
+### Run it manually
+
+```sh
+npm run supabase:keepalive
+```
+
+The script performs a small read against `public.job_applications` and:
+
+- exits `0` on success
+- exits `1` on HTTP/network/response failure
+- exits `2` when required configuration is missing
+
+### Run it from a scheduler
+
+Any scheduler can invoke it as long as the machine has:
+
+- this repo checked out
+- dependencies installed with `npm install`
+- the required environment variables available
+
+Use the same command:
+
+```sh
+npm run supabase:keepalive
+```
+
+Schedule it more often than your Supabase plan's inactivity window. Keep the schedule modest rather than pinging excessively.
+
 ## Useful commands
 
 ```sh
 npm run build
 npm run lint
+npm run supabase:keepalive
 npx jest --runInBand
 ```

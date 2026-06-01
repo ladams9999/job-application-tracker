@@ -28,3 +28,11 @@
 - Implemented clear success and failure output with the documented exit codes
 
 **Verified:** the script succeeds against a local HTTP stub that returns a valid JSON array and fails with exit code `2` when required configuration is missing
+
+### Task 4: Document setup and usage
+
+- Updated `README.md` with keep-alive configuration, manual usage, and scheduler expectations
+- Updated `.env.example` with optional dedicated `SUPABASE_*` variables for the script
+- Documented the shared `npm run supabase:keepalive` command for manual and scheduled execution
+
+**Verified:** the repository now contains human-readable setup and usage instructions covering configuration, manual runs, and scheduler prerequisites

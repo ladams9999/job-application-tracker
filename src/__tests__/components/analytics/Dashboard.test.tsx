@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import type { ReactNode } from "react";
 
 import Dashboard from "@/components/analytics/Dashboard";
 import type { AppError } from "@/lib/appError";
@@ -6,10 +7,26 @@ import { useApplicationsQuery } from "@/hooks/useApplicationQueries";
 import type { JobApplication } from "@/types";
 
 jest.mock("@/hooks/useApplicationQueries");
+jest.mock("react-router-dom", () => ({
+  Link: ({
+    to,
+    children,
+    ...props
+  }: {
+    to: string;
+    children: ReactNode;
+  }) => (
+    <a href={to} {...props}>
+      {children}
+    </a>
+  ),
+}));
 
 const mockUseApplicationsQuery = useApplicationsQuery as jest.MockedFunction<
   typeof useApplicationsQuery
 >;
+
+const renderDashboard = () => render(<Dashboard />);
 
 describe("Dashboard", () => {
   const buildApplication = (
@@ -49,7 +66,7 @@ describe("Dashboard", () => {
       refetch: jest.fn(),
     } as ReturnType<typeof useApplicationsQuery>);
 
-    render(<Dashboard />);
+    renderDashboard();
 
     expect(screen.getByRole("heading", { name: "Supabase is unavailable" })).toBeInTheDocument();
     expect(screen.getByText("load dashboard")).toBeInTheDocument();
@@ -89,7 +106,7 @@ describe("Dashboard", () => {
       refetch: jest.fn(),
     } as ReturnType<typeof useApplicationsQuery>);
 
-    render(<Dashboard />);
+    renderDashboard();
 
     expect(screen.getByText("This Week")).toBeInTheDocument();
     expect(screen.getByText("Active")).toBeInTheDocument();
@@ -114,5 +131,37 @@ describe("Dashboard", () => {
     ).toBeInTheDocument();
 
     jest.useRealTimers();
+  });
+
+  it("renders the expected deep-link targets for supported cards", () => {
+    mockUseApplicationsQuery.mockReturnValue({
+      data: [],
+      error: null,
+      isLoading: false,
+      refetch: jest.fn(),
+    } as ReturnType<typeof useApplicationsQuery>);
+
+    renderDashboard();
+
+    expect(screen.getByText("This Week").closest("a")).toHaveAttribute(
+      "href",
+      "/applications?view=this-week",
+    );
+    expect(screen.getByText("Active").closest("a")).toHaveAttribute(
+      "href",
+      "/applications?view=active",
+    );
+    expect(screen.getByText("Dormant").closest("a")).toHaveAttribute(
+      "href",
+      "/applications?view=dormant",
+    );
+    expect(screen.getByText("Silent").closest("a")).toHaveAttribute(
+      "href",
+      "/applications?view=silent",
+    );
+    expect(screen.getByText("Total").closest("a")).toHaveAttribute(
+      "href",
+      "/applications",
+    );
   });
 });

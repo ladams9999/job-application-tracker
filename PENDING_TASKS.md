@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 3: Add dashboard card deep links
-
-- Make supported dashboard cards clickable or linked to `/applications` with query parameters
-- Define the deep-link mapping for at least the requested Active view and any other cleanly supported cards
-
-**Verification:** Tests prove the dashboard emits the expected `/applications?...` targets for supported cards
-
 ### Task 4: Add query-parameter hydration to Applications filters
 
 - Update the Applications filter flow so URL parameters initialize filter state and derived dashboard filters

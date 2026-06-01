@@ -214,3 +214,11 @@
 - Extended dashboard component coverage to prove the rendered card counts still match the same application set after the refactor
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/analytics/Dashboard.test.tsx src/__tests__/services/dashboardMetrics.test.ts --runInBand` passes, and the tests prove the refactored dashboard still renders the expected metrics
+
+### Task 3: Add dashboard card deep links
+
+- Added `/applications` deep-link targets to the shared dashboard card config for This Week, Active, Dormant, Silent, and Total views
+- Updated `Dashboard` to render each metrics card as a router link while preserving the existing counts and labels
+- Added regression coverage that asserts the exact `/applications?...` URLs emitted for the supported cards
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/analytics/Dashboard.test.tsx --runInBand` passes, and the tests prove the dashboard emits the expected deep-link targets

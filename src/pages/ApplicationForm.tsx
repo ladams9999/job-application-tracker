@@ -33,7 +33,7 @@ const ApplicationForm = () => {
     );
   }
 
-   if (loadError) {
+  if (loadError) {
     return (
       <div key={componentKey}>
         <ApplicationFormHeader isEditMode={isEditMode} />

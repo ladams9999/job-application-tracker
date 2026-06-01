@@ -88,6 +88,14 @@
 
 **Verified:** `npx jest --runTestsByPath src/__tests__/services/applicationQueryUtils.test.ts src/__tests__/services/applicationAdapters.test.ts --runInBand && npm run build` passes with the hardened search and suggestion flow
 
+### Task 10: Remove the dormant company autocomplete path
+
+- Removed the permanently disabled company/job-title autocomplete branch from the production form
+- Deleted the autocomplete-specific component, fallback error boundary, and their dedicated tests
+- Simplified the shipped form path and kept the source suggestions flow intact
+
+**Verified:** `npx jest --runInBand && npm run build` passes with the simplified production form flow
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

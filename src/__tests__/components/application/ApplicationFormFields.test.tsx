@@ -12,13 +12,9 @@ import { Form } from '@/components/ui/form';
 // Test wrapper component
 const TestWrapper = ({ 
   previousEntries, 
-  enableAutocomplete = false,
-  isDataLoading = false,
   showRecruiterFields = false
 }: { 
   previousEntries?: PreviousEntryDataInput; 
-  enableAutocomplete?: boolean;
-  isDataLoading?: boolean;
   showRecruiterFields?: boolean;
 }) => {
   const form = useForm<FormValues>({
@@ -44,8 +40,6 @@ const TestWrapper = ({
       <ApplicationFormFields 
         form={form} 
         previousEntries={previousEntries}
-        enableAutocomplete={enableAutocomplete}
-        isDataLoading={isDataLoading}
         showRecruiterFields={showRecruiterFields}
       />
     </Form>
@@ -59,59 +53,15 @@ const mockPreviousEntries: PreviousEntryData = {
 };
 
 describe('ApplicationFormFields', () => {
-  it('renders CompanyFields when enableAutocomplete=false', () => {
+  it('renders the shipped company and job title inputs', () => {
     render(
       <TestWrapper 
         previousEntries={mockPreviousEntries}
-        enableAutocomplete={false}
       />
     );
     
     expect(screen.getByPlaceholderText('Enter company name...')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter job title...')).toBeInTheDocument();
-  });
-
-  it('renders CompanyFieldsWithAutocomplete when enableAutocomplete=true', () => {
-    render(
-      <TestWrapper 
-        previousEntries={mockPreviousEntries}
-        enableAutocomplete={true}
-      />
-    );
-    
-    expect(screen.getByText('Select or enter company...')).toBeInTheDocument();
-    expect(screen.getByText('Select or enter job title...')).toBeInTheDocument();
-  });
-
-  it('handles undefined previousEntries gracefully', () => {
-    render(
-      <TestWrapper 
-        previousEntries={undefined}
-        enableAutocomplete={true}
-      />
-    );
-    
-    // Should still render without crashing
-    expect(screen.getByLabelText('Company')).toBeInTheDocument();
-    expect(screen.getByLabelText('Job Title')).toBeInTheDocument();
-  });
-
-  it('creates safe default arrays for missing data', () => {
-    const incompletePreviousEntries: PreviousEntryDataInput = {
-      companies: null,
-      jobTitles: undefined,
-      sources: [] as string[]
-    };
-    
-    render(
-      <TestWrapper 
-        previousEntries={incompletePreviousEntries}
-        enableAutocomplete={true}
-      />
-    );
-    
-    // Should render fallback to simple inputs
-    expect(screen.getByPlaceholderText('Enter company name...')).toBeInTheDocument();
   });
 
   it('maintains default sources when missing', () => {

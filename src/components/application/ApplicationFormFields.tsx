@@ -3,8 +3,6 @@ import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FormValues, PreviousEntryData, PreviousEntryDataInput } from "@/types/forms";
 import CompanyFields from "./form-fields/CompanyFields";
-import CompanyFieldsWithAutocomplete from "./form-fields/CompanyFieldsWithAutocomplete";
-import ErrorBoundary from "./form-fields/ErrorBoundary";
 import JobDescriptionField from "./form-fields/JobDescriptionField";
 import ApplicationDateAndStatusFields from "./form-fields/ApplicationDateAndStatusFields";
 import SourceField from "./form-fields/SourceField";
@@ -16,8 +14,6 @@ interface ApplicationFormFieldsProps {
   form: UseFormReturn<FormValues>;
   previousEntries?: PreviousEntryDataInput;
   showRecruiterFields?: boolean;
-  isDataLoading?: boolean;
-  enableAutocomplete?: boolean;
 }
 
 const DEFAULT_ENTRIES: PreviousEntryData = {
@@ -30,38 +26,14 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   form, 
   previousEntries, 
   showRecruiterFields = false,
-  isDataLoading = false,
-  enableAutocomplete = false
 }) => {
-  // Only sanitize the sources array so CompanyFieldsWithAutocomplete can
-  // determine if it should fall back to simple inputs when the companies or
-  // jobTitles arrays are invalid. This preserves `null`/`undefined` values for
-  // those fields passed in from the loader.
   const safeSources = Array.isArray(previousEntries?.sources) && previousEntries.sources.length > 0
     ? previousEntries.sources
     : DEFAULT_ENTRIES.sources;
 
-  // Use the original previousEntries for the autocomplete component.  It may be
-  // undefined or contain invalid data which allows the component to gracefully
-  // render simple inputs instead of autocomplete fields when appropriate.
-  const autocompleteEntries = previousEntries;
-
   return (
     <>
-      <ErrorBoundary
-        fallback={<CompanyFields form={form} />}
-        onError={(error) => console.error("CompanyFields error:", error)}
-      >
-        {enableAutocomplete ? (
-          <CompanyFieldsWithAutocomplete
-            form={form}
-            previousEntries={autocompleteEntries}
-            isDataLoading={isDataLoading}
-          />
-        ) : (
-          <CompanyFields form={form} />
-        )}
-      </ErrorBoundary>
+      <CompanyFields form={form} />
       
       <JobDescriptionField form={form} />
       

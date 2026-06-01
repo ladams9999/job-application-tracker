@@ -254,3 +254,11 @@
 - Made the insert idempotent with `ON CONFLICT (id) DO NOTHING` so the sample stays safe to reason about across repeated environments
 
 **Verified:** `supabase/migrations/20260601131500-add-home-sample-application.sql` inserts the sample row with `CURRENT_DATE`, status `applied`, current UTC `created_at`/`updated_at`, and an idempotent conflict clause, which keeps it in the active set on migration day
+
+### Task 8: Update navigation and regression coverage
+
+- Added a Home navigation entry to both the desktop sidebar and mobile action bar so the new root page is reachable from the shared layout
+- Kept the Home page loading and structured error states coherent while expanding route coverage to assert the Home nav entry is present at `/`
+- Finished with the full repository lint, build, and Jest commands after the complete Home-page implementation landed
+
+**Verified:** `npm run lint && npm run build && npx jest --runInBand` passes, including the new route, Home rendering, dashboard deep-link, and filter-hydration coverage

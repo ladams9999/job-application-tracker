@@ -32,6 +32,7 @@ describe("AppRoutes", () => {
         name: "Home",
       }),
     ).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Home" })).toHaveLength(2);
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
     expect(screen.queryByText("Header")).not.toBeInTheDocument();
   });

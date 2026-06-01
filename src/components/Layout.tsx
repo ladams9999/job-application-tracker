@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ListFilter, Plus } from "lucide-react";
+import { House, ListFilter, Plus } from "lucide-react";
 
 interface NavItemProps {
   to: string;
@@ -42,6 +42,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
         <nav className="space-y-1">
           <NavItem
+            to="/"
+            icon={<House size={20} />}
+            label="Home"
+            isActive={pathname === "/"}
+          />
+          <NavItem
             to="/applications"
             icon={<ListFilter size={20} />}
             label="Applications"
@@ -60,6 +66,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="md:hidden border-b p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Application Tracker</h1>
         <div className="flex gap-4">
+          <Link
+            to="/"
+            aria-label="Home"
+            className={cn(
+              "p-2 rounded-md",
+              pathname === "/" ? "bg-primary text-primary-foreground" : ""
+            )}
+          >
+            <House size={20} />
+          </Link>
           <Link
             to="/applications"
             aria-label="Applications"

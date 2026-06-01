@@ -138,3 +138,11 @@
 - Reduced the main application chunk from a single large asset to smaller generated chunks
 
 **Verified:** `npm run build` completes without the previous Vite chunk-size warning
+
+### Task 5: Fix white screen from legacy `date_applied` timestamps
+
+- Normalized stored `date_applied` values so legacy timestamp strings are treated as date-only values before the UI renders them
+- Reused the shared normalization in Supabase row mapping and date parsing so the list page and edit form handle old and new records consistently
+- Added regression coverage for legacy timestamp values in the date utilities, row adapters, and application data loader
+
+**Verified:** `npx jest --runInBand && npm run build && npm run lint` passes with legacy timestamp rows rendering without the prior white-screen crash

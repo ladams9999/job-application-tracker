@@ -1,6 +1,19 @@
 import { format } from "date-fns";
 
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+const STORED_DATE_PREFIX_PATTERN = /^(\d{4})-(\d{2})-(\d{2})(?:$|[T\s])/;
+
+export const normalizeStoredDateValue = (value: string): string => {
+  const trimmedValue = value.trim();
+  const timestampMatch = STORED_DATE_PREFIX_PATTERN.exec(trimmedValue);
+
+  if (timestampMatch) {
+    const [, year, month, day] = timestampMatch;
+    return `${year}-${month}-${day}`;
+  }
+
+  throw new Error(`Invalid date-only value: ${value}`);
+};
 
 export const formatDateOnlyForStorage = (date: Date): string => {
   const year = date.getFullYear();
@@ -11,7 +24,8 @@ export const formatDateOnlyForStorage = (date: Date): string => {
 };
 
 export const parseDateOnly = (value: string): Date => {
-  const match = DATE_ONLY_PATTERN.exec(value);
+  const normalizedValue = normalizeStoredDateValue(value);
+  const match = DATE_ONLY_PATTERN.exec(normalizedValue);
 
   if (!match) {
     throw new Error(`Invalid date-only value: ${value}`);

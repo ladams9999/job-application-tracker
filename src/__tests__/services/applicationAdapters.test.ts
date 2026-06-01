@@ -45,6 +45,28 @@ describe('applicationAdapters', () => {
     });
   });
 
+  it('normalizes legacy timestamp date values from Supabase rows', () => {
+    const row: Tables<'job_applications'> = {
+      id: 'app-legacy',
+      company: 'Legacy Co',
+      job_title: 'Engineer',
+      job_description: 'Handle migrations',
+      date_applied: '2026-06-01T12:00:00.000Z',
+      status: 'applied',
+      notes: null,
+      created_at: '2026-06-01T12:00:00.000Z',
+      updated_at: '2026-06-02T12:00:00.000Z',
+      source: null,
+      recruiter: null,
+      recruiting_firm: null,
+      contact_email: null,
+      contact_phone: null,
+      application_url: null,
+    };
+
+    expect(mapApplicationRow(row).dateApplied).toBe('2026-06-01');
+  });
+
   it('builds the shared application request shape with defaults', () => {
     expect(
       buildApplicationRequest({

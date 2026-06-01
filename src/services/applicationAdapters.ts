@@ -1,5 +1,6 @@
 import { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 import { JobApplication } from "@/types";
+import { normalizeStoredDateValue } from "@/lib/date";
 
 export interface ApplicationMutationRequest {
   company: string;
@@ -46,7 +47,7 @@ export const mapApplicationRow = (row: JobApplicationRow): JobApplication => ({
   company: row.company,
   jobTitle: row.job_title,
   jobDescription: row.job_description,
-  dateApplied: row.date_applied,
+  dateApplied: normalizeStoredDateValue(row.date_applied),
   status: row.status,
   notes: row.notes || "",
   createdAt: row.created_at,

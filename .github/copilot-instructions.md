@@ -32,7 +32,6 @@
 - `source` is intentionally free-form. `SourceField` behaves like a combobox: users can select an existing source or type a new one. Do not narrow it to a fixed enum.
 - Recruiter-specific fields are conditional on `source === "Recruiter"` in both UI rendering and validation. Preserve that coupling if the form changes.
 - `contactEmail` is intentionally permissive: empty strings, malformed emails, and general contact notes like `"Ask HR"` are valid. `applicationUrl` is the field that gets URL validation.
-- Suggestion handling is defensive. `usePreviousEntriesLoader` sanitizes API results and falls back to default source values. `ApplicationFormFields` intentionally preserves invalid `companies` and `jobTitles` input so `CompanyFieldsWithAutocomplete` can fall back to plain inputs instead of crashing.
-- Tests live under `src/__tests__/` and depend on shared mocks from `src/setupTests.ts` for the Supabase client, router hooks, and toast helpers. Update those mocks when introducing new shared dependencies into hooks or pages.
-- `App.tsx` already provides a `QueryClientProvider`, but current data loading is still mostly manual `useEffect`/`useState` orchestration through custom hooks. Match the existing pattern unless you are intentionally migrating a flow to React Query.
+- Suggestion handling is defensive. `useSuggestionsQuery` sanitizes API results and falls back to default source values.
+- The app uses React Query for application list/detail/suggestions via `src/hooks/useApplicationQueries.ts`. Prefer using those hooks for new reads and invalidate via `applicationQueryKeys.all` after mutations.
 - Workspace MCP servers are configured in `.vscode/mcp.json`: `playwright` for browser automation and a project-scoped `supabase` server pointed at the repo's Supabase project. The Supabase MCP config is read-only by default, so schema changes should still go through `supabase/migrations/`.

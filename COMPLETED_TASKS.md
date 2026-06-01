@@ -272,3 +272,11 @@
 - Synced clear actions back into the `/applications` query string so URL-hydrated criteria stay removed after navigation or refresh
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx --runInBand` passes, and the hook tests prove active criteria and individual/all-clear URL reset behavior
+
+### Task 2: Add an Applications filter-summary component
+
+- Added `ApplicationFilterSummary` to render active search, status, and view criteria as compact chips under a shared “Filtering by” label
+- Gave each rendered criterion its own clear button and limited the shared clear-all action to multi-criteria cases
+- Added focused component coverage for populated, empty, and single-criterion summary states
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/application/ApplicationFilterSummary.test.tsx --runInBand` passes, and the component tests prove the expected criteria and clear controls render only when appropriate

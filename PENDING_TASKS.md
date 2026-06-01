@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 2: Add an Applications filter-summary component
-
-- Create a reusable component that renders only active filter criteria as chips, badges, or similar compact UI
-- Give each rendered criterion its own clear control and show a single clear-all action only when multiple criteria are active
-
-**Verification:** Component or page tests prove the expected search/status/view criteria render when active and disappear when no criteria remain
-
 ### Task 3: Integrate the summary into ApplicationsList
 
 - Render the filter summary between `ApplicationsHeader` and `FilterBar`

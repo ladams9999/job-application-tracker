@@ -146,3 +146,13 @@
 - Added regression coverage for legacy timestamp values in the date utilities, row adapters, and application data loader
 
 **Verified:** `npx jest --runInBand && npm run build && npm run lint` passes with legacy timestamp rows rendering without the prior white-screen crash
+
+## 4. Robust error handling
+
+### Task 1: Define the app error contract and classification rules
+
+- Added `src/lib/appError.ts` with a shared normalized error shape covering Supabase unavailability, app configuration, missing-record, invalid-record-data, and unknown failures
+- Defined the diagnostic fields that later UI and data flows can reuse: category, summary, technical message, retryability, operation, record id, field name, and raw failing value
+- Added `InvalidRecordDataError` so record-mapping failures can carry structured context instead of plain string-only exceptions
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/lib/appError.test.ts --runInBand` passes, and the new tests prove representative raw errors normalize into the expected classified shape

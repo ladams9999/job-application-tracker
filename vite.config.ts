@@ -13,9 +13,61 @@ export default defineConfig(({ mode }) => {
       host: "::",
       port: parseInt(env.SERVER_PORT || '8080'),
     },
-  plugins: [
-    react(),
-  ],
+    plugins: [
+      react(),
+    ],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes("node_modules")) {
+              return;
+            }
+
+            if (
+              id.includes("/react/") ||
+              id.includes("/react-dom/") ||
+              id.includes("/react-router-dom/") ||
+              id.includes("/scheduler/")
+            ) {
+              return "react-vendor";
+            }
+
+            if (
+              id.includes("/@supabase/") ||
+              id.includes("/@tanstack/")
+            ) {
+              return "data-vendor";
+            }
+
+            if (
+              id.includes("/recharts/") ||
+              id.includes("/d3-")
+            ) {
+              return "charts-vendor";
+            }
+
+            if (
+              id.includes("/react-day-picker/") ||
+              id.includes("/date-fns/")
+            ) {
+              return "date-vendor";
+            }
+
+            if (
+              id.includes("/@radix-ui/") ||
+              id.includes("/lucide-react/") ||
+              id.includes("/cmdk/") ||
+              id.includes("/embla-carousel-react/") ||
+              id.includes("/sonner/") ||
+              id.includes("/vaul/")
+            ) {
+              return "ui-vendor";
+            }
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

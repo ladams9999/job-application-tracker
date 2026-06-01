@@ -71,3 +71,11 @@
 - Silenced the intentionally exercised error path in the loader hook test
 
 **Verified:** `npx jest --runInBand` runs without the deprecated `ts-jest` warning and without the prior console noise from expected test paths
+
+### Task 4: Reduce large production bundle warning
+
+- Added targeted manual vendor chunk splitting in `vite.config.ts`
+- Split the production bundle into React, data, UI, and date-related chunks
+- Reduced the main application chunk from a single large asset to smaller generated chunks
+
+**Verified:** `npm run build` completes without the previous Vite chunk-size warning

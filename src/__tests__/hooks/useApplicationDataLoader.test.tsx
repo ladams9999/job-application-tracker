@@ -6,7 +6,6 @@ import { applicationsApi } from '@/services/applicationsApi';
 import { formatDateOnlyForStorage } from '@/lib/date';
 import { createQueryClientWrapper } from '@/test-utils/queryClient';
 
-const mockNavigate = jest.fn();
 const mockReset = jest.fn();
 
 jest.mock('@/services/applicationsApi', () => ({
@@ -16,7 +15,6 @@ jest.mock('@/services/applicationsApi', () => ({
 }));
 
 jest.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate,
   useLocation: () => ({ pathname: '/edit/existing-id' }),
 }));
 
@@ -98,5 +96,30 @@ describe('useApplicationDataLoader', () => {
 
     const resetArg = mockReset.mock.calls[0][0] as FormValues;
     expect(formatDateOnlyForStorage(resetArg.dateApplied)).toBe('2026-06-01');
+  });
+
+  it('returns a structured missing-record error instead of navigating away', async () => {
+    const wrapper = createQueryClientWrapper();
+    mockGetApplication.mockRejectedValue(new Error('Application not found'));
+
+    const form = {
+      reset: mockReset,
+    } as unknown as UseFormReturn<FormValues>;
+
+    const { result } = renderHook(() => useApplicationDataLoader('existing-id', form), {
+      wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current.loadError).toMatchObject({
+        category: 'missing-record',
+        summary: 'Application record not found',
+        technicalMessage: 'Application not found',
+        operation: 'load application',
+        recordId: 'existing-id',
+      });
+    });
+
+    expect(mockReset).not.toHaveBeenCalled();
   });
 });

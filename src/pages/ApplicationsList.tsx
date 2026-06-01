@@ -4,12 +4,15 @@ import Dashboard from "@/components/analytics/Dashboard";
 import ApplicationsHeader from "@/components/application/ApplicationsHeader";
 import FilterBar from "@/components/application/FilterBar";
 import ApplicationsTable from "@/components/application/ApplicationsTable";
+import AppErrorPanel from "@/components/error/AppErrorPanel";
+import { normalizeAppError } from "@/lib/appError";
 
 const ApplicationsList = () => {
   const {
     filteredApplications,
     isLoading,
     error,
+    retryLoad,
     filter,
     handleSearchChange,
     handleStatusChange,
@@ -33,9 +36,21 @@ const ApplicationsList = () => {
             <p className="text-muted-foreground">Loading applications...</p>
           </div>
         ) : error ? (
-          <div className="rounded-md border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-            Failed to load applications.
-          </div>
+          <AppErrorPanel
+            error={normalizeAppError(error, { operation: "load applications" })}
+            primaryAction={{
+              label: "Retry applications",
+              onClick: () => {
+                void retryLoad();
+              },
+            }}
+            secondaryAction={{
+              label: "Reload page",
+              onClick: () => {
+                window.location.reload();
+              },
+            }}
+          />
         ) : (
           <ApplicationsTable 
             applications={filteredApplications}

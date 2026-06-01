@@ -35,7 +35,7 @@ export const useApplicationForm = () => {
   const source = form.watch("source") || "LinkedIn";
   
   const { previousEntries, isLoading: isDataLoading } = usePreviousEntriesLoader();
-  const { isLoading: isFormLoading, isEditMode } = useApplicationDataLoader(id, form);
+  const { isLoading: isFormLoading, isEditMode, loadError, retryLoad } = useApplicationDataLoader(id, form);
   const { isSubmitting, onSubmit } = useApplicationSubmit(id);
 
   const isLoading = isDataLoading || isFormLoading;
@@ -45,6 +45,8 @@ export const useApplicationForm = () => {
     isSubmitting,
     isLoading,
     isEditMode,
+    loadError,
+    retryLoad,
     onSubmit,
     previousEntries,
     showRecruiterFields: source === "Recruiter"

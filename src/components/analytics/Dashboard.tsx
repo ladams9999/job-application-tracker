@@ -1,13 +1,33 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useApplicationsQuery } from "@/hooks/useApplicationQueries";
+import { normalizeAppError } from "@/lib/appError";
+import AppErrorPanel from "@/components/error/AppErrorPanel";
 
 
 const Dashboard = () => {
-  const { data: applications = [], isLoading, error } = useApplicationsQuery();
+  const { data: applications = [], isLoading, error, refetch } = useApplicationsQuery();
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading dashboard data.</div>;
+  if (error) {
+    return (
+      <AppErrorPanel
+        error={normalizeAppError(error, { operation: "load dashboard" })}
+        primaryAction={{
+          label: "Retry dashboard",
+          onClick: () => {
+            void refetch();
+          },
+        }}
+        secondaryAction={{
+          label: "Reload page",
+          onClick: () => {
+            window.location.reload();
+          },
+        }}
+      />
+    );
+  }
 
   const totalApplications = applications?.length || 0;
 

@@ -1,17 +1,16 @@
 
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { UseFormReturn } from "react-hook-form";
-import { toast } from "@/components/ui/sonner";
 import { FormValues } from "@/types/forms";
 import { parseDateOnly } from "@/lib/date";
 import { useApplicationQuery } from "@/hooks/useApplicationQueries";
+import { normalizeAppError } from "@/lib/appError";
 
 export const useApplicationDataLoader = (
   id: string | undefined, 
   form: UseFormReturn<FormValues>
 ) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const isEditMode = !!id;
   const applicationQuery = useApplicationQuery(id);
@@ -58,14 +57,18 @@ export const useApplicationDataLoader = (
     });
   }, [applicationQuery.data, form]);
 
-  useEffect(() => {
-    if (!isEditMode || !applicationQuery.isError) {
-      return;
-    }
+  const loadError =
+    isEditMode && applicationQuery.error
+      ? normalizeAppError(applicationQuery.error, {
+          operation: "load application",
+          recordId: id,
+        })
+      : null;
 
-    toast.error("Failed to load application");
-    navigate("/applications");
-  }, [applicationQuery.isError, isEditMode, navigate]);
-
-  return { isLoading: applicationQuery.isLoading, isEditMode };
+  return {
+    isLoading: applicationQuery.isLoading,
+    isEditMode,
+    loadError,
+    retryLoad: applicationQuery.refetch,
+  };
 };

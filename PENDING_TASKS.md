@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 5: Replace generic page-level error states with structured error rendering
-
-- Update list/dashboard loading failures and the edit-form record-load path to use the shared error component instead of generic text or redirects
-- Preserve retry/reload affordances for transient failures where appropriate
-
-**Verification:** Page/hook tests prove Supabase-unavailable and missing-record failures render actionable on-screen details instead of generic messages or navigation away
-
 ### Task 6: Add regression coverage for the main failure classes
 
 - Cover at least Supabase unavailable, invalid record data, missing record, and uncaught render failure

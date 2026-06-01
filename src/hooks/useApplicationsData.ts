@@ -22,6 +22,7 @@ export const useApplicationsData = (filter: ApplicationFilter) => {
     filteredApplications: applicationsQuery.data ?? [],
     isLoading: applicationsQuery.isLoading,
     error: applicationsQuery.error,
+    retryLoad: applicationsQuery.refetch,
     handleDelete,
   };
 };

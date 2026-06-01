@@ -34,7 +34,9 @@ describe('useApplicationForm', () => {
     
     mockUseApplicationDataLoader.mockReturnValue({
       isLoading: false,
-      isEditMode: false
+      isEditMode: false,
+      loadError: null,
+      retryLoad: jest.fn(),
     });
     
     mockUseApplicationSubmit.mockReturnValue({
@@ -53,6 +55,7 @@ describe('useApplicationForm', () => {
     expect(result.current.onSubmit).toBeDefined();
     expect(result.current.previousEntries).toBeDefined();
     expect(result.current.showRecruiterFields).toBe(false);
+    expect(result.current.loadError).toBeNull();
   });
 
   it('should show recruiter fields when source is Recruiter', () => {
@@ -78,7 +81,9 @@ describe('useApplicationForm', () => {
     
     mockUseApplicationDataLoader.mockReturnValue({
       isLoading: true,
-      isEditMode: false
+      isEditMode: false,
+      loadError: null,
+      retryLoad: jest.fn(),
     });
 
     const { result } = renderHook(() => useApplicationForm());
@@ -89,7 +94,9 @@ describe('useApplicationForm', () => {
   it('should handle edit mode correctly', () => {
     mockUseApplicationDataLoader.mockReturnValue({
       isLoading: false,
-      isEditMode: true
+      isEditMode: true,
+      loadError: null,
+      retryLoad: jest.fn(),
     });
 
     const { result } = renderHook(() => useApplicationForm());

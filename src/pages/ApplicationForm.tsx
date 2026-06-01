@@ -6,6 +6,7 @@ import ApplicationFormHeader from "@/components/application/ApplicationFormHeade
 import ApplicationFormFields from "@/components/application/ApplicationFormFields";
 import FormActions from "@/components/application/FormActions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
+import AppErrorPanel from "@/components/error/AppErrorPanel";
 
 const ApplicationForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +15,8 @@ const ApplicationForm = () => {
     isSubmitting, 
     isLoading, 
     isEditMode, 
+    loadError,
+    retryLoad,
     onSubmit,
     previousEntries,
     showRecruiterFields
@@ -26,6 +29,29 @@ const ApplicationForm = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <p className="text-lg text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+   if (loadError) {
+    return (
+      <div key={componentKey}>
+        <ApplicationFormHeader isEditMode={isEditMode} />
+        <AppErrorPanel
+          error={loadError}
+          primaryAction={{
+            label: "Retry load",
+            onClick: () => {
+              void retryLoad();
+            },
+          }}
+          secondaryAction={{
+            label: "Reload page",
+            onClick: () => {
+              window.location.reload();
+            },
+          }}
+        />
       </div>
     );
   }

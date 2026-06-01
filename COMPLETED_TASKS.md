@@ -180,3 +180,11 @@
 - Added regression coverage proving malformed row data is surfaced as a structured invalid-record-data error with the correct operation and record details
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/services/applicationAdapters.test.ts src/__tests__/services/applicationsApi.test.ts --runInBand` passes, and the tests prove malformed row data becomes a structured error with the expected record and field context
+
+### Task 5: Replace generic page-level error states with structured error rendering
+
+- Updated the applications list and dashboard to render `AppErrorPanel` with retry and reload actions instead of generic error text
+- Updated the edit-form loading path to preserve and expose structured load errors instead of redirecting away, so missing-record and invalid-record issues stay visible on screen
+- Added page and hook tests covering Supabase-unavailable list/dashboard failures and missing-record edit-form failures
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/ApplicationsList.test.tsx src/__tests__/components/analytics/Dashboard.test.tsx src/__tests__/pages/ApplicationForm.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/hooks/useApplicationForm.test.tsx --runInBand` passes, and the tests prove these failures now render actionable UI instead of generic text or navigation away

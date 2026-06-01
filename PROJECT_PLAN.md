@@ -12,104 +12,146 @@ MVP is done
 
 ## Additional Features
 
+- A cron script to use supabase to keep it from being paused.
 - Review and improve existing code
 - Improve UI and fix bogs
-- Add additional datastore options 
+- Add additional datastore options
+- Page to manage reruiter info
+
+- Change to or add UUIDs (v7?) for identifiers exposed outside the database.
+- multiuser support is postponed, but consider implementing an SSO/login to auth with 3rd party services..  
+- AI/LLM support is postponed.
 
 ---
-### 1.2 Product Vision
-A comprehensive, user-friendly application that helps job seekers organize, track, and manage their job applications throughout their career journey, with intelligent features to streamline the application process.
+From here and below to be grouped and reorganized into planned work
 
-### 1.3 Target Audience
+## Current Product Direction
+
+### Product Vision
+
+Build a practical, user-friendly job application tracker that helps an individual job seeker record applications, manage follow-up information, and review progress without unnecessary complexity.
+
+### Target Audience
+
 - Individual job seekers
 - Career changers
 - Recent graduates
 - Professionals actively seeking new opportunities
 
-### 1.4 Development Context
+### Development Context
+
 - Single developer with AI assistant
-- Test-Driven Development (TDD) following these steps:
-  - Write a failing test that defines a desired improvement or new function
-  - Write the minimum amount of code necessary to make the test pass
-  - Refactor the code to acceptable standards
-- Iterative development with clear MVP and future enhancements
+- Iterative development after MVP completion
+- TDD-oriented workflow where practical:
+  - write a failing test for the desired improvement
+  - implement the smallest correct change
+  - refactor once behavior is covered
 
----
+### Current Implemented Baseline
 
-## 2. Goals and Objectives
+- Add and edit application records
+- List existing applications
+- Search and filter applications
+- Persist data in Supabase
+- Track source, recruiter details, notes, and application URL
+- Show dashboard summary metrics
 
-**Primary Goal:** Enable individuals to efficiently track and manage job applications in a secure, user-friendly environment.
+## Current Goals
 
-**Objectives:**
-- Record detailed information about each job application
-- View, search, and filter applications
-- Update existing applications
-- Persist data locally via SQLite
-- Design with extensibility for cloud storage, authentication, and AI features
+### Goal 1: Stabilize and polish the current application
 
-### 4.4 Testing
+Focus first on improving reliability and usability in the features that already exist.
 
-- TDD methodology
-- Unit tests for all backend and frontend components
-- Integration tests for user workflows
-- Tools: Jest, React Testing Library, Supertest
-- Minimum 80% test coverage
+**Objectives**
+- Review and improve existing code
+- Improve UI and fix bugs
+- Strengthen tests around current workflows
+- Keep documentation aligned with the shipped implementation
 
-## 5. Future Enhancements (Post-MVP)
+### Goal 2: Complete the core tracking experience
 
-### 5.1 Authentication & Multi-User Support
-- SSO integration (GitHub, Google)
-- User-specific data isolation
-- Session management
-- User profile management
+Add the next features that most directly improve day-to-day use of the tracker.
 
-### 5.2 External Persistence
-- PostgreSQL or Supabase integration
-- Cloud sync support
-- Migration tools
+**Objectives**
+- Expand recruiter and contact management
+- Improve notes and follow-up workflow
+- Make the dashboard and list views more useful for active job searches
 
-### 5.3 Document Management
-- Upload resume and cover letter
-- Document versioning
-- File type validation (PDF, DOC, DOCX)
+## Planned Feature Roadmap
 
-### 5.4 Contact Management
-- Recruiter contact storage
-- Communication history
-- Follow-up reminders
+The items below are grouped into achievable features and listed in expected work order.
 
-### 5.5 AI Integration
-- LLM prompt generation for resumes and cover letters
-- Job description analysis
-- Resume tailoring
-- Application insights and follow-up suggestions
+### Phase 1: Quality, UX, and maintainability
 
-### 5.6 Advanced Features
+1. Review and improve existing code structure
+2. Fix current bugs and rough UI edges
+3. Improve validation, error states, and empty states
+4. Strengthen automated test coverage for key user workflows
+5. Keep agent and user documentation current
+
+### Phase 2: Recruiter and contact management
+
+1. Add a page to manage recruiter information
+2. Support reusable recruiter/contact records where appropriate
+3. Improve recruiter-related fields and workflows in the application form
+4. Add follow-up-oriented information such as communication notes or reminders
+
+### Phase 3: Better application workflow features
+
+1. Improve dashboard usefulness with clearer analytics and summaries
+2. Add timestamped notes or richer activity/history tracking
+3. Improve search, filter, and sorting options as needed
+4. Revisit delete/archive behavior and decide whether soft delete is needed
+
+### Phase 4: Operations and deployment support
+
+1. Add a cron or scheduled mechanism to keep the Supabase project active if needed
+2. Improve environment, deployment, and maintenance documentation
+3. Review backup/export needs for data safety
+
+### Phase 5: Data model and integration preparation
+
+1. Evaluate additional datastore options only if they solve a clear need
+2. Change to or add UUIDs for identifiers exposed outside the database
+3. Preserve compatibility between application code, migrations, and generated Supabase types
+
+## Deferred / Postponed Work
+
+These remain intentionally out of near-term scope.
+
+### Authentication and multi-user support
+
+- Multi-user support is postponed
+- If revisited later, prefer a clear authentication strategy such as SSO/login with third-party providers
+- Any multi-user work should include user-specific data isolation and session management
+
+### AI / LLM features
+
+- AI/LLM support is postponed
+- Potential future areas:
+  - resume and cover letter prompt assistance
+  - job description analysis
+  - application insights and follow-up suggestions
+
+### Additional long-range enhancements
+
+- Document upload and management
 - Calendar and email integration
-- Analytics dashboard
-- Export to formats (PDF, Excel)
-- Mobile app support
-- Timestamped notes
+- Export to PDF or spreadsheet formats
+- Mobile-specific experience
 
----
+## Success Criteria for Upcoming Work
 
-## 6. Success Metrics
+- Current application workflows remain stable while enhancements are added
+- Add, edit, list, search, and filter continue to work reliably
+- New features are delivered in small, testable increments
+- Documentation stays consistent with the actual implementation
+- The product remains simple and fast for a single-user job-search workflow
 
-- User can successfully add, view, update, delete (soft) applications
-- All required tests pass
-- App loads < 2s; search/filter < 500ms
-- Data persists across sessions
-- Time to add application < 2 min
-- Search/filter accuracy > 95%
-- Zero data loss incidents
-- Minimal learning curve
+## Risks and Mitigations
 
-
-## 7. Risks and Mitigations
-
-- **Scope Creep**: Strict MVP definition, backlog tracking
-- **Data Loss**: Auto-save, backups
-- **Security (SSO)**: Deferred until SSO implemented
-- **Test Gaps**: Enforce TDD + regular coverage review
-- **Performance**: Indexing, pagination
-- **Data Entry Fatigue**: Smart defaults, UI/UX simplification
+- **Scope creep**: Keep work ordered by user value and ship in small increments
+- **Code quality drift**: Prioritize refactoring and tests before adding large new features
+- **Documentation drift**: Update implementation-facing and user-facing docs with each meaningful feature change
+- **Data model churn**: Coordinate any schema changes with migrations and generated types
+- **Postponed auth complexity**: Avoid designing current features around multi-user assumptions until that work is actually scheduled

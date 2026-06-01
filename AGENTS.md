@@ -23,6 +23,4 @@ Refer to `PROJECT_PLAN.md` for current goals of this project
 - **Node.js Upgrade**: Updated from v18.19.0 to v20.19.4 via nvm to meet React Router v7.7.0 requirements
 - **Documentation**: Updated README.md and AGENTS.md with comprehensive setup instructions
 
-## Project Documentation
-Refer to the Product Requirements Document in `job_application_tracker_prd.md` for a detailed description of the intended application features.
 

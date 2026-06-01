@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 1: Extract shared dashboard activity selectors
-
-- Move the current Dashboard "active" rule and related count logic into shared helpers
-- Add a helper for recent-activity ordering using `updatedAt` with `createdAt` fallback
-
-**Verification:** Unit tests prove the active selector matches the current 14-day/non-rejected/non-withdrawn rule and the recent-activity sorter orders records correctly
-
 ### Task 2: Refactor Dashboard to consume shared selectors
 
 - Update `Dashboard` to use the shared helpers instead of deriving card counts inline

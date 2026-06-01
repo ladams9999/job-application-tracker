@@ -196,3 +196,13 @@
 - Ran the full repository lint, build, and Jest commands after the full error-handling implementation landed
 
 **Verified:** `npm run lint && npm run build && npx jest --runInBand` completes successfully, and the full suite now covers Supabase unavailable, invalid record data, missing record, and uncaught render failures
+
+## 5. Home page and dashboard deep-linking
+
+### Task 1: Extract shared dashboard activity selectors
+
+- Added `src/services/dashboardMetrics.ts` to centralize dashboard count derivation, the shared active-application rule, and recent-activity sorting helpers
+- Defined `isActiveApplication`, `getMostRecentActivityDate`, `sortByMostRecentActivity`, and `getDashboardMetrics` so later Home and dashboard work can reuse the same logic
+- Added focused unit coverage for the current Active rule, recent-activity ordering, and shared dashboard counts
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/services/dashboardMetrics.test.ts --runInBand` passes, and the new tests prove the active selector and recent-activity sorter match the required behavior

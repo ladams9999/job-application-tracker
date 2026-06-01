@@ -38,22 +38,27 @@ describe('usePreviousEntriesLoader', () => {
   });
 
   it('should handle errors gracefully', async () => {
-    mockGetSuggestions.mockRejectedValue(new Error('API Error'));
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      mockGetSuggestions.mockRejectedValue(new Error('API Error'));
 
-    const { result } = renderHook(() => usePreviousEntriesLoader());
+      const { result } = renderHook(() => usePreviousEntriesLoader());
 
-    expect(result.current.isLoading).toBe(true);
+      expect(result.current.isLoading).toBe(true);
 
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
 
-    // Should return default values on error
-    expect(result.current.previousEntries).toEqual({
-      companies: [],
-      jobTitles: [],
-      sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
-    });
+      // Should return default values on error
+      expect(result.current.previousEntries).toEqual({
+        companies: [],
+        jobTitles: [],
+        sources: ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"],
+      });
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
   });
 
   it('should handle invalid data from API', async () => {

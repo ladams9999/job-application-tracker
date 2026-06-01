@@ -7,15 +7,12 @@ export default {
   },
   preset: 'ts-jest/presets/default-esm',
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  globals: {
-    'ts-jest': {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
       useESM: true,
       tsconfig: './tsconfig.jest.json',
-    },
+    }],
   },
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.(ts|tsx|js)',

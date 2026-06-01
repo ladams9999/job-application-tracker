@@ -55,7 +55,6 @@ const ApplicationForm = () => {
                 showRecruiterFields={showRecruiterFields}
                 isDataLoading={isLoading}
                 enableAutocomplete={enableAutocomplete}
-                isEditMode={isEditMode}
               />
               <FormActions isSubmitting={isSubmitting} isEditMode={isEditMode} />
             </form>

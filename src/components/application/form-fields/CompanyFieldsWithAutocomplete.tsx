@@ -12,35 +12,25 @@ import { FormValues, PreviousEntryDataInput } from "@/types/forms";
 
 interface CompanyFieldsWithAutocompleteProps {
   form: UseFormReturn<FormValues>;
-  previousEntries: PreviousEntryDataInput;
+  previousEntries?: PreviousEntryDataInput;
   isDataLoading?: boolean;
-  isEditMode?: boolean;
 }
 
 const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({ 
   form, 
   previousEntries, 
-  isDataLoading = false,
-  isEditMode = false
+  isDataLoading = false
 }) => {
   const [companyOpen, setCompanyOpen] = useState(false);
   const [jobTitleOpen, setJobTitleOpen] = useState(false);
-  
-  console.log("CompanyFieldsWithAutocomplete rendered with:", { 
-    previousEntries, 
-    isDataLoading,
-    companiesLength: previousEntries?.companies?.length,
-    jobTitlesLength: previousEntries?.jobTitles?.length
-  });
 
   // Only render autocomplete if data is fully loaded and valid
   const canRenderAutocomplete = !isDataLoading && 
-    previousEntries && 
-    Array.isArray(previousEntries.companies) && 
-    Array.isArray(previousEntries.jobTitles);
+    Array.isArray(previousEntries?.companies) && 
+    Array.isArray(previousEntries?.jobTitles);
 
-  const companyOptions = Array.isArray(previousEntries.companies) ? previousEntries.companies : [];
-  const jobTitleOptions = Array.isArray(previousEntries.jobTitles) ? previousEntries.jobTitles : [];
+  const companyOptions = Array.isArray(previousEntries?.companies) ? previousEntries.companies : [];
+  const jobTitleOptions = Array.isArray(previousEntries?.jobTitles) ? previousEntries.jobTitles : [];
 
   if (isDataLoading) {
     return (
@@ -56,9 +46,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
       </div>
     );
   }
-
   if (!canRenderAutocomplete) {
-    console.warn("CompanyFieldsWithAutocomplete: Data not ready, falling back to simple inputs");
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FormField

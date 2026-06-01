@@ -62,3 +62,12 @@
 - Tightened chart payload typing and updated the Tailwind suppression comment to satisfy ESLint
 
 **Verified:** `npm run lint` now completes successfully for the current codebase
+
+### Task 3: Clean up Jest configuration and noisy test output
+
+- Moved `ts-jest` options from deprecated `globals` config into the transform entry
+- Removed debug logging from form components and hooks
+- Tightened the autocomplete fallback so undefined previous-entry data no longer triggers expected test-time error-boundary noise
+- Silenced the intentionally exercised error path in the loader hook test
+
+**Verified:** `npx jest --runInBand` runs without the deprecated `ts-jest` warning and without the prior console noise from expected test paths

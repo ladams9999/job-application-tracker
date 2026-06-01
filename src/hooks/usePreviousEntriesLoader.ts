@@ -18,7 +18,6 @@ export const usePreviousEntriesLoader = () => {
       try {
         setIsLoading(true);
         const suggestions = await getSuggestions();
-        console.log("Loaded suggestions:", suggestions);
         
         // Ensure we always have valid arrays
         const safeEntries: PreviousEntryData = {

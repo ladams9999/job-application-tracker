@@ -3,17 +3,13 @@ import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FormValues, PreviousEntryData } from "@/types/forms";
+import { FormValues } from "@/types/forms";
 
 interface CompanyFieldsProps {
   form: UseFormReturn<FormValues>;
-  previousEntries: PreviousEntryData;
-  isEditMode?: boolean;
 }
 
-const CompanyFields: FC<CompanyFieldsProps> = ({ form, previousEntries, isEditMode = false }) => {
-  console.log("CompanyFields rendered with previousEntries:", previousEntries);
-  
+const CompanyFields: FC<CompanyFieldsProps> = ({ form }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField

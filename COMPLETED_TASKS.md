@@ -55,6 +55,14 @@
 
 **Verified:** `npx jest --runTestsByPath src/__tests__/hooks/useApplicationSubmit.test.tsx --runInBand` confirms create and edit submissions include all contact fields
 
+### Task 6: Normalize `date_applied` handling as a date-only value
+
+- Added shared date-only parse and format helpers for storage, edit-mode hydration, and display formatting
+- Replaced `toISOString()` submission and naive `new Date(dateString)` loading with date-only-safe handling
+- Added regression coverage for submit, loader, and date utility round-tripping
+
+**Verified:** `npx jest --runTestsByPath src/__tests__/hooks/useApplicationSubmit.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/lib/date.test.ts --runInBand` confirms the same calendar date is preserved across save and reload flows
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

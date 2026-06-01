@@ -23,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { formatStoredDateForDisplay } from "@/lib/date";
 
 interface ApplicationsTableProps {
   applications: JobApplication[];
@@ -37,10 +38,6 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
   onSortChange, 
   onDelete 
 }) => {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
-
   const renderSortIcon = (field: "dateApplied" | "company" | "jobTitle" | "status") => {
     if (filter.sortBy !== field) return null;
     
@@ -103,7 +100,7 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                   </Link>
                 </TableCell>
                 <TableCell>{app.jobTitle}</TableCell>
-                <TableCell>{formatDate(app.dateApplied)}</TableCell>
+                <TableCell>{formatStoredDateForDisplay(app.dateApplied)}</TableCell>
                 <TableCell>
                   <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(app.status)}`}>
                     {getStatusLabel(app.status)}

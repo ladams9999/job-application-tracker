@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { FormValues } from "@/types/forms";
 import { addApplication, updateApplication } from "@/services/applicationService";
+import { formatDateOnlyForStorage } from "@/lib/date";
 
 export const useApplicationSubmit = (id: string | undefined) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,7 +21,7 @@ export const useApplicationSubmit = (id: string | undefined) => {
           company: data.company,
           jobTitle: data.jobTitle,
           jobDescription: data.jobDescription,
-          dateApplied: data.dateApplied.toISOString(),
+          dateApplied: formatDateOnlyForStorage(data.dateApplied),
           status: data.status,
           notes: data.notes,
           source: data.source,
@@ -37,7 +38,7 @@ export const useApplicationSubmit = (id: string | undefined) => {
           company: data.company,
           jobTitle: data.jobTitle,
           jobDescription: data.jobDescription,
-          dateApplied: data.dateApplied.toISOString(),
+          dateApplied: formatDateOnlyForStorage(data.dateApplied),
           status: data.status,
           notes: data.notes,
           source: data.source,

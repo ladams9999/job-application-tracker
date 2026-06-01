@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import { toast } from "@/components/ui/sonner";
 import { FormValues } from "@/types/forms";
 import { applicationsApi } from "@/services/applicationsApi";
+import { parseDateOnly } from "@/lib/date";
 
 export const useApplicationDataLoader = (
   id: string | undefined, 
@@ -52,7 +53,7 @@ export const useApplicationDataLoader = (
         company: application.company || "",
         jobTitle: application.jobTitle || "",
         jobDescription: application.jobDescription || "",
-        dateApplied: new Date(application.dateApplied),
+        dateApplied: parseDateOnly(application.dateApplied),
         status: application.status,
         notes: application.notes || "",
         source: application.source || "LinkedIn",

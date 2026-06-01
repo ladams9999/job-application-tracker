@@ -38,14 +38,14 @@ describe('useApplicationSubmit', () => {
     mockAddApplication.mockResolvedValue({
       id: 'created-id',
       ...buildFormValues(),
-      dateApplied: buildFormValues().dateApplied.toISOString(),
+      dateApplied: '2026-06-01',
       createdAt: '2026-06-01T12:00:00.000Z',
       updatedAt: '2026-06-01T12:00:00.000Z',
     });
     mockUpdateApplication.mockResolvedValue({
       id: 'existing-id',
       ...buildFormValues(),
-      dateApplied: buildFormValues().dateApplied.toISOString(),
+      dateApplied: '2026-06-01',
       createdAt: '2026-06-01T12:00:00.000Z',
       updatedAt: '2026-06-01T12:00:00.000Z',
     });
@@ -63,7 +63,7 @@ describe('useApplicationSubmit', () => {
       company: 'Acme',
       jobTitle: 'Frontend Engineer',
       jobDescription: 'Build UI features',
-      dateApplied: '2026-06-01T12:00:00.000Z',
+      dateApplied: '2026-06-01',
       status: 'applied',
       notes: 'Initial application',
       source: 'LinkedIn',
@@ -94,7 +94,7 @@ describe('useApplicationSubmit', () => {
       company: 'Acme',
       jobTitle: 'Frontend Engineer',
       jobDescription: 'Build UI features',
-      dateApplied: '2026-06-01T12:00:00.000Z',
+      dateApplied: '2026-06-01',
       status: 'applied',
       notes: 'Initial application',
       source: 'Recruiter',

@@ -80,6 +80,14 @@
 
 **Verified:** `npx jest --runTestsByPath src/__tests__/services/applicationAdapters.test.ts src/__tests__/hooks/useApplicationSubmit.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/lib/date.test.ts --runInBand && npm run build` passes with the adapter-based service/API flow
 
+### Task 9: Harden search and suggestion queries
+
+- Replaced raw PostgREST `or(...)` search-string interpolation with literal client-side matching on the fetched application set
+- Added bounded ordering and limits to the suggestion queries so they no longer scan full columns
+- Extracted shared query helpers and added regression coverage for punctuation-heavy search input and suggestion deduplication
+
+**Verified:** `npx jest --runTestsByPath src/__tests__/services/applicationQueryUtils.test.ts src/__tests__/services/applicationAdapters.test.ts --runInBand && npm run build` passes with the hardened search and suggestion flow
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

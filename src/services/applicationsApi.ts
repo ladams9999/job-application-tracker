@@ -7,6 +7,11 @@ import {
   buildUpdateApplicationPayload,
   mapApplicationRow,
 } from "./applicationAdapters";
+import {
+  SUGGESTION_QUERY_LIMIT,
+  extractUniqueValues,
+  filterApplicationsBySearch,
+} from "./applicationQueryUtils";
 
 export interface ApplicationsResponse {
   applications: JobApplication[];
@@ -34,11 +39,6 @@ export const applicationsApi = {
         .from('job_applications')
         .select('*');
 
-      // Apply search filter
-      if (filter?.search) {
-        query = query.or(`company.ilike.%${filter.search}%,job_title.ilike.%${filter.search}%`);
-      }
-
       // Apply status filter
       if (filter?.status && filter.status !== 'all') {
         query = query.eq('status', filter.status);
@@ -63,7 +63,10 @@ export const applicationsApi = {
       }
 
       // Transform data to match JobApplication interface
-      const applications: JobApplication[] = (data || []).map(mapApplicationRow);
+      const applications = filterApplicationsBySearch(
+        (data || []).map(mapApplicationRow),
+        filter?.search ?? "",
+      );
 
       return {
         applications,
@@ -182,7 +185,9 @@ export const applicationsApi = {
       const { data: companiesData, error: companiesError } = await supabase
         .from('job_applications')
         .select('company')
-        .neq('company', 'Anonymous');
+        .neq('company', 'Anonymous')
+        .order('created_at', { ascending: false })
+        .limit(SUGGESTION_QUERY_LIMIT);
 
       if (companiesError) {
         console.error('Error fetching companies:', companiesError);
@@ -191,7 +196,9 @@ export const applicationsApi = {
       // Get distinct job titles
       const { data: jobTitlesData, error: jobTitlesError } = await supabase
         .from('job_applications')
-        .select('job_title');
+        .select('job_title')
+        .order('created_at', { ascending: false })
+        .limit(SUGGESTION_QUERY_LIMIT);
 
       if (jobTitlesError) {
         console.error('Error fetching job titles:', jobTitlesError);
@@ -201,16 +208,18 @@ export const applicationsApi = {
       const { data: sourcesData, error: sourcesError } = await supabase
         .from('job_applications')
         .select('source')
-        .not('source', 'is', null);
+        .not('source', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(SUGGESTION_QUERY_LIMIT);
 
       if (sourcesError) {
         console.error('Error fetching sources:', sourcesError);
       }
 
       // Extract unique values
-      const companies = [...new Set((companiesData || []).map(item => item.company))];
-      const jobTitles = [...new Set((jobTitlesData || []).map(item => item.job_title))];
-      const sources = [...new Set((sourcesData || []).map(item => item.source))];
+      const companies = extractUniqueValues(companiesData, (item) => item.company);
+      const jobTitles = extractUniqueValues(jobTitlesData, (item) => item.job_title);
+      const sources = extractUniqueValues(sourcesData, (item) => item.source);
 
       // Add default sources if none exist
       const defaultSources = ["LinkedIn", "Recruiter", "Job Board", "Company Website", "Other"];

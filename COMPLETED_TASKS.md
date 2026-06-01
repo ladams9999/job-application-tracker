@@ -262,3 +262,13 @@
 - Finished with the full repository lint, build, and Jest commands after the complete Home-page implementation landed
 
 **Verified:** `npm run lint && npm run build && npx jest --runInBand` passes, including the new route, Home rendering, dashboard deep-link, and filter-hydration coverage
+
+## 6. Applications filter criteria summary
+
+### Task 1: Extend filter hook criteria and clear actions
+
+- Extended `useApplicationFilters` to derive active `search`, `status`, and `view` criteria from the current filter state
+- Added explicit clear handlers for each supported criterion plus a clear-all action that keeps non-filter sort state intact
+- Synced clear actions back into the `/applications` query string so URL-hydrated criteria stay removed after navigation or refresh
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx --runInBand` passes, and the hook tests prove active criteria and individual/all-clear URL reset behavior

@@ -1,13 +1,5 @@
 # Pending Tasks
 
-### Task 1: Extend filter hook criteria and clear actions
-
-- Update `useApplicationFilters` to derive active criteria for `search`, `status`, and `view`
-- Add explicit handlers to clear each supported criterion individually and to clear all active criteria together
-- Keep query-parameter-derived state aligned when a visible criterion is cleared
-
-**Verification:** Hook tests prove active criteria are derived from query parameters correctly and that individual/all-clear actions reset the expected filter fields and URL params
-
 ### Task 2: Add an Applications filter-summary component
 
 - Create a reusable component that renders only active filter criteria as chips, badges, or similar compact UI

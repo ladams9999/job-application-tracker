@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 3: Add a top-level error boundary to prevent blank screens
-
-- Wrap the routed application in an error boundary that catches render-time/runtime failures
-- Render the shared fallback screen when uncaught errors escape normal page logic
-
-**Verification:** A test that throws from a child component renders the fallback screen instead of leaving the UI blank
-
 ### Task 4: Preserve structured context when Supabase data is read and transformed
 
 - Update the API/service/adapter path to attach operation details and record context before errors reach the UI

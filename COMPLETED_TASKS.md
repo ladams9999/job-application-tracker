@@ -164,3 +164,11 @@
 - Added optional primary and secondary action slots so later tasks can wire retry and reload affordances into the same shared UI
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/error/AppErrorPanel.test.tsx --runInBand` passes, and the component tests prove both Supabase and invalid-record examples render the expected diagnostics
+
+### Task 3: Add a top-level error boundary to prevent blank screens
+
+- Added `src/components/error/AppErrorBoundary.tsx` to catch uncaught render-time/runtime failures and render the shared full-screen fallback with retry/reload affordances
+- Updated `src/main.tsx` to lazy-load the routed app tree inside the boundary so unexpected app-bootstrap failures surface through the same fallback instead of dropping to a blank page
+- Normalized boundary failures through the shared app-error contract so fatal crashes still expose a summary, technical message, and operation context
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/error/AppErrorBoundary.test.tsx --runInBand` passes, and the boundary test proves a thrown child renders the fallback instead of a blank screen

@@ -24,7 +24,7 @@
   - `usePreviousEntriesLoader` loads suggestion data for company, title, and source pickers.
   - `useApplicationSubmit` chooses create vs. update and navigates back to `/applications`.
 - Supabase schema changes live under `supabase/migrations/`, while the generated TypeScript representation lives in `src/integrations/supabase/types.ts`. Keep both aligned when changing persisted fields.
-- `Dashboard` currently computes metrics client-side from the full application list instead of using a dedicated stats endpoint or React Query cache.
+- `Dashboard` fetches the application list via `useApplicationsQuery` (React Query) and computes metrics client-side from that list.
 
 ## Key conventions
 

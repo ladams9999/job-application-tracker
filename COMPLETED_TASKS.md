@@ -206,3 +206,11 @@
 - Added focused unit coverage for the current Active rule, recent-activity ordering, and shared dashboard counts
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/services/dashboardMetrics.test.ts --runInBand` passes, and the new tests prove the active selector and recent-activity sorter match the required behavior
+
+### Task 2: Refactor Dashboard to consume shared selectors
+
+- Refactored `src/components/analytics/Dashboard.tsx` to use `getDashboardMetrics` instead of deriving counts inline
+- Added `src/components/analytics/dashboardCardConfig.ts` so card metadata is centralized and ready for deep-link behavior without changing card rendering logic again
+- Extended dashboard component coverage to prove the rendered card counts still match the same application set after the refactor
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/analytics/Dashboard.test.tsx src/__tests__/services/dashboardMetrics.test.ts --runInBand` passes, and the tests prove the refactored dashboard still renders the expected metrics

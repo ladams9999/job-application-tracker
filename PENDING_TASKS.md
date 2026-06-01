@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 2: Refactor Dashboard to consume shared selectors
-
-- Update `Dashboard` to use the shared helpers instead of deriving card counts inline
-- Prepare card configuration so deep links can be added without changing displayed metrics
-
-**Verification:** Tests prove the rendered dashboard counts still match the same input applications after the refactor
-
 ### Task 3: Add dashboard card deep links
 
 - Make supported dashboard cards clickable or linked to `/applications` with query parameters

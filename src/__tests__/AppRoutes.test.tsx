@@ -5,6 +5,14 @@ global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 jest.mock("react-router-dom", () => jest.requireActual("react-router-dom"));
 jest.mock("@/components/analytics/Dashboard", () => () => <div>Dashboard</div>);
+jest.mock("@/hooks/useApplicationQueries", () => ({
+  useApplicationsQuery: () => ({
+    data: [],
+    error: null,
+    isLoading: false,
+    refetch: jest.fn(),
+  }),
+}));
 
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";

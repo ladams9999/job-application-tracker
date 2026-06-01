@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 6: Add the Active Applications section to Home
-
-- Render only applications matching the shared active rule
-- Sort the list from most recent activity to least recent and show a reasonable empty state when no records match
-
-**Verification:** Page tests prove Home shows only active applications in descending recent-activity order
-
 ### Task 7: Add a persisted sample record for today
 
 - Create a Supabase migration or seed row for a clearly labeled sample application dated today so it appears in the active list

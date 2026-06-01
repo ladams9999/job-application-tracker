@@ -238,3 +238,11 @@
 - Exported the route tree for focused routing coverage and added a root-route test that exercises the new Home entry point
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/AppRoutes.test.tsx --runInBand` passes, and the route test proves `/` now renders Home instead of redirecting
+
+### Task 6: Add the Active Applications section to Home
+
+- Extended `Home` to load the application list, reuse the shared active selector, and sort the matching records with `sortByMostRecentActivity`
+- Added loading, structured error, and empty states for the new section while keeping the dashboard at the top of the page
+- Added Home page regression coverage proving only active applications render and that they appear in descending recent-activity order
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/Home.test.tsx src/__tests__/AppRoutes.test.tsx --runInBand` passes, and the tests prove Home only shows active applications in the expected order

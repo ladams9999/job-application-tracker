@@ -4,14 +4,6 @@
 
 This is the next feature to implement. The goal is a **portable script or tool** that can be invoked by an automated scheduler on this machine or on a different machine.
 
-### Task 2: Choose the script interface
-
-- Decide how the script will be run locally and from other machines
-- Define how configuration is supplied, such as environment variables or a `.env` file
-- Define exit-code behavior for success and failure
-
-**Verifiable outcome:** a documented command interface, required inputs, and exit-code expectations
-
 ### Task 3: Implement the keep-alive script
 
 - Add the script/tool to the repository

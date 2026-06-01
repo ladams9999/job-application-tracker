@@ -304,6 +304,52 @@ The keep-alive request should fail clearly when:
 - the response is not valid JSON
 - the Supabase project is unreachable
 
+### Script interface
+
+The keep-alive tool should be implemented as a **Node script** stored under `scripts/` and runnable in either of these ways:
+
+```sh
+node scripts/supabase-keepalive.mjs
+```
+
+or, once wired into `package.json`:
+
+```sh
+npm run supabase:keepalive
+```
+
+This keeps the tool portable across machines that already have Node installed and avoids dependence on a specific scheduler or shell environment.
+
+### Configuration contract
+
+The script should read configuration from environment variables with this precedence:
+
+1. `SUPABASE_URL`
+2. `VITE_SUPABASE_URL`
+
+and:
+
+1. `SUPABASE_PUBLISHABLE_KEY`
+2. `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+The script should support loading those values from the process environment, including environments populated from a local `.env` file before invocation.
+
+### Output contract
+
+On success, the script should print a short human-readable success line that includes:
+
+- the queried endpoint path
+- the HTTP status
+- whether the response contained 0 or more rows
+
+On failure, the script should print a short human-readable error to stderr describing whether the failure was caused by configuration, networking, or a non-success Supabase response.
+
+### Exit codes
+
+- `0`: request succeeded and returned valid JSON
+- `1`: request ran but failed due to HTTP, network, or response parsing issues
+- `2`: required configuration was missing
+
 ## Commands
 
 Use Node.js `v20.19.4` and npm.

@@ -280,3 +280,11 @@
 - Added focused component coverage for populated, empty, and single-criterion summary states
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/application/ApplicationFilterSummary.test.tsx --runInBand` passes, and the component tests prove the expected criteria and clear controls render only when appropriate
+
+### Task 3: Integrate the summary into ApplicationsList
+
+- Updated `useApplicationsList` to expose active criteria plus unified per-criterion and clear-all handlers for the page layer
+- Rendered `ApplicationFilterSummary` between `ApplicationsHeader` and `FilterBar` on the Applications page
+- Expanded Applications page coverage to prove the summary appears in the intended location while the loading and structured error states still behave as before
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes, and the page tests prove the summary placement and existing loading/error behavior

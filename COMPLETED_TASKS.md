@@ -296,3 +296,11 @@
 - Confirmed the new filter-summary behavior is covered end-to-end across derivation, rendering, and page placement
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx src/__tests__/components/application/ApplicationFilterSummary.test.tsx src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes for the completed filter-summary feature
+
+### Task 5: Fix router hook coverage in the applications-list regression test
+
+- Added an explicit `useNavigate` mock to `useApplicationsList.test.tsx` so the local `react-router-dom` mock matches the hook's current dependencies
+- Reset the navigation spy between tests to keep the hook suite isolated and deterministic
+- Restored the full Jest suite after the URL-hydration regression started exercising `useApplicationFilters` through `useApplicationsList`
+
+**Verified:** `npm run lint && npm run build && npx jest --runInBand` passes with the repaired router-hook test setup

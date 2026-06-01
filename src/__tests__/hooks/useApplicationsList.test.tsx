@@ -7,12 +7,14 @@ import type { JobApplication } from "@/types";
 
 const mockDeleteApplication = jest.fn();
 let mockSearch = "";
+const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   useLocation: () => ({
     pathname: "/applications",
     search: mockSearch,
   }),
+  useNavigate: () => mockNavigate,
 }));
 
 jest.mock("@/hooks/useApplicationQueries", () => ({
@@ -55,6 +57,7 @@ describe("useApplicationsList", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockSearch = "";
+    mockNavigate.mockReset();
     jest.useFakeTimers().setSystemTime(new Date("2026-06-15T12:00:00.000Z"));
   });
 

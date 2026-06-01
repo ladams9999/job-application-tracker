@@ -63,6 +63,15 @@
 
 **Verified:** `npx jest --runTestsByPath src/__tests__/hooks/useApplicationSubmit.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/lib/date.test.ts --runInBand` confirms the same calendar date is preserved across save and reload flows
 
+### Task 7: Move application data flows onto shared React Query hooks
+
+- Added shared query hooks and query keys for application lists, individual records, and suggestion data
+- Replaced manual `useEffect` / `useState` loaders in the list, dashboard, and form-related hooks with React Query
+- Added cache invalidation on create, update, and delete so the dashboard, list, and form flows stay in sync
+- Updated hook tests to run with a QueryClient test wrapper
+
+**Verified:** `npx jest --runInBand && npm run build` completes successfully with the migrated query-based data flows
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

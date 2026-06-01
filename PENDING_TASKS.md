@@ -1,14 +1,6 @@
 # Pending Tasks
 
-## 1. Move application data flows onto shared React Query hooks
-
-- `App.tsx` already provides `QueryClientProvider`, but the list, form loaders, suggestions, and dashboard still rely on manual `useEffect` / `useState` orchestration
-- `Dashboard` fetches its own application list once on mount, so its metrics can drift from the table after deletes or edits
-- Current service-layer fallbacks also blur the difference between a real empty state and a failed request
-
-**Verifiable outcome:** list, dashboard, and form-related queries use shared React Query hooks with predictable loading/error states and mutation invalidation keeps views in sync
-
-## 2. Centralize Supabase row mapping and payload shaping
+## 1. Centralize Supabase row mapping and payload shaping
 
 - `applicationsApi.ts` repeats snake_case-to-camelCase mapping logic and request payload construction in multiple CRUD paths
 - This duplication increases the chance that future schema changes update one path but miss another
@@ -16,7 +8,7 @@
 
 **Verifiable outcome:** Supabase request/response mapping lives in shared typed helpers, duplicated transformation logic is removed, and existing behavior stays intact
 
-## 3. Harden search and suggestion queries
+## 2. Harden search and suggestion queries
 
 - `getApplications` interpolates raw search text into a PostgREST `.or(...)` filter string, which is fragile for punctuation-heavy input
 - `getSuggestions` currently reads whole columns and deduplicates client-side, which will not scale well as the table grows
@@ -24,7 +16,7 @@
 
 **Verifiable outcome:** search works reliably with arbitrary input characters, and suggestion loading avoids full-table fetch patterns
 
-## 4. Remove or fully ship the dormant company autocomplete path
+## 3. Remove or fully ship the dormant company autocomplete path
 
 - `ApplicationForm.tsx` hardcodes `enableAutocomplete = false`, so `CompanyFieldsWithAutocomplete` and its fallback/error-boundary complexity are never used in production
 - Keeping an always-off feature path increases maintenance cost and test surface without user benefit
@@ -32,7 +24,7 @@
 
 **Verifiable outcome:** no permanently disabled autocomplete flag remains, and the production form only contains behavior the app actually supports
 
-## 5. Modernize routing and navigation primitives
+## 4. Modernize routing and navigation primitives
 
 - The root route redirects with `useEffect` + `navigate` instead of using declarative routing
 - `NotFound` logs expected 404 navigation to the console and uses a plain anchor tag, causing a full page reload back to the app

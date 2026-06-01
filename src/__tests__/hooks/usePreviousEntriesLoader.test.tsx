@@ -2,13 +2,15 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { usePreviousEntriesLoader } from '@/hooks/usePreviousEntriesLoader';
-import * as applicationService from '@/services/applicationService';
+import { applicationsApi } from '@/services/applicationsApi';
+import { createQueryClientWrapper } from '@/test-utils/queryClient';
 
-// Mock the applicationService
-const mockGetSuggestions = applicationService.getSuggestions as jest.MockedFunction<typeof applicationService.getSuggestions>;
+const mockGetSuggestions = applicationsApi.getSuggestions as jest.MockedFunction<typeof applicationsApi.getSuggestions>;
 
-jest.mock('@/services/applicationService', () => ({
-  getSuggestions: jest.fn(),
+jest.mock('@/services/applicationsApi', () => ({
+  applicationsApi: {
+    getSuggestions: jest.fn(),
+  },
 }));
 
 describe('usePreviousEntriesLoader', () => {
@@ -17,6 +19,7 @@ describe('usePreviousEntriesLoader', () => {
   });
 
   it('should load suggestions successfully', async () => {
+    const wrapper = createQueryClientWrapper();
     const mockSuggestions = {
       companies: ['Google', 'Microsoft'],
       jobTitles: ['Developer', 'Engineer'],
@@ -25,7 +28,7 @@ describe('usePreviousEntriesLoader', () => {
 
     mockGetSuggestions.mockResolvedValue(mockSuggestions);
 
-    const { result } = renderHook(() => usePreviousEntriesLoader());
+    const { result } = renderHook(() => usePreviousEntriesLoader(), { wrapper });
 
     expect(result.current.isLoading).toBe(true);
 
@@ -38,11 +41,12 @@ describe('usePreviousEntriesLoader', () => {
   });
 
   it('should handle errors gracefully', async () => {
+    const wrapper = createQueryClientWrapper();
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     try {
       mockGetSuggestions.mockRejectedValue(new Error('API Error'));
 
-      const { result } = renderHook(() => usePreviousEntriesLoader());
+      const { result } = renderHook(() => usePreviousEntriesLoader(), { wrapper });
 
       expect(result.current.isLoading).toBe(true);
 
@@ -62,6 +66,7 @@ describe('usePreviousEntriesLoader', () => {
   });
 
   it('should handle invalid data from API', async () => {
+    const wrapper = createQueryClientWrapper();
     const invalidSuggestions = {
       companies: null,
       jobTitles: undefined,
@@ -70,7 +75,7 @@ describe('usePreviousEntriesLoader', () => {
 
     mockGetSuggestions.mockResolvedValue(invalidSuggestions);
 
-    const { result } = renderHook(() => usePreviousEntriesLoader());
+    const { result } = renderHook(() => usePreviousEntriesLoader(), { wrapper });
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -85,6 +90,7 @@ describe('usePreviousEntriesLoader', () => {
   });
 
   it('should handle empty sources array', async () => {
+    const wrapper = createQueryClientWrapper();
     const suggestionsWithEmptySources = {
       companies: ['Google'],
       jobTitles: ['Developer'],
@@ -93,7 +99,7 @@ describe('usePreviousEntriesLoader', () => {
 
     mockGetSuggestions.mockResolvedValue(suggestionsWithEmptySources);
 
-    const { result } = renderHook(() => usePreviousEntriesLoader());
+    const { result } = renderHook(() => usePreviousEntriesLoader(), { wrapper });
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);

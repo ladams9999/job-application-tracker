@@ -1,40 +1,15 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState, useEffect } from "react";
-import { JobApplication, ApplicationStatus } from "@/types";
-import { getAllApplications } from "@/services/applicationService";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useApplicationsQuery } from "@/hooks/useApplicationQueries";
 
 
 const Dashboard = () => {
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const loadApplications = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getAllApplications();
-        setApplications(data);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadApplications();
-  }, []);
+  const { data: applications = [], isLoading, error } = useApplicationsQuery();
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error loading dashboard data.</div>;
 
   const totalApplications = applications?.length || 0;
-  const statusCounts = applications?.reduce((acc, app) => {
-    acc[app.status] = (acc[app.status] || 0) + 1;
-    return acc;
-  }, {} as Record<ApplicationStatus, number>) || {};
 
   const getStartOfWeek = () => {
     const now = new Date();

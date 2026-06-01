@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useApplicationSubmit } from '@/hooks/useApplicationSubmit';
 import { addApplication, updateApplication } from '@/services/applicationService';
 import { FormValues } from '@/types/forms';
+import { createQueryClientWrapper } from '@/test-utils/queryClient';
 
 const mockNavigate = jest.fn();
 
@@ -52,7 +53,8 @@ describe('useApplicationSubmit', () => {
   });
 
   it('submits contact fields when creating an application', async () => {
-    const { result } = renderHook(() => useApplicationSubmit(undefined));
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useApplicationSubmit(undefined), { wrapper });
     const formValues = buildFormValues();
 
     await act(async () => {
@@ -77,7 +79,8 @@ describe('useApplicationSubmit', () => {
   });
 
   it('submits and preserves contact fields when editing an application', async () => {
-    const { result } = renderHook(() => useApplicationSubmit('existing-id'));
+    const wrapper = createQueryClientWrapper();
+    const { result } = renderHook(() => useApplicationSubmit('existing-id'), { wrapper });
     const formValues = {
       ...buildFormValues(),
       source: 'Recruiter',

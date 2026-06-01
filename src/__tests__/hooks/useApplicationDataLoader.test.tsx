@@ -4,6 +4,7 @@ import { useApplicationDataLoader } from '@/hooks/useApplicationDataLoader';
 import type { FormValues } from '@/types/forms';
 import { applicationsApi } from '@/services/applicationsApi';
 import { formatDateOnlyForStorage } from '@/lib/date';
+import { createQueryClientWrapper } from '@/test-utils/queryClient';
 
 const mockNavigate = jest.fn();
 const mockReset = jest.fn();
@@ -27,6 +28,7 @@ describe('useApplicationDataLoader', () => {
   });
 
   it('loads a stored date-only value without changing the calendar day', async () => {
+    const wrapper = createQueryClientWrapper();
     mockGetApplication.mockResolvedValue({
       id: 'existing-id',
       company: 'Acme',
@@ -49,7 +51,7 @@ describe('useApplicationDataLoader', () => {
       reset: mockReset,
     } as unknown as UseFormReturn<FormValues>;
 
-    renderHook(() => useApplicationDataLoader('existing-id', form));
+    renderHook(() => useApplicationDataLoader('existing-id', form), { wrapper });
 
     await waitFor(() => {
       expect(mockGetApplication).toHaveBeenCalledWith('existing-id');

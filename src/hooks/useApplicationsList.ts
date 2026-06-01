@@ -4,10 +4,12 @@ import { useApplicationsData } from "./useApplicationsData";
 
 export const useApplicationsList = () => {
   const { filter, handleSearchChange, handleStatusChange, handleSortChange } = useApplicationFilters();
-  const { filteredApplications, handleDelete } = useApplicationsData(filter);
+  const { filteredApplications, isLoading, error, handleDelete } = useApplicationsData(filter);
 
   return {
     filteredApplications,
+    isLoading,
+    error,
     filter,
     handleSearchChange,
     handleStatusChange,

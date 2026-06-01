@@ -1,45 +1,27 @@
 
-import { useState, useEffect } from "react";
-import { JobApplication, ApplicationFilter } from "@/types";
-import { applicationsApi } from "@/services/applicationsApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApplicationFilter } from "@/types";
 import { deleteApplication } from "@/services/applicationService";
+import { applicationQueryKeys, useApplicationsQuery } from "@/hooks/useApplicationQueries";
 
 export const useApplicationsData = (filter: ApplicationFilter) => {
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-  const [filteredApplications, setFilteredApplications] = useState<JobApplication[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadApplications();
-  }, [filter]);
-
-  const loadApplications = async () => {
-    try {
-      setIsLoading(true);
-      const response = await applicationsApi.getApplications(filter);
-      setApplications(response.applications);
-      setFilteredApplications(response.applications);
-    } catch (error) {
-      console.error("Error loading applications:", error);
-      setApplications([]);
-      setFilteredApplications([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const queryClient = useQueryClient();
+  const applicationsQuery = useApplicationsQuery(filter);
+  const deleteMutation = useMutation({
+    mutationFn: deleteApplication,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: applicationQueryKeys.all });
+    },
+  });
 
   const handleDelete = async (id: string) => {
-    try {
-      await deleteApplication(id);
-      await loadApplications(); // Reload data after deletion
-    } catch (error) {
-      console.error("Error deleting application:", error);
-    }
+    await deleteMutation.mutateAsync(id);
   };
 
   return {
-    filteredApplications,
-    isLoading,
+    filteredApplications: applicationsQuery.data ?? [],
+    isLoading: applicationsQuery.isLoading,
+    error: applicationsQuery.error,
     handleDelete,
   };
 };

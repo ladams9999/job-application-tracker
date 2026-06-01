@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 5: Create the Home page route and shell
-
-- Add a dedicated Home page at `/` using the shared app layout
-- Replace the existing `/` redirect with the new Home route
-
-**Verification:** Routing tests prove `/` renders Home instead of redirecting to Applications
-
 ### Task 6: Add the Active Applications section to Home
 
 - Render only applications matching the shared active rule

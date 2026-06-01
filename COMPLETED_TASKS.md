@@ -230,3 +230,11 @@
 - Added hook coverage for URL hydration and list filtering, and updated the existing Applications page test fixture for the expanded filter shape
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx src/__tests__/hooks/useApplicationsList.test.tsx src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes, and the tests prove `/applications` reads query parameters and returns the expected filtered subset
+
+### Task 5: Create the Home page route and shell
+
+- Added `src/pages/Home.tsx` as a dedicated landing page that uses the shared layout and renders the dashboard section
+- Replaced the root redirect in `App.tsx` with a real `/` route while keeping the existing Applications, Add, Edit, and Not Found routes intact
+- Exported the route tree for focused routing coverage and added a root-route test that exercises the new Home entry point
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/AppRoutes.test.tsx --runInBand` passes, and the route test proves `/` now renders Home instead of redirecting

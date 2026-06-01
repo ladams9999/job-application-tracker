@@ -8,8 +8,47 @@ import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import ApplicationsList from "./pages/ApplicationsList";
 import ApplicationForm from "./pages/ApplicationForm";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient();
+
+export const AppRoutes = () => (
+  <Routes>
+    <Route
+      path="/"
+      element={
+        <Layout>
+          <Home />
+        </Layout>
+      }
+    />
+    <Route
+      path="/applications"
+      element={
+        <Layout>
+          <ApplicationsList />
+        </Layout>
+      }
+    />
+    <Route
+      path="/add"
+      element={
+        <Layout>
+          <ApplicationForm />
+        </Layout>
+      }
+    />
+    <Route
+      path="/edit/:id"
+      element={
+        <Layout>
+          <ApplicationForm />
+        </Layout>
+      }
+    />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -17,25 +56,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/applications" replace />} />
-          <Route path="/applications" element={
-            <Layout>
-              <ApplicationsList />
-            </Layout>
-          } />
-          <Route path="/add" element={
-            <Layout>
-              <ApplicationForm />
-            </Layout>
-          } />
-          <Route path="/edit/:id" element={
-            <Layout>
-              <ApplicationForm />
-            </Layout>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

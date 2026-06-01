@@ -36,3 +36,11 @@
 - Documented the shared `npm run supabase:keepalive` command for manual and scheduled execution
 
 **Verified:** the repository now contains human-readable setup and usage instructions covering configuration, manual runs, and scheduler prerequisites
+
+### Task 5: Validate against the target Supabase project
+
+- Ran `npm run supabase:keepalive` against the configured Supabase project
+- Confirmed the keep-alive request succeeded end-to-end with the current project credentials
+- Rechecked the invalid-key path and confirmed the script fails clearly with a non-zero exit
+
+**Verified:** the script now succeeds against the real Supabase project and still fails as expected when given an invalid publishable key

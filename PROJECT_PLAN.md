@@ -22,41 +22,24 @@ MVP is done
 - multiuser support is postponed, but consider implementing an SSO/login to auth with 3rd party services..  
 - AI/LLM support is postponed.
 
----
-From here and below to be grouped and reorganized into planned work
-
 ## Current Product Direction
 
 ### Product Vision
 
 Build a practical, user-friendly job application tracker that helps an individual job seeker record applications, manage follow-up information, and review progress without unnecessary complexity.
 
-### Target Audience
-
-- Individual job seekers
-- Career changers
-- Recent graduates
-- Professionals actively seeking new opportunities
-
-### Development Context
-
-- Single developer with AI assistant
-- Iterative development after MVP completion
-- TDD-oriented workflow where practical:
-  - write a failing test for the desired improvement
-  - implement the smallest correct change
-  - refactor once behavior is covered
-
-### Current Implemented Baseline
-
-- Add and edit application records
-- List existing applications
-- Search and filter applications
-- Persist data in Supabase
-- Track source, recruiter details, notes, and application URL
-- Show dashboard summary metrics
-
 ## Current Goals
+
+### Goal 0: Add portable Supabase keep-alive automation
+
+Build a script or small tool that can be run by an external scheduler from this machine or another machine to perform a safe Supabase keep-alive operation.
+
+**Objectives**
+- Use a scheduler-agnostic script rather than tying the solution to one machine-specific scheduler
+- Define a simple, verifiable keep-alive operation against Supabase
+- Keep configuration and credentials manageable through environment variables or documented setup
+- Document how the script is intended to be scheduled externally
+- Verify the script reports success and failure clearly
 
 ### Goal 1: Stabilize and polish the current application
 
@@ -81,7 +64,14 @@ Add the next features that most directly improve day-to-day use of the tracker.
 
 The items below are grouped into achievable features and listed in expected work order.
 
-### Phase 1: Quality, UX, and maintainability
+### Phase 1: Supabase keep-alive automation
+
+1. Define the keep-alive operation and success criteria
+2. Implement a portable script or tool that can be run by an external scheduler
+3. Add configuration and setup documentation for local and cross-machine use
+4. Validate the script against the target Supabase project
+
+### Phase 2: Quality, UX, and maintainability
 
 1. Review and improve existing code structure
 2. Fix current bugs and rough UI edges
@@ -89,27 +79,26 @@ The items below are grouped into achievable features and listed in expected work
 4. Strengthen automated test coverage for key user workflows
 5. Keep agent and user documentation current
 
-### Phase 2: Recruiter and contact management
+### Phase 3: Recruiter and contact management
 
 1. Add a page to manage recruiter information
 2. Support reusable recruiter/contact records where appropriate
 3. Improve recruiter-related fields and workflows in the application form
 4. Add follow-up-oriented information such as communication notes or reminders
 
-### Phase 3: Better application workflow features
+### Phase 4: Better application workflow features
 
 1. Improve dashboard usefulness with clearer analytics and summaries
 2. Add timestamped notes or richer activity/history tracking
 3. Improve search, filter, and sorting options as needed
 4. Revisit delete/archive behavior and decide whether soft delete is needed
 
-### Phase 4: Operations and deployment support
+### Phase 5: Operations and deployment support
 
-1. Add a cron or scheduled mechanism to keep the Supabase project active if needed
-2. Improve environment, deployment, and maintenance documentation
-3. Review backup/export needs for data safety
+1. Improve environment, deployment, and maintenance documentation
+2. Review backup/export needs for data safety
 
-### Phase 5: Data model and integration preparation
+### Phase 6: Data model and integration preparation
 
 1. Evaluate additional datastore options only if they solve a clear need
 2. Change to or add UUIDs for identifiers exposed outside the database

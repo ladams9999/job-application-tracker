@@ -10,7 +10,7 @@ const config: Config = {
     "./app/**/*.{js,jsx,ts,tsx}",
   ],
   // Include custom utilities in safelist to ensure availability
-  // @ts-ignore: safelist is supported but missing TS types
+  // @ts-expect-error safelist is supported by Tailwind but missing in the Config type
   safelist: ["border-border", "bg-background", "text-foreground"],
   theme: {
     container: {

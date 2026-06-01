@@ -23,3 +23,9 @@ export interface PreviousEntryData {
   jobTitles: string[];
   sources: string[];
 }
+
+export interface PreviousEntryDataInput {
+  companies?: string[] | null;
+  jobTitles?: string[] | null;
+  sources?: string[] | null;
+}

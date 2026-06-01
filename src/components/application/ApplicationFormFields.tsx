@@ -1,7 +1,7 @@
 
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormValues, PreviousEntryData } from "@/types/forms";
+import { FormValues, PreviousEntryData, PreviousEntryDataInput } from "@/types/forms";
 import CompanyFields from "./form-fields/CompanyFields";
 import CompanyFieldsWithAutocomplete from "./form-fields/CompanyFieldsWithAutocomplete";
 import ErrorBoundary from "./form-fields/ErrorBoundary";
@@ -14,7 +14,7 @@ import ContactFields from "./form-fields/ContactFields";
 
 interface ApplicationFormFieldsProps {
   form: UseFormReturn<FormValues>;
-  previousEntries?: PreviousEntryData;
+  previousEntries?: PreviousEntryDataInput;
   showRecruiterFields?: boolean;
   isDataLoading?: boolean;
   enableAutocomplete?: boolean;
@@ -48,7 +48,7 @@ const ApplicationFormFields: FC<ApplicationFormFieldsProps> = ({
   // Use the original previousEntries for the autocomplete component.  It may be
   // undefined or contain invalid data which allows the component to gracefully
   // render simple inputs instead of autocomplete fields when appropriate.
-  const autocompleteEntries = previousEntries as any;
+  const autocompleteEntries = previousEntries;
 
   console.log("ApplicationFormFields render:", {
     enableAutocomplete,

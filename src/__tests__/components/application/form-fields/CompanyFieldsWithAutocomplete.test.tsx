@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import CompanyFieldsWithAutocomplete from '@/components/application/form-fields/CompanyFieldsWithAutocomplete';
-import { FormValues, PreviousEntryData } from '@/types/forms';
+import { FormValues, PreviousEntryData, PreviousEntryDataInput } from '@/types/forms';
 import { formSchema } from '@/schemas/applicationFormSchema';
 import { Form } from '@/components/ui/form';
 
@@ -15,7 +15,7 @@ const TestWrapper = ({
   previousEntries, 
   isDataLoading = false 
 }: { 
-  previousEntries: PreviousEntryData; 
+  previousEntries: PreviousEntryDataInput; 
   isDataLoading?: boolean;
 }) => {
   const form = useForm<FormValues>({
@@ -90,9 +90,9 @@ describe('CompanyFieldsWithAutocomplete', () => {
   });
 
   it('falls back to simple inputs when data is invalid', () => {
-    const invalidEntries = {
-      companies: null as any,
-      jobTitles: undefined as any,
+    const invalidEntries: PreviousEntryDataInput = {
+      companies: null,
+      jobTitles: undefined,
       sources: ['LinkedIn']
     };
     

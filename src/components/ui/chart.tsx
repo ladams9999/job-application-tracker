@@ -101,13 +101,27 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+type ChartTooltipPayloadItem = {
+  color?: string
+  name?: React.ReactNode
+  value?: number | string
+  payload?: {
+    fill?: string
+  }
+}
+
+type ChartLegendPayloadItem = {
+  color?: string
+  value?: React.ReactNode
+}
+
 // Simplified ChartTooltipContent to avoid complex type issues
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
     active?: boolean
-    payload?: any
-    label?: any
+    payload?: ChartTooltipPayloadItem[]
+    label?: React.ReactNode
     hideLabel?: boolean
     hideIndicator?: boolean
     indicator?: "line" | "dot" | "dashed"
@@ -143,8 +157,9 @@ const ChartTooltipContent = React.forwardRef<
           <div className="font-medium">{label}</div>
         )}
         <div className="grid gap-1.5">
-          {payload.map((item: any, index: number) => {
+          {payload.map((item: ChartTooltipPayloadItem, index: number) => {
             const indicatorColor = item.payload?.fill || item.color
+            const itemValue = item.value
 
             return (
               <div
@@ -177,9 +192,11 @@ const ChartTooltipContent = React.forwardRef<
                   <span className="text-muted-foreground">
                     {item.name}
                   </span>
-                  {item.value && (
+                  {itemValue !== undefined && itemValue !== null && (
                     <span className="font-mono font-medium tabular-nums text-foreground">
-                      {item.value.toLocaleString()}
+                      {typeof itemValue === "number"
+                        ? itemValue.toLocaleString()
+                        : itemValue}
                     </span>
                   )}
                 </div>
@@ -199,7 +216,7 @@ const ChartLegend = RechartsPrimitive.Legend
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
-    payload?: any
+    payload?: ChartLegendPayloadItem[]
     verticalAlign?: "top" | "bottom"
     hideIcon?: boolean
   }
@@ -223,9 +240,9 @@ const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item: any) => (
+        {payload.map((item: ChartLegendPayloadItem, index: number) => (
           <div
-            key={item.value}
+            key={typeof item.value === "string" || typeof item.value === "number" ? item.value : index}
             className="flex items-center gap-1.5"
           >
             {!hideIcon && (

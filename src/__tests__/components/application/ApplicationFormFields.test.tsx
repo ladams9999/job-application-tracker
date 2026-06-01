@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ApplicationFormFields from '@/components/application/ApplicationFormFields';
-import { FormValues, PreviousEntryData } from '@/types/forms';
+import { FormValues, PreviousEntryData, PreviousEntryDataInput } from '@/types/forms';
 import { formSchema } from '@/schemas/applicationFormSchema';
 import { Form } from '@/components/ui/form';
 
@@ -16,7 +16,7 @@ const TestWrapper = ({
   isDataLoading = false,
   showRecruiterFields = false
 }: { 
-  previousEntries?: PreviousEntryData; 
+  previousEntries?: PreviousEntryDataInput; 
   enableAutocomplete?: boolean;
   isDataLoading?: boolean;
   showRecruiterFields?: boolean;
@@ -97,9 +97,9 @@ describe('ApplicationFormFields', () => {
   });
 
   it('creates safe default arrays for missing data', () => {
-    const incompletePreviousEntries = {
-      companies: null as any,
-      jobTitles: undefined as any,
+    const incompletePreviousEntries: PreviousEntryDataInput = {
+      companies: null,
+      jobTitles: undefined,
       sources: [] as string[]
     };
     

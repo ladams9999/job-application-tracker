@@ -8,11 +8,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FormValues, PreviousEntryData } from "@/types/forms";
+import { FormValues, PreviousEntryDataInput } from "@/types/forms";
 
 interface CompanyFieldsWithAutocompleteProps {
   form: UseFormReturn<FormValues>;
-  previousEntries: PreviousEntryData;
+  previousEntries: PreviousEntryDataInput;
   isDataLoading?: boolean;
   isEditMode?: boolean;
 }
@@ -38,6 +38,9 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
     previousEntries && 
     Array.isArray(previousEntries.companies) && 
     Array.isArray(previousEntries.jobTitles);
+
+  const companyOptions = Array.isArray(previousEntries.companies) ? previousEntries.companies : [];
+  const jobTitleOptions = Array.isArray(previousEntries.jobTitles) ? previousEntries.jobTitles : [];
 
   if (isDataLoading) {
     return (
@@ -142,7 +145,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
                   </CommandEmpty>
                   <CommandList>
                     <CommandGroup>
-                      {previousEntries.companies.map((company) => (
+                      {companyOptions.map((company) => (
                         <CommandItem
                           key={company}
                           value={company}
@@ -213,7 +216,7 @@ const CompanyFieldsWithAutocomplete: FC<CompanyFieldsWithAutocompleteProps> = ({
                   </CommandEmpty>
                   <CommandList>
                     <CommandGroup>
-                      {previousEntries.jobTitles.map((jobTitle) => (
+                      {jobTitleOptions.map((jobTitle) => (
                         <CommandItem
                           key={jobTitle}
                           value={jobTitle}

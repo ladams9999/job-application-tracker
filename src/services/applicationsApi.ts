@@ -17,7 +17,7 @@ export interface CreateApplicationRequest {
   applicationUrl?: string;
 }
 
-export interface UpdateApplicationRequest extends CreateApplicationRequest {}
+export type UpdateApplicationRequest = CreateApplicationRequest;
 
 export interface ApplicationsResponse {
   applications: JobApplication[];

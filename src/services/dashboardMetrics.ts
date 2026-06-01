@@ -1,4 +1,4 @@
-import type { JobApplication } from "@/types";
+import type { DashboardApplicationView, JobApplication } from "@/types";
 
 export interface DashboardMetrics {
   totalApplications: number;
@@ -41,13 +41,46 @@ const getStartOfWeek = (now: Date): Date => {
   return startOfWeek;
 };
 
+const getThirtyDaysAgo = (now: Date): Date => {
+  const thirtyDaysAgo = new Date(now);
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  return thirtyDaysAgo;
+};
+
+export const filterApplicationsByDashboardView = (
+  applications: JobApplication[],
+  view: DashboardApplicationView,
+  now: Date = new Date(),
+): JobApplication[] => {
+  if (view === "all") {
+    return applications;
+  }
+
+  const startOfWeek = getStartOfWeek(now);
+  const thirtyDaysAgo = getThirtyDaysAgo(now);
+
+  return applications.filter((application) => {
+    switch (view) {
+      case "this-week":
+        return new Date(application.createdAt) >= startOfWeek;
+      case "active":
+        return isActiveApplication(application, now);
+      case "dormant":
+        return getMostRecentActivityDate(application) < thirtyDaysAgo;
+      case "silent":
+        return application.createdAt === application.updatedAt || !application.updatedAt;
+      default:
+        return true;
+    }
+  });
+};
+
 export const getDashboardMetrics = (
   applications: JobApplication[],
   now: Date = new Date(),
 ): DashboardMetrics => {
   const startOfWeek = getStartOfWeek(now);
-  const thirtyDaysAgo = new Date(now);
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const thirtyDaysAgo = getThirtyDaysAgo(now);
 
   return {
     totalApplications: applications.length,

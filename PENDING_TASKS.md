@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 4: Add query-parameter hydration to Applications filters
-
-- Update the Applications filter flow so URL parameters initialize filter state and derived dashboard filters
-- Preserve existing manual filtering and sorting after hydration
-
-**Verification:** Tests prove `/applications` reads query parameters and shows the expected filtered and sorted results
-
 ### Task 5: Create the Home page route and shell
 
 - Add a dedicated Home page at `/` using the shared app layout

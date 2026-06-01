@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApplicationFilter } from "@/types";
 import { deleteApplication } from "@/services/applicationService";
 import { applicationQueryKeys, useApplicationsQuery } from "@/hooks/useApplicationQueries";
+import { filterApplicationsByDashboardView } from "@/services/dashboardMetrics";
 
 export const useApplicationsData = (filter: ApplicationFilter) => {
   const queryClient = useQueryClient();
@@ -19,7 +20,10 @@ export const useApplicationsData = (filter: ApplicationFilter) => {
   };
 
   return {
-    filteredApplications: applicationsQuery.data ?? [],
+    filteredApplications: filterApplicationsByDashboardView(
+      applicationsQuery.data ?? [],
+      filter.view,
+    ),
     isLoading: applicationsQuery.isLoading,
     error: applicationsQuery.error,
     retryLoad: applicationsQuery.refetch,

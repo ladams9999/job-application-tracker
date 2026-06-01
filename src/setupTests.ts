@@ -17,7 +17,7 @@ jest.mock('@/integrations/supabase/client', () => ({
 jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
   useParams: () => ({}),
-  useLocation: () => ({ pathname: '/' }),
+  useLocation: () => ({ pathname: '/', search: '' }),
 }));
 
 // Mock UI components that might cause issues

@@ -139,7 +139,7 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="h-24 text-center">
-                {filter.search || filter.status !== "all" ? (
+                {filter.search || filter.status !== "all" || filter.view !== "all" ? (
                   <div className="text-muted-foreground">
                     No applications match your search criteria.
                   </div>

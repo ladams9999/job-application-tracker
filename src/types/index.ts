@@ -24,9 +24,17 @@ export type ApplicationStatus =
   | 'rejected'
   | 'withdrawn';
 
+export type DashboardApplicationView =
+  | 'all'
+  | 'this-week'
+  | 'active'
+  | 'dormant'
+  | 'silent';
+
 export interface ApplicationFilter {
   search: string;
   status: ApplicationStatus | 'all';
   sortBy: 'dateApplied' | 'company' | 'jobTitle' | 'status';
   sortDirection: 'asc' | 'desc';
+  view: DashboardApplicationView;
 }

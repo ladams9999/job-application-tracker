@@ -34,6 +34,7 @@ describe("ApplicationsList", () => {
         status: "all",
         sortBy: "dateApplied",
         sortDirection: "desc",
+        view: "all",
       },
       handleSearchChange: jest.fn(),
       handleStatusChange: jest.fn(),

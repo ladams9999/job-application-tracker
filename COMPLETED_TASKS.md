@@ -222,3 +222,11 @@
 - Added regression coverage that asserts the exact `/applications?...` URLs emitted for the supported cards
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/analytics/Dashboard.test.tsx --runInBand` passes, and the tests prove the dashboard emits the expected deep-link targets
+
+### Task 4: Add query-parameter hydration to Applications filters
+
+- Extended the applications filter model with dashboard-view state and hydrated it from `/applications` query parameters through `useLocation`
+- Added shared query-string parsing and reused the shared dashboard selectors to apply `this-week`, `active`, `dormant`, and `silent` derived views on top of the fetched list without changing the existing sort order
+- Added hook coverage for URL hydration and list filtering, and updated the existing Applications page test fixture for the expanded filter shape
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx src/__tests__/hooks/useApplicationsList.test.tsx src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes, and the tests prove `/applications` reads query parameters and returns the expected filtered subset

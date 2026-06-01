@@ -14,8 +14,8 @@
 ## High-level architecture
 
 - This is a Vite + React + TypeScript single-page app. `src/main.tsx` mounts `App`, and `src/App.tsx` sets up `BrowserRouter`, `QueryClientProvider`, and the toast/tooltip providers.
-- Routing is simple: `/applications` renders the main list page, `/add` and `/edit/:id` both render `ApplicationForm`, and `/` immediately redirects to `/applications`.
-- The list page is composed from `Dashboard`, `ApplicationsHeader`, `FilterBar`, and `ApplicationsTable`. `useApplicationsList` wires filtering state to `useApplicationsData`, which reloads from Supabase whenever the filter changes.
+- Routing is simple: `/` renders `Home`, `/applications` renders the main list page, and `/add` / `/edit/:id` both render `ApplicationForm`.
+- The list page is composed from `Dashboard`, `ApplicationsHeader`, `ApplicationFilterSummary`, `FilterBar`, and `ApplicationsTable`.
 - There is no separate backend in this repo. The frontend talks directly to Supabase through `src/services/applicationsApi.ts`, which performs CRUD and suggestion queries against `public.job_applications`.
 - `src/services/applicationService.ts` is the UI-facing wrapper around `applicationsApi.ts`. It is where success/error toasts are emitted; pages and hooks call the service layer rather than talking to Supabase directly.
 - Form behavior is split across hooks:

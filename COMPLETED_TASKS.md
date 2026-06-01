@@ -44,3 +44,13 @@
 - Rechecked the invalid-key path and confirmed the script fails clearly with a non-zero exit
 
 **Verified:** the script now succeeds against the real Supabase project and still fails as expected when given an invalid publishable key
+
+## 2. Repository maintenance
+
+### Task 1: Fix lint dependency resolution
+
+- Added `concat-map` as a development dependency
+- Updated the lockfile so the missing transitive dependency is installed consistently
+- Confirmed ESLint now starts normally instead of failing during module resolution
+
+**Verified:** `npm run lint` no longer fails with `Cannot find module 'concat-map'` and now proceeds to real project lint findings

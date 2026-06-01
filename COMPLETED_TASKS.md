@@ -188,3 +188,11 @@
 - Added page and hook tests covering Supabase-unavailable list/dashboard failures and missing-record edit-form failures
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/ApplicationsList.test.tsx src/__tests__/components/analytics/Dashboard.test.tsx src/__tests__/pages/ApplicationForm.test.tsx src/__tests__/hooks/useApplicationDataLoader.test.tsx src/__tests__/hooks/useApplicationForm.test.tsx --runInBand` passes, and the tests prove these failures now render actionable UI instead of generic text or navigation away
+
+### Task 6: Add regression coverage for the main failure classes
+
+- Added direct regression coverage for the main failure classes across the shared error model, API layer, page-level fallbacks, and the top-level error boundary
+- Added an API-level missing-record regression so real Supabase `PGRST116` responses are normalized with the expected operation and record context
+- Ran the full repository lint, build, and Jest commands after the full error-handling implementation landed
+
+**Verified:** `npm run lint && npm run build && npx jest --runInBand` completes successfully, and the full suite now covers Supabase unavailable, invalid record data, missing record, and uncaught render failures

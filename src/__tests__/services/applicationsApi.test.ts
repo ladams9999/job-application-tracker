@@ -4,9 +4,14 @@ import type { Tables } from "@/integrations/supabase/types";
 
 describe("applicationsApi", () => {
   const mockFrom = supabase.from as jest.Mock;
+  const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   it("normalizes malformed record data with operation and field context", async () => {
@@ -46,6 +51,32 @@ describe("applicationsApi", () => {
       recordId: "app-bad",
       fieldName: "date_applied",
       rawValue: "not-a-date",
+    });
+  });
+
+  it("normalizes missing-record Supabase responses with operation context", async () => {
+    const mockSingle = jest.fn().mockResolvedValue({
+      data: null,
+      error: {
+        code: "PGRST116",
+        message: "JSON object requested, multiple (or no) rows returned",
+        details: "The result contains 0 rows",
+      },
+    });
+    const mockEq = jest.fn().mockReturnValue({ single: mockSingle });
+    const mockSelect = jest.fn().mockReturnValue({ eq: mockEq });
+
+    mockFrom.mockReturnValue({
+      select: mockSelect,
+    });
+
+    await expect(applicationsApi.getApplication("missing-id")).rejects.toMatchObject({
+      category: "missing-record",
+      summary: "Application record not found",
+      technicalMessage: "JSON object requested, multiple (or no) rows returned",
+      retryable: false,
+      operation: "load application",
+      recordId: "missing-id",
     });
   });
 });

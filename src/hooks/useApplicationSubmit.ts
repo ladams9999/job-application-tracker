@@ -26,6 +26,9 @@ export const useApplicationSubmit = (id: string | undefined) => {
           source: data.source,
           recruiter: data.source === "Recruiter" ? data.recruiter : undefined,
           recruitingFirm: data.source === "Recruiter" ? data.recruitingFirm : undefined,
+          contactEmail: data.contactEmail,
+          contactPhone: data.contactPhone,
+          applicationUrl: data.applicationUrl,
           createdAt: "", // These will be preserved by updateApplication
           updatedAt: "",
         });
@@ -40,6 +43,9 @@ export const useApplicationSubmit = (id: string | undefined) => {
           source: data.source,
           recruiter: data.source === "Recruiter" ? data.recruiter : undefined,
           recruitingFirm: data.source === "Recruiter" ? data.recruitingFirm : undefined,
+          contactEmail: data.contactEmail,
+          contactPhone: data.contactPhone,
+          applicationUrl: data.applicationUrl,
         });
       }
       

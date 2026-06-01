@@ -28,6 +28,9 @@ export const addApplication = async (application: Omit<JobApplication, 'id' | 'c
       source: application.source || "LinkedIn",
       recruiter: application.recruiter,
       recruitingFirm: application.recruitingFirm,
+      contactEmail: application.contactEmail,
+      contactPhone: application.contactPhone,
+      applicationUrl: application.applicationUrl,
     };
     
     const newApplication = await applicationsApi.createApplication(createRequest);
@@ -53,6 +56,9 @@ export const updateApplication = async (application: JobApplication): Promise<Jo
       source: application.source || "LinkedIn",
       recruiter: application.recruiter,
       recruitingFirm: application.recruitingFirm,
+      contactEmail: application.contactEmail,
+      contactPhone: application.contactPhone,
+      applicationUrl: application.applicationUrl,
     };
     
     const updatedApplication = await applicationsApi.updateApplication(application.id, updateRequest);

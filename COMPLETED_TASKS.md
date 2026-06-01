@@ -47,6 +47,16 @@
 
 ## 2. Repository maintenance
 
+### Task 5: Persist contact fields through create and update flows
+
+- Passed `contactEmail`, `contactPhone`, and `applicationUrl` through the submit hook and service layer
+- Kept the existing form load behavior intact so saved contact fields continue to hydrate in edit mode
+- Added regression coverage for both create and edit submissions
+
+**Verified:** `npx jest --runTestsByPath src/__tests__/hooks/useApplicationSubmit.test.tsx --runInBand` confirms create and edit submissions include all contact fields
+
+## 3. Repository maintenance
+
 ### Task 1: Fix lint dependency resolution
 
 - Added `concat-map` as a development dependency

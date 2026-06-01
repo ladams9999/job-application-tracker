@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ListFilter, Plus, LayoutDashboard } from "lucide-react";
+import { ListFilter, Plus } from "lucide-react";
 
 interface NavItemProps {
   to: string;
@@ -60,9 +60,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="md:hidden border-b p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Application Tracker</h1>
         <div className="flex gap-4">
-            <LayoutDashboard size={20} />
           <Link
             to="/applications"
+            aria-label="Applications"
             className={cn(
               "p-2 rounded-md",
               pathname === "/applications" ? "bg-primary text-primary-foreground" : ""
@@ -72,6 +72,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </Link>
           <Link
             to="/add"
+            aria-label="Add application"
             className={cn(
               "p-2 rounded-md",
               pathname === "/add" ? "bg-primary text-primary-foreground" : ""

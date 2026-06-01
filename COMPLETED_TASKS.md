@@ -96,6 +96,14 @@
 
 **Verified:** `npx jest --runInBand && npm run build` passes with the simplified production form flow
 
+### Task 11: Modernize routing and navigation primitives
+
+- Replaced the imperative root-page redirect with a declarative router redirect
+- Updated the 404 page to use SPA navigation back to `/applications` without logging expected misses
+- Removed the non-actionable dashboard icon from the mobile nav and added explicit labels to the remaining actions
+
+**Verified:** `npx jest --runInBand && npm run build` passes with the updated routing and navigation behavior
+
 ## 3. Repository maintenance
 
 ### Task 1: Fix lint dependency resolution

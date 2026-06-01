@@ -306,13 +306,13 @@ The keep-alive request should fail clearly when:
 
 ### Script interface
 
-The keep-alive tool should be implemented as a **Node script** stored under `scripts/` and runnable in either of these ways:
+The keep-alive tool is implemented as a **Node script** at `scripts/supabase-keepalive.mjs` and is runnable in either of these ways:
 
 ```sh
 node scripts/supabase-keepalive.mjs
 ```
 
-or, once wired into `package.json`:
+or:
 
 ```sh
 npm run supabase:keepalive

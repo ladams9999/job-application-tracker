@@ -19,3 +19,12 @@
 - Exit codes documented for success, runtime/request failure, and missing configuration
 
 **Verified:** the script interface is now documented in `IMPLEMENTATION.md` with explicit command shape, configuration precedence, output expectations, and exit-code behavior
+
+### Task 3: Implement the keep-alive script
+
+- Added `scripts/supabase-keepalive.mjs`
+- Added the `npm run supabase:keepalive` command in `package.json`
+- Implemented environment-variable fallback from `SUPABASE_*` to `VITE_*`
+- Implemented clear success and failure output with the documented exit codes
+
+**Verified:** the script succeeds against a local HTTP stub that returns a valid JSON array and fails with exit code `2` when required configuration is missing

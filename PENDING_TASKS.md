@@ -4,14 +4,6 @@
 
 This is the next feature to implement. The goal is a **portable script or tool** that can be invoked by an automated scheduler on this machine or on a different machine.
 
-### Task 3: Implement the keep-alive script
-
-- Add the script/tool to the repository
-- Make it portable and scheduler-agnostic
-- Ensure it performs the chosen Supabase operation and exits non-zero on failure
-
-**Verifiable outcome:** a runnable script that succeeds with valid configuration and fails clearly with invalid configuration
-
 ### Task 4: Document setup and usage
 
 - Document how to configure and run the script manually

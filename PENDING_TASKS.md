@@ -4,14 +4,6 @@
 
 This is the next feature to implement. The goal is a **portable script or tool** that can be invoked by an automated scheduler on this machine or on a different machine.
 
-### Task 1: Define the keep-alive operation
-
-- Decide what Supabase operation the script will perform to keep the project active
-- Prefer a safe, low-cost operation with clear success/failure behavior
-- Record the required inputs, such as project URL, key, and target endpoint/query
-
-**Verifiable outcome:** a documented keep-alive approach with explicit configuration inputs and expected success response
-
 ### Task 2: Choose the script interface
 
 - Decide how the script will be run locally and from other machines

@@ -255,6 +255,55 @@ cp .env.example .env
 
 Then fill in real Supabase values before running the app.
 
+## Supabase Keep-Alive Design
+
+### Keep-alive operation
+
+The keep-alive automation should perform a **minimal public read** against the existing `job_applications` table through Supabase REST:
+
+```text
+GET {VITE_SUPABASE_URL}/rest/v1/job_applications?select=id&limit=1
+```
+
+This request should send:
+
+- `apikey: {VITE_SUPABASE_PUBLISHABLE_KEY}`
+- `Authorization: Bearer {VITE_SUPABASE_PUBLISHABLE_KEY}`
+
+### Why this operation
+
+- It uses the same public project URL and publishable key already required by the app
+- It targets a table that already exists for normal application behavior
+- It is read-only and low-cost
+- It does not require introducing auth, a service-role key, or a new backend component
+- Supabase counts API/database traffic as project activity, so this is a reasonable keep-alive ping
+
+### Required inputs
+
+- `SUPABASE_URL` or `VITE_SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY` or `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+The keep-alive tool should prefer dedicated `SUPABASE_*` variables if present, while remaining compatible with the existing app-style `VITE_*` variables.
+
+### Success criteria
+
+The keep-alive request is considered successful when:
+
+- the HTTP status is `200`
+- the response body is a JSON array
+- the script can report the target URL path it queried
+
+An empty array is still a successful result because the purpose is to generate valid Supabase API activity, not to require existing rows.
+
+### Failure criteria
+
+The keep-alive request should fail clearly when:
+
+- required configuration is missing
+- the HTTP response is non-2xx
+- the response is not valid JSON
+- the Supabase project is unreachable
+
 ## Commands
 
 Use Node.js `v20.19.4` and npm.

@@ -2,6 +2,7 @@
 import { useApplicationsList } from "@/hooks/useApplicationsList";
 import Dashboard from "@/components/analytics/Dashboard";
 import ApplicationsHeader from "@/components/application/ApplicationsHeader";
+import ApplicationFilterSummary from "@/components/application/ApplicationFilterSummary";
 import FilterBar from "@/components/application/FilterBar";
 import ApplicationsTable from "@/components/application/ApplicationsTable";
 import AppErrorPanel from "@/components/error/AppErrorPanel";
@@ -14,9 +15,12 @@ const ApplicationsList = () => {
     error,
     retryLoad,
     filter,
+    activeCriteria,
     handleSearchChange,
     handleStatusChange,
     handleSortChange,
+    handleClearCriterion,
+    clearAllCriteria,
     handleDelete,
   } = useApplicationsList();
 
@@ -26,6 +30,11 @@ const ApplicationsList = () => {
       
       <div className="space-y-6">
         <ApplicationsHeader />
+        <ApplicationFilterSummary
+          criteria={activeCriteria}
+          onClearCriterion={handleClearCriterion}
+          onClearAll={clearAllCriteria}
+        />
         <FilterBar 
           filter={filter}
           onSearchChange={handleSearchChange}

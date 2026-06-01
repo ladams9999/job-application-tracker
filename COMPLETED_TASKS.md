@@ -262,3 +262,37 @@
 - Finished with the full repository lint, build, and Jest commands after the complete Home-page implementation landed
 
 **Verified:** `npm run lint && npm run build && npx jest --runInBand` passes, including the new route, Home rendering, dashboard deep-link, and filter-hydration coverage
+
+## 6. Applications filter criteria summary
+
+### Task 1: Extend filter hook criteria and clear actions
+
+- Extended `useApplicationFilters` to derive active `search`, `status`, and `view` criteria from the current filter state
+- Added explicit clear handlers for each supported criterion plus a clear-all action that keeps non-filter sort state intact
+- Synced clear actions back into the `/applications` query string so URL-hydrated criteria stay removed after navigation or refresh
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx --runInBand` passes, and the hook tests prove active criteria and individual/all-clear URL reset behavior
+
+### Task 2: Add an Applications filter-summary component
+
+- Added `ApplicationFilterSummary` to render active search, status, and view criteria as compact chips under a shared “Filtering by” label
+- Gave each rendered criterion its own clear button and limited the shared clear-all action to multi-criteria cases
+- Added focused component coverage for populated, empty, and single-criterion summary states
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/application/ApplicationFilterSummary.test.tsx --runInBand` passes, and the component tests prove the expected criteria and clear controls render only when appropriate
+
+### Task 3: Integrate the summary into ApplicationsList
+
+- Updated `useApplicationsList` to expose active criteria plus unified per-criterion and clear-all handlers for the page layer
+- Rendered `ApplicationFilterSummary` between `ApplicationsHeader` and `FilterBar` on the Applications page
+- Expanded Applications page coverage to prove the summary appears in the intended location while the loading and structured error states still behave as before
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes, and the page tests prove the summary placement and existing loading/error behavior
+
+### Task 4: Finish regression coverage and validation
+
+- Updated the affected page fixture to cover the expanded `useApplicationsList` contract, including active criteria and clear handlers
+- Re-ran lint, build, and focused Jest coverage for the hook, summary component, and Applications page integration together
+- Confirmed the new filter-summary behavior is covered end-to-end across derivation, rendering, and page placement
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/hooks/useApplicationFilters.test.tsx src/__tests__/components/application/ApplicationFilterSummary.test.tsx src/__tests__/pages/ApplicationsList.test.tsx --runInBand` passes for the completed filter-summary feature

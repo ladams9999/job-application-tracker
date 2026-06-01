@@ -1,6 +1,6 @@
 
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ApplicationFilter,
   ApplicationStatus,
@@ -40,6 +40,84 @@ const VALID_VIEWS = new Set<DashboardApplicationView>([
   "silent",
 ]);
 
+const VIEW_LABELS: Record<Exclude<DashboardApplicationView, "all">, string> = {
+  "this-week": "This Week",
+  active: "Active",
+  dormant: "Dormant",
+  silent: "Silent",
+};
+
+export interface ApplicationFilterCriterion {
+  id: "search" | "status" | "view";
+  label: string;
+  value: string;
+}
+
+const buildSearchFromFilter = (filter: ApplicationFilter): string => {
+  const searchParams = new URLSearchParams();
+
+  const trimmedSearch = filter.search.trim();
+  if (trimmedSearch) {
+    searchParams.set("search", trimmedSearch);
+  }
+
+  if (filter.status !== DEFAULT_FILTER.status) {
+    searchParams.set("status", filter.status);
+  }
+
+  if (filter.sortBy !== DEFAULT_FILTER.sortBy) {
+    searchParams.set("sortBy", filter.sortBy);
+  }
+
+  if (filter.sortDirection !== DEFAULT_FILTER.sortDirection) {
+    searchParams.set("sortDirection", filter.sortDirection);
+  }
+
+  if (filter.view !== DEFAULT_FILTER.view) {
+    searchParams.set("view", filter.view);
+  }
+
+  const search = searchParams.toString();
+
+  return search ? `?${search}` : "";
+};
+
+const formatStatusLabel = (status: ApplicationStatus): string =>
+  status.charAt(0).toUpperCase() + status.slice(1);
+
+const getActiveCriteria = (
+  filter: ApplicationFilter,
+): ApplicationFilterCriterion[] => {
+  const criteria: ApplicationFilterCriterion[] = [];
+
+  const trimmedSearch = filter.search.trim();
+  if (trimmedSearch) {
+    criteria.push({
+      id: "search",
+      label: "Search",
+      value: trimmedSearch,
+    });
+  }
+
+  if (filter.status !== DEFAULT_FILTER.status) {
+    criteria.push({
+      id: "status",
+      label: "Status",
+      value: formatStatusLabel(filter.status),
+    });
+  }
+
+  if (filter.view !== DEFAULT_FILTER.view) {
+    criteria.push({
+      id: "view",
+      label: "View",
+      value: VIEW_LABELS[filter.view],
+    });
+  }
+
+  return criteria;
+};
+
 export const getApplicationFilterFromSearch = (
   search: string,
 ): ApplicationFilter => {
@@ -73,6 +151,7 @@ export const getApplicationFilterFromSearch = (
 
 export const useApplicationFilters = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<ApplicationFilter>(() =>
     getApplicationFilterFromSearch(location.search),
   );
@@ -80,6 +159,25 @@ export const useApplicationFilters = () => {
   useEffect(() => {
     setFilter(getApplicationFilterFromSearch(location.search));
   }, [location.search]);
+
+  const activeCriteria = useMemo(() => getActiveCriteria(filter), [filter]);
+
+  const updateFilter = (
+    nextFilter: ApplicationFilter,
+    syncLocation: boolean = false,
+  ) => {
+    setFilter(nextFilter);
+
+    if (syncLocation) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: buildSearchFromFilter(nextFilter),
+        },
+        { replace: true },
+      );
+    }
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter((currentFilter) => ({
@@ -110,10 +208,57 @@ export const useApplicationFilters = () => {
     );
   };
 
+  const clearSearchCriterion = () => {
+    updateFilter(
+      {
+        ...filter,
+        search: DEFAULT_FILTER.search,
+      },
+      true,
+    );
+  };
+
+  const clearStatusCriterion = () => {
+    updateFilter(
+      {
+        ...filter,
+        status: DEFAULT_FILTER.status,
+      },
+      true,
+    );
+  };
+
+  const clearViewCriterion = () => {
+    updateFilter(
+      {
+        ...filter,
+        view: DEFAULT_FILTER.view,
+      },
+      true,
+    );
+  };
+
+  const clearAllCriteria = () => {
+    updateFilter(
+      {
+        ...filter,
+        search: DEFAULT_FILTER.search,
+        status: DEFAULT_FILTER.status,
+        view: DEFAULT_FILTER.view,
+      },
+      true,
+    );
+  };
+
   return {
     filter,
+    activeCriteria,
     handleSearchChange,
     handleStatusChange,
     handleSortChange,
+    clearSearchCriterion,
+    clearStatusCriterion,
+    clearViewCriterion,
+    clearAllCriteria,
   };
 };

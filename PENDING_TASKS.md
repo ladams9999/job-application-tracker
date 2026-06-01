@@ -1,12 +1,5 @@
 # Pending Tasks
 
-### Task 2: Add a shared minimal error UI for fatal and recoverable failures
-
-- Create a reusable error screen/panel that renders a concise summary plus enough technical detail to pursue a fix
-- Include the raw failing value for record-data failures, matching the agreed diagnostic level
-
-**Verification:** Component tests prove the shared UI renders the expected summary and diagnostics for both Supabase and bad-record examples
-
 ### Task 3: Add a top-level error boundary to prevent blank screens
 
 - Wrap the routed application in an error boundary that catches render-time/runtime failures

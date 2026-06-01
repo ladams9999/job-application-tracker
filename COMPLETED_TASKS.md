@@ -156,3 +156,11 @@
 - Added `InvalidRecordDataError` so record-mapping failures can carry structured context instead of plain string-only exceptions
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/lib/appError.test.ts --runInBand` passes, and the new tests prove representative raw errors normalize into the expected classified shape
+
+### Task 2: Add a shared minimal error UI for fatal and recoverable failures
+
+- Added `src/components/error/AppErrorPanel.tsx` as a reusable fallback component that can render either as an in-page panel or a full-screen error view
+- Rendered the agreed diagnostics directly from the normalized error contract, including category, summary, technical message, operation, record id, field name, raw failing value, and retryability
+- Added optional primary and secondary action slots so later tasks can wire retry and reload affordances into the same shared UI
+
+**Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/components/error/AppErrorPanel.test.tsx --runInBand` passes, and the component tests prove both Supabase and invalid-record examples render the expected diagnostics

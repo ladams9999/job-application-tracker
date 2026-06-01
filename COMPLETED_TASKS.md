@@ -246,3 +246,11 @@
 - Added Home page regression coverage proving only active applications render and that they appear in descending recent-activity order
 
 **Verified:** `npm run lint && npm run build && npx jest --runTestsByPath src/__tests__/pages/Home.test.tsx src/__tests__/AppRoutes.test.tsx --runInBand` passes, and the tests prove Home only shows active applications in the expected order
+
+### Task 7: Add a persisted sample record for today
+
+- Added a Supabase migration that inserts a clearly labeled `Home Page Sample Company` application for Home page development
+- Used `CURRENT_DATE` together with current UTC timestamps so the seeded record always counts as active on the day the migration is applied
+- Made the insert idempotent with `ON CONFLICT (id) DO NOTHING` so the sample stays safe to reason about across repeated environments
+
+**Verified:** `supabase/migrations/20260601131500-add-home-sample-application.sql` inserts the sample row with `CURRENT_DATE`, status `applied`, current UTC `created_at`/`updated_at`, and an idempotent conflict clause, which keeps it in the active set on migration day
